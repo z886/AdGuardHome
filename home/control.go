@@ -417,6 +417,10 @@ func validateUpstream(u string) (bool, error) {
 		return defaultUpstream, nil
 	}
 
+	if u == "recursive" {
+		return defaultUpstream, nil
+	}
+
 	// Check if the upstream has a valid protocol prefix
 	for _, proto := range protocols {
 		if strings.HasPrefix(u, proto) {
