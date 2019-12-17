@@ -58,7 +58,9 @@ type Server struct {
 	isRunning     bool
 
 	sync.RWMutex
-	conf ServerConfig
+
+	conf     *ServerConfig
+	confLock sync.Mutex
 }
 
 // NewServer creates a new instance of the dnsforward.Server
@@ -94,7 +96,7 @@ func stringArrayDup(a []string) []string {
 
 // WriteDiskConfig - write configuration
 func (s *Server) WriteDiskConfig(c *FilteringConfig) {
-	s.RLock()
+	s.confLock.Lock()
 	sc := s.conf.FilteringConfig
 	*c = sc
 	c.RatelimitWhitelist = stringArrayDup(sc.RatelimitWhitelist)
@@ -103,7 +105,7 @@ func (s *Server) WriteDiskConfig(c *FilteringConfig) {
 	c.DisallowedClients = stringArrayDup(sc.DisallowedClients)
 	c.BlockedHosts = stringArrayDup(sc.BlockedHosts)
 	c.UpstreamDNS = stringArrayDup(sc.UpstreamDNS)
-	s.RUnlock()
+	s.confLock.Unlock()
 }
 
 // FilteringConfig represents the DNS filtering configuration of AdGuard Home
@@ -230,9 +232,11 @@ func (s *Server) startInternal() error {
 }
 
 // Prepare the object
+// Note: 'config' parameter must not be modified by user after this function returns
 func (s *Server) Prepare(config *ServerConfig) error {
 	if config != nil {
-		s.conf = *config
+		s.conf = &ServerConfig{}
+		*s.conf = *config
 		if s.conf.BlockingMode == "custom_ip" {
 			s.conf.BlockingIPAddrv4 = net.ParseIP(s.conf.BlockingIPv4)
 			s.conf.BlockingIPAddrv6 = net.ParseIP(s.conf.BlockingIPv6)

@@ -32,14 +32,14 @@ type dnsConfigJSON struct {
 
 func (s *Server) handleGetConfig(w http.ResponseWriter, r *http.Request) {
 	resp := dnsConfigJSON{}
-	s.RLock()
+	s.confLock.Lock()
 	resp.ProtectionEnabled = s.conf.ProtectionEnabled
 	resp.BlockingMode = s.conf.BlockingMode
 	resp.BlockingIPv4 = s.conf.BlockingIPv4
 	resp.BlockingIPv6 = s.conf.BlockingIPv6
 	resp.RateLimit = s.conf.Ratelimit
 	resp.EDNSCSEnabled = s.conf.EnableEDNSClientSubnet
-	s.RUnlock()
+	s.confLock.Unlock()
 
 	js, err := json.Marshal(resp)
 	if err != nil {
@@ -85,7 +85,7 @@ func (s *Server) handleSetConfig(w http.ResponseWriter, r *http.Request) {
 	}
 
 	restart := false
-	s.Lock()
+	s.confLock.Lock()
 
 	if js.Exists("protection_enabled") {
 		s.conf.ProtectionEnabled = req.ProtectionEnabled
@@ -117,7 +117,7 @@ func (s *Server) handleSetConfig(w http.ResponseWriter, r *http.Request) {
 		restart = true
 	}
 
-	s.Unlock()
+	s.confLock.Unlock()
 	s.conf.ConfigModified()
 
 	if restart {
@@ -165,11 +165,11 @@ func (s *Server) handleSetUpstreamConfig(w http.ResponseWriter, r *http.Request)
 
 	newconf.AllServers = req.AllServers
 
-	s.Lock()
+	s.confLock.Lock()
 	s.conf.UpstreamDNS = newconf.UpstreamDNS
 	s.conf.BootstrapDNS = newconf.BootstrapDNS
 	s.conf.AllServers = newconf.AllServers
-	s.Unlock()
+	s.confLock.Unlock()
 	s.conf.ConfigModified()
 
 	err = s.Restart()
