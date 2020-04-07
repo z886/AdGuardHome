@@ -187,12 +187,11 @@ export const ipv4 = (value) => {
 };
 
 export const clientId = (value) => {
-    if (!value) {
-        return undefined;
-    }
-    const formattedValue = value ? value.trim() : value;
-    if (formattedValue && !(R_IPV4.test(formattedValue) || R_IPV6.test(formattedValue)
-        || R_MAC.test(formattedValue) || R_CIDR.test(formattedValue))) {
+    // eslint-disable-next-line no-param-reassign
+    value = value && value.trim();
+
+    if (value && !(R_IPV4.test(value) || R_IPV6.test(value)
+        || R_MAC.test(value) || R_CIDR.test(value))) {
         return <Trans>form_error_client_id_format</Trans>;
     }
     return undefined;
