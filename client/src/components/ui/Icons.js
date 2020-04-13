@@ -171,6 +171,30 @@ const Icons = () => (
         <symbol id="plus" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
             <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
         </symbol>
+
+        <symbol id="update" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M19 12c0-3.866-3.134-7-7-7-2.1476 0-4.0692.967-5.3533 2.4895M5.0007 12c0 3.866 3.134 7 7 7 2.1476 0 4.0692-.967 5.3533-2.4895"/>
+            <path d="M3 12.849L5.017 11 7 13M21 11.151L18.983 13 17 11"/>
+        </symbol>
+
+        <symbol id="privacy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M2.5866 12.3095C6.794 7.3586 11.1651 5.7805 15.7 7.5755m2.4625 1.4893c1.0875.8216 2.1525 1.9173 3.2428 3.1815M2.6235 12.2657c2.0598 2.3114 3.8824 3.8055 5.4679 4.4823M11.0093 17.5762c3.5788.4657 6.8214-1.2685 10.3071-5.3102M4.33 21.33L20.319 2.697"/>
+            <path d="M10.2684 14.379c-2.5431-2.023 0-6.5648 3.6615-4.183"/>
+        </symbol>
+
+        <symbol id="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M17.3386 18.4244c-1.0523 1.6302-2.7179 2.8256-5.3388 2.8256-2.6208 0-4.2863-1.1953-5.3386-2.8255-1.754-2.7172-1.8987-6.5446-1.9098-8.3217C7.0486 9.172 9.743 8.75 11.9998 8.75c2.2571 0 4.9519.4222 7.2492 1.3528-.0116 1.777-.1563 5.6044-1.9104 8.3216z"/>
+            <path d="M12 14v2"/>
+            <path d="M8 9c0-2.688.0284-6 3.8654-6S16 6.2023 16 9"/>
+        </symbol>
+
+        <symbol id="list" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M4 6h16M4 10h13M4 14h16M4 18h8.591"/>
+        </symbol>
+
+        <symbol id="detailed_list" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M4 6h16M4 10h16V6H4zM4 14h16v4H4zM4 18h8.591"/>
+        </symbol>
     </svg>
 );
 

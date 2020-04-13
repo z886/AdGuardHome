@@ -335,10 +335,8 @@ export const DNS_RECORD_TYPES = [
 ];
 
 export const DEFAULT_LOGS_FILTER = {
-    filter_domain: '',
-    filter_client: '',
-    filter_question_type: '',
-    filter_response_status: '',
+    search: '',
+    response_status: '',
 };
 
 export const DEFAULT_LANGUAGE = 'en';
@@ -349,10 +347,21 @@ export const SMALL_TABLE_DEFAULT_PAGE_SIZE = 20;
 
 export const RESPONSE_FILTER = {
     ALL: 'all',
-    FILTERED: 'filtered',
+    BLOCKED: 'blocked',
+    WHITELISTED: 'whitelisted',
+    PROCESSED: 'processed',
 };
 
 export const DEFAULT_TIME_FORMAT = 'HH:mm:ss';
+
+export const LONG_TIME_FORMAT = 'HH:mm:ss.SSS';
+
+export const DEFAULT_SHORT_DATE_FORMAT_OPTIONS = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour12: false,
+};
 
 export const DEFAULT_DATE_FORMAT_OPTIONS = {
     year: 'numeric',

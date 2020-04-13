@@ -185,3 +185,84 @@
     margin-right: 1px;
     opacity: 0.5;
 }
+
+/* New logs */
+.logs__table {
+    background-color: #fff;
+    border: 0;
+    border-radius: 8px;
+}
+
+.logs__table .rt-thead.-header {
+    box-shadow: none;
+}
+
+.logs__table .rt-thead .rt-th {
+    padding: 15px 15px 15px 0;
+    font-weight: 700;
+    text-align: left;
+    border-right: 0;
+}
+
+.logs__table .rt-tbody .rt-td {
+    padding: 15px 15px 17px 0;
+    border-right: 0;
+}
+
+.logs__table .rt-thead .rt-th:last-child,
+.logs__table .rt-tbody .rt-td:last-child {
+    padding-right: 0;
+}
+
+.logs__table .rt-tbody .rt-tr-group {
+    border-bottom: 0;
+}
+
+.logs__table .rt-tr {
+    position: relative;
+    padding: 0 24px;
+}
+
+.logs__table .rt-tr:after {
+    content: "";
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 0;
+    width: calc(100% - 48px);
+    height: 2px;
+    background-color: rgba(216, 216, 216, 0.23);
+}
+
+.logs__table .rt-tr-group:last-child .rt-tr:after,
+.logs__table .rt-thead .rt-tr:after {
+    display: none;
+}
+
+.logs__time {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.logs__date {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #888888;
+}
+
+/* Hide 3 and 4 column on mobile */
+.logs__table .rt-thead .rt-th:nth-child(3),
+.logs__table .rt-thead .rt-th:nth-child(4),
+.logs__table .rt-tbody .rt-td:nth-child(3),
+.logs__table .rt-tbody .rt-td:nth-child(4) {
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .logs__table .rt-thead .rt-th:nth-child(3),
+    .logs__table .rt-thead .rt-th:nth-child(4),
+    .logs__table .rt-tbody .rt-td:nth-child(3),
+    .logs__table .rt-tbody .rt-td:nth-child(4) {
+        display: block;
+    }
+}

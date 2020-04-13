@@ -6,7 +6,6 @@ import { Trans, withNamespaces } from 'react-i18next';
 
 import { TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 
-import PageTitle from '../ui/PageTitle';
 import Loading from '../ui/Loading';
 import Filters from './Filters';
 import Table from './Table';
@@ -80,7 +79,6 @@ class Logs extends Component {
 
     render() {
         const {
-            t,
             filtering,
             setLogsPage,
             setLogsPagination,
@@ -95,28 +93,12 @@ class Logs extends Component {
                 logs,
                 pages,
                 page,
+                isDetailed,
             },
         } = this.props;
 
-        const refreshButton = enabled ? (
-            <button
-                type="button"
-                className="btn btn-icon btn-outline-primary btn-sm ml-3"
-                onClick={this.refreshLogs}
-            >
-                <svg className="icons">
-                    <use xlinkHref="#refresh" />
-                </svg>
-            </button>
-        ) : (
-            ''
-        );
-
         return (
             <Fragment>
-                <PageTitle title={t('query_log')}>
-                    {refreshButton}
-                </PageTitle>
                 {enabled && processingGetConfig && <Loading />}
                 {enabled && !processingGetConfig && (
                     <Fragment>
@@ -125,6 +107,7 @@ class Logs extends Component {
                             processingGetLogs={processingGetLogs}
                             processingAdditionalLogs={processingAdditionalLogs}
                             setLogsFilter={setLogsFilter}
+                            refreshLogs={this.refreshLogs}
                         />
                         <Table
                             logs={logs}
@@ -134,6 +117,7 @@ class Logs extends Component {
                             filtering={filtering}
                             processingGetLogs={processingGetLogs}
                             processingGetConfig={processingGetConfig}
+                            isDetailed={isDetailed}
                             setLogsPagination={setLogsPagination}
                             setLogsPage={setLogsPage}
                             getLogs={this.getLogs}
@@ -161,6 +145,7 @@ Logs.propTypes = {
     setLogsPagination: PropTypes.func.isRequired,
     setLogsFilter: PropTypes.func.isRequired,
     setLogsPage: PropTypes.func.isRequired,
+    toggleDetailedLogs: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
 };
 

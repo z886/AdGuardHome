@@ -10,7 +10,9 @@ import round from 'lodash/round';
 import axios from 'axios';
 import i18n from 'i18next';
 import uniqBy from 'lodash/uniqBy';
+
 import versionCompare from './versionCompare';
+import { getTrackerData } from '../helpers/trackers/trackers';
 
 import {
     STANDARD_DNS_PORT,
@@ -30,9 +32,9 @@ import {
  * @param string The time to format
  * @returns string Returns the time in the format HH:mm:ss
  */
-export const formatTime = (time) => {
+export const formatTime = (time, options = DEFAULT_TIME_FORMAT) => {
     const parsedTime = dateParse(time);
-    return dateFormat(parsedTime, DEFAULT_TIME_FORMAT);
+    return dateFormat(parsedTime, options);
 };
 
 /**
@@ -73,6 +75,7 @@ export const normalizeLogs = logs => logs.map((log) => {
         const { value, type, ttl } = response;
         return `${type}: ${value} (ttl=${ttl})`;
     }) : [];
+    const tracker = getTrackerData(domain);
     return {
         time,
         domain,
@@ -85,6 +88,7 @@ export const normalizeLogs = logs => logs.map((log) => {
         status,
         serviceName: service_name,
         originalAnswer: original_answer,
+        tracker,
     };
 });
 

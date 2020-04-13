@@ -132,6 +132,7 @@
     "rules_count_table_header": "Rules count",
     "last_time_updated_table_header": "Last time updated",
     "actions_table_header": "Actions",
+    "request_table_header": "Request",
     "edit_table_action": "Edit",
     "delete_table_action": "Delete",
     "filters_and_hosts_hint": "AdGuard Home understands basic adblock rules and hosts files syntax.",
@@ -489,5 +490,9 @@
     "list_updated": "{{count}} list updated",
     "list_updated_plural": "{{count}} lists updated",
     "dnssec_enable": "Enable DNSSEC",
-    "dnssec_enable_desc": "Set DNSSEC flag in the outcoming DNS queries and check the result (DNSSEC-enabled resolver is required)"
+    "dnssec_enable_desc": "Set DNSSEC flag in the outcoming DNS queries and check the result (DNSSEC-enabled resolver is required)",
+    "show_all_responses": "All responses",
+    "show_blocked_responses": "Blocked",
+    "show_whitelisted_responses": "Whitelisted",
+    "show_processed_responses": "Processed"
 }

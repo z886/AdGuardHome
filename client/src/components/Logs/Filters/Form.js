@@ -4,7 +4,6 @@ import { Field, reduxForm } from 'redux-form';
 import { withNamespaces, Trans } from 'react-i18next';
 import flow from 'lodash/flow';
 
-import { renderInputField } from '../../../helpers/form';
 import { RESPONSE_FILTER } from '../../../helpers/constants';
 import Tooltip from '../../ui/Tooltip';
 
@@ -49,54 +48,37 @@ const Form = (props) => {
     return (
         <form onSubmit={handleChange}>
             <div className="row">
-                <div className="col-6 col-sm-3 my-2">
+                <div className="col-6">
                     <Field
-                        id="filter_domain"
-                        name="filter_domain"
+                        id="search"
+                        name="search"
                         component={renderFilterField}
                         type="text"
                         className="form-control"
-                        placeholder={t('domain_name_table_header')}
+                        placeholder="Domain or client"
                         tooltip={t('query_log_strict_search')}
                         onChange={handleChange}
                     />
                 </div>
-                <div className="col-6 col-sm-3 my-2">
+                <div className="col-6">
                     <Field
-                        id="filter_question_type"
-                        name="filter_question_type"
-                        component={renderInputField}
-                        type="text"
-                        className="form-control"
-                        placeholder={t('type_table_header')}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="col-6 col-sm-3 my-2">
-                    <Field
-                        name="filter_response_status"
+                        name="response_status"
                         component="select"
                         className="form-control custom-select"
                     >
-                        <option value={RESPONSE_FILTER.ALL}>
-                            <Trans>show_all_filter_type</Trans>
+                        <option value="">
+                            <Trans>show_all_responses</Trans>
                         </option>
-                        <option value={RESPONSE_FILTER.FILTERED}>
-                            <Trans>show_filtered_type</Trans>
+                        <option value={RESPONSE_FILTER.BLOCKED}>
+                            <Trans>show_blocked_responses</Trans>
+                        </option>
+                        <option value={RESPONSE_FILTER.PROCESSED}>
+                            <Trans>show_processed_responses</Trans>
+                        </option>
+                        <option value={RESPONSE_FILTER.WHITELISTED}>
+                            <Trans>show_whitelisted_responses</Trans>
                         </option>
                     </Field>
-                </div>
-                <div className="col-6 col-sm-3 my-2">
-                    <Field
-                        id="filter_client"
-                        name="filter_client"
-                        component={renderFilterField}
-                        type="text"
-                        className="form-control"
-                        placeholder={t('client_table_header')}
-                        tooltip={t('query_log_strict_search')}
-                        onChange={handleChange}
-                    />
                 </div>
             </div>
         </form>

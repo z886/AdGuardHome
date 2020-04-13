@@ -8,3 +8,13 @@
     width: 24px;
     height: 24px;
 }
+
+.icon--privacy {
+    width: 24px;
+    height: 24px;
+    color: #d8d8d8;
+}
+
+.icon--active {
+    color: #66b574;
+}

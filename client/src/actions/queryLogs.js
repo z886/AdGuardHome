@@ -56,6 +56,7 @@ const checkFilteredLogs = async (data, filter, dispatch, total) => {
 
 export const setLogsPagination = createAction('LOGS_PAGINATION');
 export const setLogsPage = createAction('SET_LOG_PAGE');
+export const toggleDetailedLogs = createAction('TOGGLE_DETAILED_LOGS');
 
 export const getLogsRequest = createAction('GET_LOGS_REQUEST');
 export const getLogsFailure = createAction('GET_LOGS_FAILURE');

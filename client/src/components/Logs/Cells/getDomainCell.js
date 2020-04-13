@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import nanoid from 'nanoid';
 
-import { getTrackerData } from '../../../helpers/trackers/trackers';
-import Popover from '../../ui/Popover';
+import Trackers from '../Tooltip/Trackers';
 
 const getDomainCell = (row) => {
-    const response = row.value;
-    const trackerData = getTrackerData(response);
+    const { value, original: { tracker } } = row;
+    const id = nanoid();
 
     return (
-        <div className="logs__row" title={response}>
-            <div className="logs__text">
-                {response}
-            </div>
-            {trackerData && (
-                <Popover data={trackerData} />
+        <div className="logs__row" title={value}>
+            {tracker ? (
+                <Fragment>
+                    <svg
+                        className="icons icon--privacy icon--active"
+                        data-tip
+                        data-for={id}
+                    >
+                        <use xlinkHref="#privacy" />
+                    </svg>
+                    <Trackers
+                        id={id}
+                        name={tracker.name}
+                        url={tracker.url}
+                        category={tracker.category}
+                        sourceData={tracker.sourceData}
+                    />
+                </Fragment>
+            ) : (
+                <svg className="icons icon--privacy">
+                    <use xlinkHref="#privacy" />
+                </svg>
             )}
+            <div className="logs__text">
+                {value}
+            </div>
         </div>
     );
 };

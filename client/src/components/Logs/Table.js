@@ -14,33 +14,27 @@ import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
 import getResponseCell from './Cells/getResponseCell';
-import Card from '../ui/Card';
 
 class Table extends Component {
     columns = [
         {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
-            minWidth: 105,
-            Cell: getDateCell,
+            Cell: getDateCell(this.props.isDetailed),
         },
         {
-            Header: this.props.t('domain_name_table_header'),
+            Header: this.props.t('request_table_header'),
             accessor: 'domain',
-            minWidth: 180,
             Cell: getDomainCell,
         },
         {
             Header: this.props.t('response_table_header'),
             accessor: 'response',
-            minWidth: 250,
             Cell: getResponseCell(this.props.filtering, this.props.t),
         },
         {
             Header: this.props.t('client_table_header'),
             accessor: 'client',
-            maxWidth: 240,
-            minWidth: 240,
             Cell: getClientCell(this.props.t),
         },
     ];
@@ -73,72 +67,58 @@ class Table extends Component {
         const isLoading = processingGetLogs || processingGetConfig;
 
         return (
-            <Card>
-                <ReactTable
-                    manual
-                    minRows={5}
-                    page={page}
-                    pages={pages}
-                    columns={this.columns}
-                    filterable={false}
-                    sortable={false}
-                    data={logs || []}
-                    loading={isLoading}
-                    showPagination={true}
-                    showPaginationTop={true}
-                    showPageJump={false}
-                    showPageSizeOptions={false}
-                    onFetchData={this.fetchData}
-                    onPageChange={this.changePage}
-                    className="logs__table"
-                    defaultPageSize={TABLE_DEFAULT_PAGE_SIZE}
-                    previousText={t('previous_btn')}
-                    nextText={t('next_btn')}
-                    loadingText={t('loading_table_status')}
-                    rowsText={t('rows_table_footer_text')}
-                    noDataText={t('no_logs_found')}
-                    pageText={''}
-                    ofText={''}
-                    renderTotalPagesCount={() => false}
-                    defaultFilterMethod={(filter, row) => {
-                        const id = filter.pivotId || filter.id;
-                        return row[id] !== undefined
-                            ? String(row[id]).indexOf(filter.value) !== -1
-                            : true;
-                    }}
-                    defaultSorted={[
-                        {
-                            id: 'time',
-                            desc: true,
-                        },
-                    ]}
-                    getTrProps={(_state, rowInfo) => {
-                        if (!rowInfo) {
-                            return {};
-                        }
+            <ReactTable
+                manual
+                minRows={5}
+                page={page}
+                pages={pages}
+                columns={this.columns}
+                filterable={false}
+                sortable={false}
+                resizable={false}
+                data={logs || []}
+                loading={isLoading}
+                showPagination={true}
+                showPageJump={false}
+                showPageSizeOptions={false}
+                onFetchData={this.fetchData}
+                onPageChange={this.changePage}
+                className="logs__table"
+                defaultPageSize={TABLE_DEFAULT_PAGE_SIZE}
+                previousText={t('previous_btn')}
+                nextText={t('next_btn')}
+                loadingText={t('loading_table_status')}
+                rowsText={t('rows_table_footer_text')}
+                noDataText={t('no_logs_found')}
+                pageText={''}
+                ofText={''}
+                renderTotalPagesCount={() => false}
+                getTrProps={(_state, rowInfo) => {
+                    if (!rowInfo) {
+                        return {};
+                    }
 
-                        const { reason } = rowInfo.original;
+                    const { reason } = rowInfo.original;
 
-                        if (checkFiltered(reason)) {
-                            return {
-                                className: 'red',
-                            };
-                        } else if (checkWhiteList(reason)) {
-                            return {
-                                className: 'green',
-                            };
-                        } else if (checkRewrite(reason) || checkRewriteHosts(reason)) {
-                            return {
-                                className: 'blue',
-                            };
-                        }
-
+                    if (checkFiltered(reason)) {
                         return {
-                            className: '',
+                            className: 'red',
                         };
-                    }}
-                />
-            </Card>
+                    } else if (checkWhiteList(reason)) {
+                        return {
+                            className: 'green',
+                        };
+                    } else if (checkRewrite(reason) || checkRewriteHosts(reason)) {
+                        return {
+                            className: 'blue',
+                        };
+                    }
+
+                    return {
+                        className: '',
+                    };
+                }}
+            />
         );
     }
 }
@@ -151,6 +131,7 @@ Table.propTypes = {
     filtering: PropTypes.object.isRequired,
     processingGetLogs: PropTypes.bool.isRequired,
     processingGetConfig: PropTypes.bool.isRequired,
+    isDetailed: PropTypes.bool.isRequired,
     setLogsPage: PropTypes.func.isRequired,
     setLogsPagination: PropTypes.func.isRequired,
     getLogs: PropTypes.func.isRequired,

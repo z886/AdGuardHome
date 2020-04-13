@@ -21,6 +21,31 @@ export const sources = {
 };
 
 /**
+ * Gets the source metadata for the specified tracker
+ * @param {TrackerData} trackerData tracker data
+ * @returns {source} source metadata or null if no matching tracker found
+ */
+export const getSourceData = (trackerData) => {
+    if (!trackerData || !trackerData.source) {
+        return null;
+    }
+
+    if (trackerData.source === sources.WHOTRACKSME) {
+        return {
+            name: 'Whotracks.me',
+            url: `https://whotracks.me/trackers/${trackerData.id}.html`,
+        };
+    } else if (trackerData.source === sources.ADGUARD) {
+        return {
+            name: 'AdGuard',
+            url: REPOSITORY.TRACKERS_DB,
+        };
+    }
+
+    return null;
+};
+
+/**
  * Gets tracker data in the specified database
  *
  * @param {String} domainName domain name to check
@@ -44,6 +69,8 @@ const getTrackerDataFromDb = (domainName, trackersDb, source) => {
         if (trackerId) {
             const trackerData = trackersDb.trackers[trackerId];
             const categoryName = trackersDb.categories[trackerData.categoryId];
+            trackerData.source = source;
+            const sourceData = getSourceData(trackerData);
 
             return {
                 id: trackerId,
@@ -51,36 +78,12 @@ const getTrackerDataFromDb = (domainName, trackersDb, source) => {
                 url: trackerData.url,
                 category: categoryName,
                 source,
+                sourceData,
             };
         }
     }
 
     // No tracker found for the specified domain
-    return null;
-};
-
-/**
- * Gets the source metadata for the specified tracker
- * @param {TrackerData} trackerData tracker data
- * @returns {source} source metadata or null if no matching tracker found
- */
-export const getSourceData = (trackerData) => {
-    if (!trackerData || !trackerData.source) {
-        return null;
-    }
-
-    if (trackerData.source === sources.WHOTRACKSME) {
-        return {
-            name: 'Whotracks.me',
-            url: `https://whotracks.me/trackers/${trackerData.id}.html`,
-        };
-    } else if (trackerData.source === sources.ADGUARD) {
-        return {
-            name: 'AdGuard',
-            url: REPOSITORY.TRACKERS_DB,
-        };
-    }
-
     return null;
 };
 

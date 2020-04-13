@@ -1,0 +1,16 @@
+.custom-tooltip {
+    padding: 16px 24px 20px 24px;
+    font-size: 16px!important;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 4px!important;
+    pointer-events: auto!important;
+}
+
+.custom-tooltip.show {
+    opacity: 1!important;
+}
+
+.custom-tooltip:hover {
+    visibility: visible!important;
+    opacity: 1!important;
+}

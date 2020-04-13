@@ -25,6 +25,11 @@ const queryLogs = handleActions(
             page: payload,
         }),
 
+        [actions.toggleDetailedLogs]: (state, { payload }) => ({
+            ...state,
+            isDetailed: payload,
+        }),
+
         [actions.setLogsFilterRequest]: state => ({ ...state, processingGetLogs: true }),
         [actions.setLogsFilterFailure]: state => ({ ...state, processingGetLogs: false }),
         [actions.setLogsFilterSuccess]: (state, { payload }) => {
@@ -135,6 +140,7 @@ const queryLogs = handleActions(
         filter: DEFAULT_LOGS_FILTER,
         isFiltered: false,
         anonymize_client_ip: false,
+        isDetailed: true,
     },
 );
 

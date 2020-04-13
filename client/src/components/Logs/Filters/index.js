@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import classnames from 'classnames';
+import { Trans } from 'react-i18next';
 
-import { DEBOUNCE_FILTER_TIMEOUT, RESPONSE_FILTER } from '../../../helpers/constants';
-import { isValidQuestionType } from '../../../helpers/helpers';
+import { DEBOUNCE_FILTER_TIMEOUT } from '../../../helpers/constants';
 import Form from './Form';
-import Card from '../../ui/Card';
 
 class Filters extends Component {
     getFilters = ({
-        filter_domain, filter_question_type, filter_response_status, filter_client,
+        search, response_status,
     }) => ({
-        filter_domain: filter_domain || '',
-        filter_question_type: isValidQuestionType(filter_question_type) ? filter_question_type.toUpperCase() : '',
-        filter_response_status: filter_response_status === RESPONSE_FILTER.FILTERED ? filter_response_status : '',
-        filter_client: filter_client || '',
+        search: search || '',
+        response_status,
     });
 
     handleFormChange = debounce((values) => {
@@ -24,20 +20,31 @@ class Filters extends Component {
     }, DEBOUNCE_FILTER_TIMEOUT);
 
     render() {
-        const { filter, processingAdditionalLogs } = this.props;
+        const { filter, refreshLogs } = this.props;
 
-        const cardBodyClass = classnames({
-            'card-body': true,
-            'card-body--loading': processingAdditionalLogs,
-        });
+        const refreshButton = (
+            <button
+                type="button"
+                className="btn btn-icon btn-outline-success btn-sm ml-3"
+                onClick={refreshLogs}
+            >
+                <svg className="icons">
+                    <use xlinkHref="#update" />
+                </svg>
+            </button>
+        );
 
         return (
-            <Card bodyType={cardBodyClass}>
+            <div className="page-header page-header--logs">
+                <h1 className="page-title page-title--large">
+                    <Trans>query_log</Trans>
+                    {refreshButton}
+                </h1>
                 <Form
                     initialValues={filter}
                     onChange={this.handleFormChange}
                 />
-            </Card>
+            </div>
         );
     }
 }
@@ -45,8 +52,8 @@ class Filters extends Component {
 Filters.propTypes = {
     filter: PropTypes.object.isRequired,
     setLogsFilter: PropTypes.func.isRequired,
+    refreshLogs: PropTypes.func.isRequired,
     processingGetLogs: PropTypes.bool.isRequired,
-    processingAdditionalLogs: PropTypes.bool.isRequired,
 };
 
 export default Filters;
