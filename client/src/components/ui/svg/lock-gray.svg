@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="20px" viewBox="0 0 16 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>Icons/24/privacy Copy</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Log" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop/Menu" transform="translate(-564.000000, -588.000000)" stroke="#67B279">
+            <g id="Group-6-Copy-5" transform="translate(416.000000, 584.000000)">
+                <g id="Icons/24/lock" transform="translate(144.000000, 2.000000)">
+                    <g id="Group" transform="translate(4.000000, 3.000000)">
+                        <path d="M0.752370993,7.10228253 C0.771890941,9.06478283 0.917068956,10.632386 1.37155842,12.3593468 C2.35709802,16.1041823 4.42355339,18.25 7.99982303,18.25 C11.2061245,18.25 13.1932685,16.5270881 14.2936721,13.4460257 C14.9995721,11.4695493 15.2222744,9.52849162 15.2475016,7.10224311 C13.0868376,6.2287572 10.4265996,5.75 7.99982303,5.75 C5.57313709,5.75 2.91288258,6.22878421 0.752370993,7.10228253 Z" id="Path" stroke-width="1.5"></path>
+                        <path d="M8,11 L8,13" id="Line" stroke-width="1.5" stroke-linecap="round"></path>
+                        <path d="M4,6 C4,3.31191182 4.02838306,0 7.86539235,0 C11.7024016,0 12,3.20226892 12,6" id="Path-2" stroke-width="1.5"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

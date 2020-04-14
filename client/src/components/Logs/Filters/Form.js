@@ -19,23 +19,26 @@ const renderFilterField = ({
     meta: { touched, error },
 }) => (
     <Fragment>
-        <div className="logs__input-wrap">
-            <input
-                {...input}
-                id={id}
-                placeholder={placeholder}
-                type={type}
-                className={className}
-                disabled={disabled}
-                autoComplete={autoComplete}
-            />
-            <span className="logs__notice">
+        <div className="input-group-search">
+            <svg className="icons icon--small icon-gray">
+                <use xlinkHref="#magnifier" />
+            </svg>
+        </div>
+        <input
+            {...input}
+            id={id}
+            placeholder={placeholder}
+            type={type}
+            className={className}
+            disabled={disabled}
+            autoComplete={autoComplete}
+            aria-label={placeholder} />
+        <span className="logs__notice">
                 <Tooltip text={tooltip} type='tooltip-custom--logs' />
             </span>
-            {!disabled &&
-                touched &&
-                (error && <span className="form__message form__message--error">{error}</span>)}
-        </div>
+        {!disabled &&
+        touched &&
+        (error && <span className="form__message form__message--error">{error}</span>)}
     </Fragment>
 );
 
@@ -47,39 +50,36 @@ const Form = (props) => {
 
     return (
         <form onSubmit={handleChange}>
-            <div className="row">
-                <div className="col-6">
-                    <Field
-                        id="search"
-                        name="search"
-                        component={renderFilterField}
-                        type="text"
-                        className="form-control"
-                        placeholder="Domain or client"
-                        tooltip={t('query_log_strict_search')}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="col-6">
-                    <Field
-                        name="response_status"
-                        component="select"
-                        className="form-control custom-select"
-                    >
-                        <option value="">
-                            <Trans>show_all_responses</Trans>
-                        </option>
-                        <option value={RESPONSE_FILTER.BLOCKED}>
-                            <Trans>show_blocked_responses</Trans>
-                        </option>
-                        <option value={RESPONSE_FILTER.PROCESSED}>
-                            <Trans>show_processed_responses</Trans>
-                        </option>
-                        <option value={RESPONSE_FILTER.WHITELISTED}>
-                            <Trans>show_whitelisted_responses</Trans>
-                        </option>
-                    </Field>
-                </div>
+            <div className="input-group">
+
+                <Field
+                    id="search"
+                    name="search"
+                    component={renderFilterField}
+                    type="text"
+                    className="form-control--search form-control--transparent"
+                    placeholder="Domain or client"
+                    tooltip={t('query_log_strict_search')}
+                    onChange={handleChange}
+                />
+                <Field
+                    name="response_status"
+                    component="select"
+                    className="form-control custom-select form-control--transparent"
+                >
+                    <option value="">
+                        <Trans>show_all_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.BLOCKED}>
+                        <Trans>show_blocked_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.PROCESSED}>
+                        <Trans>show_processed_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.WHITELISTED}>
+                        <Trans>show_whitelisted_responses</Trans>
+                    </option>
+                </Field>
             </div>
         </form>
     );

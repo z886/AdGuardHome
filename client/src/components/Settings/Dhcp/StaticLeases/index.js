@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import { Trans, withNamespaces } from 'react-i18next';
-import { SMALL_TABLE_DEFAULT_PAGE_SIZE } from '../../../../helpers/constants';
+import { LEASES_TABLE_DEFAULT_PAGE_SIZE } from '../../../../helpers/constants';
 
 import Modal from './Modal';
 
@@ -83,9 +83,9 @@ class StaticLeases extends Component {
                             },
                         },
                     ]}
-                    pageSize={SMALL_TABLE_DEFAULT_PAGE_SIZE}
+                    pageSize={LEASES_TABLE_DEFAULT_PAGE_SIZE}
                     showPageSizeOptions={false}
-                    showPagination={staticLeases.length > SMALL_TABLE_DEFAULT_PAGE_SIZE}
+                    showPagination={staticLeases.length > LEASES_TABLE_DEFAULT_PAGE_SIZE}
                     noDataText={t('dhcp_static_leases_not_found')}
                     className="-striped -highlight card-table-overflow"
                     minRows={6}

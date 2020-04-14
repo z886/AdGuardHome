@@ -24,6 +24,7 @@ Dashboard UI
     --white: #fff;
     --gray: #868e96;
     --gray-dark: #343a40;
+    --gray-a5: #a5a5a5;
     --azure: #45aaf2;
     --lime: #7bd235;
     --primary: #467fcf;
@@ -1948,6 +1949,26 @@ pre code {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.form-control--search {
+    width: 39.125rem;
+    box-shadow: 0 1px 0 #ddd;
+    padding: 0 2.5rem;
+}
+
+.form-control--transparent {
+    border: 0 solid transparent !important;
+    background-color: transparent !important;
+}
+
+.input-group-search {
+    background-color: transparent;
+    position: relative;
+    left: 2rem;
+    top: 0.4rem;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
 .form-control::-ms-expand {
     background-color: transparent;
     border: 0;
@@ -3790,6 +3811,7 @@ tbody.collapse.show {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    margin-left: 3.3125rem;
 }
 
 .custom-select:focus {
@@ -14286,6 +14308,10 @@ Icon input
 
 .input-icon .form-control:not(:first-child) {
     padding-left: 2.5rem;
+}
+
+.input-icon-question{
+
 }
 
 .input-icon-addon {

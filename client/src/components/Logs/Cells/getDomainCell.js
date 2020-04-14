@@ -12,7 +12,7 @@ const getDomainCell = (row) => {
             {tracker ? (
                 <Fragment>
                     <svg
-                        className="icons icon--privacy icon--active"
+                        className="icons icon--small icon--privacy icon--active"
                         data-tip
                         data-for={id}
                     >
@@ -27,7 +27,7 @@ const getDomainCell = (row) => {
                     />
                 </Fragment>
             ) : (
-                <svg className="icons icon--privacy">
+                <svg className="icons icon--small icon--privacy">
                     <use xlinkHref="#privacy" />
                 </svg>
             )}

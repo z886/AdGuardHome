@@ -6,7 +6,6 @@
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    margin-left: 5px;
     background-image: url("./svg/help-circle.svg");
     background-size: 100%;
     cursor: pointer;

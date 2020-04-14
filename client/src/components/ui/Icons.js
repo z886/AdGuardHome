@@ -195,6 +195,10 @@ const Icons = () => (
         <symbol id="detailed_list" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
             <path d="M4 6h16M4 10h16V6H4zM4 14h16v4H4zM4 18h8.591"/>
         </symbol>
+
+        <symbol id="magnifier" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <circle id="Oval" cx="9.5" cy="9.5" r="5.5"></circle><path d="M14,14 L19,19" id="Line"></path>
+        </symbol>
     </svg>
 );
 

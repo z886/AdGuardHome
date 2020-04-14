@@ -89,7 +89,7 @@ const renderFieldsWrapper = (placeholder, buttonTitle) =>
                     onClick={() => fields.push()}
                     title={buttonTitle}
                 >
-                    <svg className="icon icon--close">
+                    <svg className="icon icon--small">
                         <use xlinkHref="#plus" />
                     </svg>
                 </button>

@@ -63,6 +63,7 @@ class Table extends Component {
             logs,
             pages,
             page,
+            defaultPageSize,
         } = this.props;
         const isLoading = processingGetLogs || processingGetConfig;
 
@@ -84,7 +85,7 @@ class Table extends Component {
                 onFetchData={this.fetchData}
                 onPageChange={this.changePage}
                 className="logs__table"
-                defaultPageSize={TABLE_DEFAULT_PAGE_SIZE}
+                defaultPageSize={defaultPageSize || TABLE_DEFAULT_PAGE_SIZE}
                 previousText={t('previous_btn')}
                 nextText={t('next_btn')}
                 loadingText={t('loading_table_status')}
@@ -127,6 +128,7 @@ Table.propTypes = {
     logs: PropTypes.array.isRequired,
     pages: PropTypes.number.isRequired,
     page: PropTypes.number.isRequired,
+    defaultPageSize: PropTypes.number,
     oldest: PropTypes.string.isRequired,
     filtering: PropTypes.object.isRequired,
     processingGetLogs: PropTypes.bool.isRequired,

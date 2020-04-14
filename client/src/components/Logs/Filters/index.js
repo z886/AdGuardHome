@@ -22,13 +22,13 @@ class Filters extends Component {
     render() {
         const { filter, refreshLogs } = this.props;
 
-        const refreshButton = (
+        const getRefreshButton = () => (
             <button
                 type="button"
-                className="btn btn-icon btn-outline-success btn-sm ml-3"
+                className="btn btn-icon--green ml-3"
                 onClick={refreshLogs}
             >
-                <svg className="icons">
+                <svg className="icons icon--small">
                     <use xlinkHref="#update" />
                 </svg>
             </button>
@@ -38,7 +38,7 @@ class Filters extends Component {
             <div className="page-header page-header--logs">
                 <h1 className="page-title page-title--large">
                     <Trans>query_log</Trans>
-                    {refreshButton}
+                    {getRefreshButton()}
                 </h1>
                 <Form
                     initialValues={filter}
