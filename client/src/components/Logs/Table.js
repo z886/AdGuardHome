@@ -21,11 +21,13 @@ class Table extends Component {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
             Cell: getDateCell(this.props.isDetailed),
+            minWidth: 50,
         },
         {
             Header: this.props.t('request_table_header'),
             accessor: 'domain',
             Cell: getDomainCell,
+            minWidth: 150,
         },
         {
             Header: this.props.t('response_table_header'),
@@ -76,7 +78,6 @@ class Table extends Component {
                 columns={this.columns}
                 filterable={false}
                 sortable={false}
-                resizable={false}
                 data={logs || []}
                 loading={isLoading}
                 showPagination={true}

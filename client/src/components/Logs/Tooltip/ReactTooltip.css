@@ -1,16 +1,23 @@
 .custom-tooltip {
-    padding: 16px 24px 20px 24px;
-    font-size: 16px!important;
+    width: 16.25rem;
+    height: 10.5rem;
+    padding: 1rem 1.5rem 1.25rem 1.5rem !important;
+    font-size: 16px !important;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 4px!important;
-    pointer-events: auto!important;
+    border-radius: 4px !important;
+    pointer-events: auto !important;
+}
+
+.custom-tooltip--small{
+    width: 13.75rem;
+    height: 3.75rem;
 }
 
 .custom-tooltip.show {
-    opacity: 1!important;
+    opacity: 1 !important;
 }
 
 .custom-tooltip:hover {
-    visibility: visible!important;
-    opacity: 1!important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }

@@ -69,6 +69,7 @@ export const normalizeLogs = logs => logs.map((log) => {
         service_name,
         status,
         original_answer,
+        answer_dnssec,
     } = log;
     const { host: domain, type } = question;
     const responsesArray = response ? response.map((response) => {
@@ -89,6 +90,7 @@ export const normalizeLogs = logs => logs.map((log) => {
         serviceName: service_name,
         originalAnswer: original_answer,
         tracker,
+        answer_dnssec,
     };
 });
 

@@ -13,8 +13,8 @@
     color: var(--gray-a5);
 }
 
-.icon--privacy {
-    color: #d8d8d8;
+.icon--disabled {
+    color: var(--gray-d8);
 }
 
 .icon--active {
