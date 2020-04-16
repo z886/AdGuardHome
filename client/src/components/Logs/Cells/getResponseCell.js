@@ -1,6 +1,5 @@
 import React from 'react';
 import { Trans } from 'react-i18next';
-
 import {
     checkFiltered,
     checkRewrite,
@@ -11,6 +10,8 @@ import {
 } from '../../../helpers/helpers';
 import { SERVICES, FILTERED, CUSTOM_FILTERING_RULES_ID } from '../../../helpers/constants';
 import PopoverFiltered from '../../ui/PopoverFilter';
+import CustomTooltip from '../Tooltip/CustomTooltip';
+import getHintElement from './getHintElement';
 
 const getFilterName = (filters, whitelistFilters, filterId, t) => {
     if (filterId === CUSTOM_FILTERING_RULES_ID) {
@@ -64,7 +65,7 @@ const getResponseCell = (filtering, t) =>
     function cell(row) {
         const { value: responses, original } = row;
         const {
-            reason, filterId, rule, status, originalAnswer,
+            reason, filterId, rule, status, originalAnswer, domain,
         } = original;
         const { filters, whitelistFilters } = filtering;
 
@@ -132,6 +133,23 @@ const getResponseCell = (filtering, t) =>
                     )}
                 </div>
                 <div className="logs__list-wrap">
+                    {getHintElement({
+                        className: 'icons mt-3 icon--small',
+                        dataTip: true,
+                        xlinkHref: 'question',
+                        tooltipComponent: ({ id }) =>
+                            <CustomTooltip id={id}
+                                           title="details"
+                                           place="bottom"
+                                           rowClass="pr-4"
+                                           content={{
+                                               encryption_status: status,
+                                               install_settings_dns: domain,
+                                               elapsed: 'elapsed',
+                                               request_table_header: responses,
+                                           }}
+                            />,
+                    })}
                     {renderResponseList(responses, status)}
                     {isWhiteList && renderTooltip(isWhiteList, rule, filterName)}
                 </div>

@@ -61,6 +61,11 @@
     margin-right: 5px;
 }
 
+.tooltip__option:hover {
+    background-color: var(--gray-f3);
+    cursor: pointer;
+}
+
 .logs__action,
 .table__action {
     position: absolute;

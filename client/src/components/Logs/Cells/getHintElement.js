@@ -11,9 +11,11 @@ const getHintElement = ({
     const id = nanoid();
 
     return <Fragment>
-        <svg className={className} data-tip={dataTip} data-for={dataTip ? id : undefined}>
-            <use xlinkHref={`#${xlinkHref}`} />
-        </svg>
+        <div data-tip={dataTip} data-for={dataTip ? id : undefined}>
+            {xlinkHref && <svg className={className}>
+                <use xlinkHref={`#${xlinkHref}`} />
+            </svg>}
+        </div>
         {dataTip && tooltipComponent({ id })}
     </Fragment>;
 };
@@ -21,7 +23,7 @@ const getHintElement = ({
 getHintElement.propTypes = {
     className: PropTypes.string,
     dataTip: PropTypes.string,
-    xlinkHref: PropTypes.string.isRequired,
+    xlinkHref: PropTypes.string,
     tooltipComponent: PropTypes.element.isRequired,
 };
 
