@@ -16,7 +16,7 @@ const Tooltip = ({
         backgroundColor="#fff"
         arrowColor="transparent"
         textColor="#4d4d4d"
-        delayHide={30000}
+        delayHide={300}
     >
         {children}
     </ReactTooltip>
