@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import CustomTooltip from '../Tooltip/CustomTooltip';
 import getHintElement from './getHintElement';
 
-const getDomainCell = (row) => {
+const getDomainCell = (row, isDetailed) => {
     const { value, answer_dnssec, original: { tracker } } = row;
     const hasTracker = !!tracker;
 
@@ -29,7 +29,7 @@ const getDomainCell = (row) => {
         className: privacyIconClass,
         dataTip: hasTracker,
         xlinkHref: 'privacy',
-        tooltipComponent: ({ id }) => <CustomTooltip id={id} rowClass="pr-4" title="known_tracker" content={{
+        tooltipComponent: ({ id }) => <CustomTooltip id={id} title="known_tracker" content={{
             name_table_header: tracker.name,
             category_label: tracker.category,
             source_label: tracker.sourceData.name,
@@ -40,8 +40,12 @@ const getDomainCell = (row) => {
         <div className="logs__row" title={value}>
             {dnssecHint}
             {trackerHint}
-            <div className="logs__text">{value}</div>
+            <div>
+                <div className="logs__text">{value}</div>
+                {isDetailed && <div className="detailed-info">test</div>}
+            </div>
         </div>
+
     );
 };
 

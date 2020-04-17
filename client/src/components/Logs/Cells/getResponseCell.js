@@ -61,100 +61,101 @@ const renderResponseList = (response, status) => {
 const renderTooltip = (isFiltered, rule, filter, service) =>
     isFiltered && <PopoverFiltered rule={rule} filter={filter} service={service} />;
 
-const getResponseCell = (filtering, t) =>
-    function cell(row) {
-        const { value: responses, original } = row;
-        const {
-            reason, filterId, rule, status, originalAnswer, domain,
-        } = original;
-        const { filters, whitelistFilters } = filtering;
+const getResponseCell = (row, filtering, t, isDetailed) => {
+    const { value: responses, original } = row;
+    const {
+        reason, filterId, rule, status, originalAnswer, domain,
+    } = original;
+    const { filters, whitelistFilters } = filtering;
 
-        const isFiltered = checkFiltered(reason);
-        const isBlackList = checkBlackList(reason);
-        const isRewrite = checkRewrite(reason);
-        const isRewriteAuto = checkRewriteHosts(reason);
-        const isWhiteList = checkWhiteList(reason);
-        const isBlockedService = checkBlockedService(reason);
-        const isBlockedCnameIp = originalAnswer;
+    const isFiltered = checkFiltered(reason);
+    const isBlackList = checkBlackList(reason);
+    const isRewrite = checkRewrite(reason);
+    const isRewriteAuto = checkRewriteHosts(reason);
+    const isWhiteList = checkWhiteList(reason);
+    const isBlockedService = checkBlockedService(reason);
+    const isBlockedCnameIp = originalAnswer;
 
-        const filterKey = reason.replace(FILTERED, '');
-        const parsedFilteredReason = t('query_log_filtered', { filter: filterKey });
-        const currentService = SERVICES.find(service => service.id === original.serviceName);
-        const serviceName = currentService && currentService.name;
-        const filterName = getFilterName(filters, whitelistFilters, filterId, t);
+    const filterKey = reason.replace(FILTERED, '');
+    const parsedFilteredReason = t('query_log_filtered', { filter: filterKey });
+    const currentService = SERVICES.find(service => service.id === original.serviceName);
+    const serviceName = currentService && currentService.name;
+    const filterName = getFilterName(filters, whitelistFilters, filterId, t);
 
-        if (isBlockedCnameIp) {
-            const normalizedAnswer = normalizeResponse(originalAnswer);
-
-            return (
-                <div className="logs__row logs__row--column">
-                    <div className="logs__text-wrap">
-                        <span className="logs__text">
-                            <Trans>blocked_by_response</Trans>
-                        </span>
-                        {this.renderTooltip(isFiltered, rule, filterName)}
-                    </div>
-                    <div className="logs__list-wrap">
-                        {renderResponseList(normalizedAnswer, status)}
-                    </div>
-                </div>
-            );
-        }
+    if (isBlockedCnameIp) {
+        const normalizedAnswer = normalizeResponse(originalAnswer);
 
         return (
             <div className="logs__row logs__row--column">
                 <div className="logs__text-wrap">
-                    {(isFiltered || isBlockedService) && !isBlackList && (
-                        <span className="logs__text" title={parsedFilteredReason}>
+                        <span className="logs__text">
+                            <Trans>blocked_by_response</Trans>
+                        </span>
+                    {this.renderTooltip(isFiltered, rule, filterName)}
+                </div>
+                <div className="logs__list-wrap">
+                    {renderResponseList(normalizedAnswer, status)}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="logs__row logs__row--column">
+            <div className="logs__text-wrap">
+                {(isFiltered || isBlockedService) && !isBlackList && (
+                    <span className="logs__text" title={parsedFilteredReason}>
                             {parsedFilteredReason}
                         </span>
-                    )}
-                    {isBlackList && (
-                        <span className="logs__text">
+                )}
+                {isBlackList && (
+                    <span className="logs__text">
                             <Trans values={{ filter: filterName }}>
                                 query_log_filtered
                             </Trans>
                         </span>
-                    )}
-                    {isBlockedService
-                        ? renderTooltip(isFiltered, '', '', serviceName)
-                        : renderTooltip(isFiltered, rule, filterName)}
-                    {isRewrite && (
-                        <strong>
-                            <Trans>rewrite_applied</Trans>
-                        </strong>
-                    )}
-                    {isRewriteAuto && (
-                        <span className="logs__text">
+                )}
+                {isBlockedService
+                    ? renderTooltip(isFiltered, '', '', serviceName)
+                    : renderTooltip(isFiltered, rule, filterName)}
+                {isRewrite && (
+                    <strong>
+                        <Trans>rewrite_applied</Trans>
+                    </strong>
+                )}
+                {isRewriteAuto && (
+                    <span className="logs__text">
                             <strong>
                                 <Trans>rewrite_hosts_applied</Trans>
                             </strong>
                         </span>
-                    )}
-                </div>
-                <div className="logs__list-wrap">
-                    {getHintElement({
-                        className: 'icons mt-3 icon--small',
-                        dataTip: true,
-                        xlinkHref: 'question',
-                        tooltipComponent: ({ id }) =>
-                            <CustomTooltip id={id}
-                                           title="details"
-                                           place="bottom"
-                                           rowClass="pr-4"
-                                           content={{
-                                               encryption_status: status,
-                                               install_settings_dns: domain,
-                                               elapsed: 'elapsed',
-                                               request_table_header: responses,
-                                           }}
-                            />,
-                    })}
-                    {renderResponseList(responses, status)}
-                    {isWhiteList && renderTooltip(isWhiteList, rule, filterName)}
-                </div>
+                )}
             </div>
-        );
-    };
+            <div className="logs__list-wrap">
+                {getHintElement({
+                    className: 'icons mt-3 icon--small',
+                    dataTip: true,
+                    xlinkHref: 'question',
+                    tooltipComponent: ({ id }) =>
+                        <CustomTooltip id={id}
+                                       title="details"
+                                       place="bottom"
+                                       content={{
+                                           encryption_status: status,
+                                           install_settings_dns: domain,
+                                           elapsed: 'elapsed',
+                                           request_table_header: responses,
+                                       }}
+                        />,
+                })}
+                <div>
+                    {renderResponseList(responses, status)}
+                    {isDetailed && <div className="detailed-info">test</div>}
+                </div>
+                {isWhiteList && renderTooltip(isWhiteList, rule, filterName)}
+            </div>
+        </div>
+    );
+};
 
 export default getResponseCell;

@@ -245,14 +245,20 @@
 }
 
 .logs__time {
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.5;
 }
 
-.logs__date {
-    font-size: 13px;
+.detailed-info {
+    font-size: 0.8rem;
     line-height: 1.4;
     color: #888888;
+}
+
+.icon--selected {
+    background-color: var(--gray-f3);
+    border: solid 1px var(--gray-d8);
+    border-radius: 4px;
 }
 
 /* Hide 3 and 4 column on mobile */
@@ -270,4 +276,9 @@
     .logs__table .rt-tbody .rt-td:nth-child(4) {
         display: block;
     }
+}
+
+.logs__header {
+    font-weight: 200 !important;
+    font-size: 1rem;
 }

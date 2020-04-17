@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import ReactTable from 'react-table';
-
+import classNames from 'classnames';
 import {
     checkFiltered,
     checkRewrite,
@@ -20,24 +20,51 @@ class Table extends Component {
         {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
-            Cell: getDateCell(this.props.isDetailed),
+            Cell: row => getDateCell(row, this.props.isDetailed),
             minWidth: 50,
+            headerClassName: 'logs__header',
         },
         {
             Header: this.props.t('request_table_header'),
             accessor: 'domain',
-            Cell: getDomainCell,
+            Cell: row => getDomainCell(row, this.props.isDetailed),
             minWidth: 150,
+            headerClassName: 'logs__header',
         },
         {
             Header: this.props.t('response_table_header'),
             accessor: 'response',
-            Cell: getResponseCell(this.props.filtering, this.props.t),
+            Cell: row => getResponseCell(row, this.props.filtering, this.props.t, this.props.isDetailed),
+            headerClassName: 'logs__header',
         },
         {
-            Header: this.props.t('client_table_header'),
+            Header: () => {
+                const plainSelected = classNames({
+                    'icon--selected': !this.props.isDetailed,
+                });
+
+                const detailedSelected = classNames({
+                    'icon--selected': this.props.isDetailed,
+                });
+
+                return <div className="d-flex justify-content-between">
+                    {this.props.t('client_table_header')}
+                    <span>
+                        <svg className={`icons icon--small icon--active mr-2 ${detailedSelected}`}
+                             onClick={() => this.props.toggleDetailedLogs(true)}>
+                            <use xlinkHref='#list' />
+                        </svg>
+                    <svg
+                        className={`icons icon--small icon--active ${plainSelected}`}
+                        onClick={() => this.props.toggleDetailedLogs(false)}>
+                        <use xlinkHref='#detailed_list' />
+                    </svg>
+                    </span>
+                </div>;
+            },
             accessor: 'client',
-            Cell: getClientCell(this.props.t),
+            Cell: row => getClientCell(row, this.props.t, this.props.isDetailed),
+            headerClassName: 'logs__header',
         },
     ];
 
@@ -54,7 +81,10 @@ class Table extends Component {
 
     changePage = (page) => {
         this.props.setLogsPage(page);
-        this.props.setLogsPagination({ page, pageSize: TABLE_DEFAULT_PAGE_SIZE });
+        this.props.setLogsPagination({
+            page,
+            pageSize: TABLE_DEFAULT_PAGE_SIZE,
+        });
     };
 
     render() {
@@ -78,6 +108,7 @@ class Table extends Component {
                 columns={this.columns}
                 filterable={false}
                 sortable={false}
+                resizable={false}
                 data={logs || []}
                 loading={isLoading}
                 showPagination={true}
@@ -138,6 +169,7 @@ Table.propTypes = {
     setLogsPage: PropTypes.func.isRequired,
     setLogsPagination: PropTypes.func.isRequired,
     getLogs: PropTypes.func.isRequired,
+    toggleDetailedLogs: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
 };
 

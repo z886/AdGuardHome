@@ -83,6 +83,7 @@ class Logs extends Component {
             setLogsPage,
             setLogsPagination,
             setLogsFilter,
+            toggleDetailedLogs,
             queryLogs: {
                 filter,
                 enabled,
@@ -120,6 +121,7 @@ class Logs extends Component {
                             isDetailed={isDetailed}
                             setLogsPagination={setLogsPagination}
                             setLogsPage={setLogsPage}
+                            toggleDetailedLogs={toggleDetailedLogs}
                             getLogs={this.getLogs}
                         />
                     </Fragment>

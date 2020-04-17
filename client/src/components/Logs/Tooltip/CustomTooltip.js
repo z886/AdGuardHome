@@ -33,19 +33,15 @@ const CustomTooltip = ({
 
     const getRowCell = el => (el.map ? el.map(render) : render(el));
 
-    const wrapColumn = cellRow => <div key={nanoid()}
-                                         className={'d-flex justify-content-around flex-column w-100'}>{cellRow}</div>;
-
-
     const renderFunc = (content) => {
         const { keys, values } = formatContent(content);
         return [keys, values].filter(Boolean)
-            .map((items, idx) => wrapColumn(getRowCell(items), idx));
+            .map(items => getRowCell(items));
     };
 
     return <Tooltip id={id} className={className} place={place}>
         {title && <div className="pb-4 h-25"><Trans>{title}</Trans></div>}
-        <div className={`d-flex ${columnClass}`}>
+        <div className={`grid ${columnClass}`}>
             {renderFunc(content)}
         </div>
     </Tooltip>;
