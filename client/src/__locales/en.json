@@ -220,6 +220,7 @@
     "custom_ip": "Custom IP",
     "blocking_ipv4": "Blocking IPv4",
     "blocking_ipv6": "Blocking IPv6",
+    "DNS-over-HTTPS": "IPv6, DNS-over-HTTPS",
     "form_enter_rate_limit": "Enter rate limit",
     "rate_limit": "Rate limit",
     "edns_enable": "Enable EDNS Client Subnet",
@@ -505,5 +506,8 @@
     "show_all_responses": "All responses",
     "show_blocked_responses": "Blocked",
     "show_whitelisted_responses": "Whitelisted",
-    "show_processed_responses": "Processed"
+    "show_processed_responses": "Processed",
+    "safe_search": "Safe search",
+    "blocklist": "Blocklist",
+    "milliseconds_abbreviation": "ms"
 }

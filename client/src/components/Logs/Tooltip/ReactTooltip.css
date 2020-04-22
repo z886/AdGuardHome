@@ -7,14 +7,22 @@
 }
 
 .grid {
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(auto-fill, auto);
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: repeat(2, auto);
     grid-gap: 0.5rem 1.5rem;
 }
 
-.grid:first-child:not(:last-child) .colon::after {
+.grid .key-colon:nth-child(odd)::after {
     content: ':';
+}
+
+.grid__one-row {
+    grid-template-columns: 15rem;
+}
+
+.grid__flow-column {
+    grid-auto-flow: column;
 }
 
 .custom-tooltip.show {

@@ -34,7 +34,11 @@ class Table extends Component {
         {
             Header: this.props.t('response_table_header'),
             accessor: 'response',
-            Cell: row => getResponseCell(row, this.props.filtering, this.props.t, this.props.isDetailed),
+            Cell: row => getResponseCell(
+                row,
+                this.props.filtering,
+                this.props.t, this.props.isDetailed,
+            ),
             headerClassName: 'logs__header',
         },
         {
@@ -50,13 +54,13 @@ class Table extends Component {
                 return <div className="d-flex justify-content-between">
                     {this.props.t('client_table_header')}
                     <span>
-                        <svg className={`icons icon--small icon--active mr-2 ${detailedSelected}`}
-                             onClick={() => this.props.toggleDetailedLogs(true)}>
+                        <svg className={`icons icon--small icon--active mr-2 ${plainSelected}`}
+                             onClick={() => this.props.toggleDetailedLogs(false)}>
                             <use xlinkHref='#list' />
                         </svg>
                     <svg
-                        className={`icons icon--small icon--active ${plainSelected}`}
-                        onClick={() => this.props.toggleDetailedLogs(false)}>
+                        className={`icons icon--small icon--active ${detailedSelected}`}
+                        onClick={() => this.props.toggleDetailedLogs(true)}>
                         <use xlinkHref='#detailed_list' />
                     </svg>
                     </span>

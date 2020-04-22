@@ -59,17 +59,18 @@ export const isToday = date => isSameDay(new Date(date), new Date());
 
 export const normalizeLogs = logs => logs.map((log) => {
     const {
-        time,
-        question,
         answer: response,
-        reason,
+        answer_dnssec,
         client,
+        elapsedMs,
+        question,
+        reason,
+        status,
+        time,
         filterId,
         rule,
         service_name,
-        status,
         original_answer,
-        answer_dnssec,
     } = log;
     const { host: domain, type } = question;
     const responsesArray = response ? response.map((response) => {
@@ -91,6 +92,7 @@ export const normalizeLogs = logs => logs.map((log) => {
         originalAnswer: original_answer,
         tracker,
         answer_dnssec,
+        elapsedMs,
     };
 });
 
@@ -172,7 +174,10 @@ export const getPercent = (amount, number) => {
     return 0;
 };
 
-export const captitalizeWords = text => text.split(/[ -_]/g).map(str => str.charAt(0).toUpperCase() + str.substr(1)).join(' ');
+export const captitalizeWords = text => text.split(/[ -_]/g)
+    .map(str => str.charAt(0)
+        .toUpperCase() + str.substr(1))
+    .join(' ');
 
 export const getInterfaceIp = (option) => {
     const onlyIPv6 = option.ip_addresses.every(ip => ip.includes(':'));
@@ -192,9 +197,10 @@ export const getInterfaceIp = (option) => {
 export const getIpList = (interfaces) => {
     let list = [];
 
-    Object.keys(interfaces).forEach((item) => {
-        list = [...list, ...interfaces[item].ip_addresses];
-    });
+    Object.keys(interfaces)
+        .forEach((item) => {
+            list = [...list, ...interfaces[item].ip_addresses];
+        });
 
     return list.sort();
 };
@@ -288,7 +294,9 @@ export const normalizeTextarea = (text) => {
         return [];
     }
 
-    return text.replace(/[;, ]/g, '\n').split('\n').filter(n => n);
+    return text.replace(/[;, ]/g, '\n')
+        .split('\n')
+        .filter(n => n);
 };
 
 /**
@@ -311,7 +319,10 @@ export const normalizeTopClients = topClients => topClients.reduce((nameToCountM
     // eslint-disable-next-line no-param-reassign
     nameToCountMap.configured[infoName] = count;
     return nameToCountMap;
-}, { auto: {}, configured: {} });
+}, {
+    auto: {},
+    configured: {},
+});
 
 export const getClientInfo = (clients, ip) => {
     const client = clients
@@ -324,7 +335,10 @@ export const getClientInfo = (clients, ip) => {
     const { name, whois_info } = client;
     const whois = Object.keys(whois_info).length > 0 ? whois_info : '';
 
-    return { name, whois };
+    return {
+        name,
+        whois,
+    };
 };
 
 export const getAutoClientInfo = (clients, ip) => {
@@ -337,7 +351,10 @@ export const getAutoClientInfo = (clients, ip) => {
     const { name, whois_info } = client;
     const whois = Object.keys(whois_info).length > 0 ? whois_info : '';
 
-    return { name, whois };
+    return {
+        name,
+        whois,
+    };
 };
 
 export const sortClients = (clients) => {
@@ -369,7 +386,8 @@ export const secondsToMilliseconds = (seconds) => {
     return seconds;
 };
 
-export const normalizeRulesTextarea = text => text && text.replace(/^\n/g, '').replace(/\n\s*\n/g, '\n');
+export const normalizeRulesTextarea = text => text && text.replace(/^\n/g, '')
+    .replace(/\n\s*\n/g, '\n');
 
 export const isVersionGreater = (currentVersion, previousVersion) => (
     versionCompare(currentVersion, previousVersion) === -1
@@ -446,15 +464,30 @@ export const checkSafeBrowsing = reason => reason === FILTERED_STATUS.FILTERED_S
 export const checkParental = reason => reason === FILTERED_STATUS.FILTERED_PARENTAL;
 export const checkBlockedService = reason => reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
 
+export const REQ_STATUS_TO_LABEL_MAP = {
+    [FILTERED_STATUS.NOT_FILTERED_WHITE_LIST]: 'show_whitelisted_responses',
+    [FILTERED_STATUS.NOT_FILTERED_NOT_FOUND]: 'show_processed_responses',
+    [FILTERED_STATUS.FILTERED_BLOCKED_SERVICE]: 'show_blocked_responses',
+    [FILTERED_STATUS.FILTERED_SAFE_SEARCH]: 'safe_search',
+    [FILTERED_STATUS.FILTERED_BLACK_LIST]: 'blocklist',
+};
+
 export const getCurrentFilter = (url, filters) => {
     const filter = filters && filters.find(item => url === item.url);
 
     if (filter) {
         const { enabled, name, url } = filter;
-        return { enabled, name, url };
+        return {
+            enabled,
+            name,
+            url,
+        };
     }
 
-    return { name: '', url: '' };
+    return {
+        name: '',
+        url: '',
+    };
 };
 
 /**
@@ -464,4 +497,15 @@ export const getCurrentFilter = (url, filters) => {
 export const formatNumber = (num) => {
     const currentLanguage = i18n.languages[0] || DEFAULT_LANGUAGE;
     return num.toLocaleString(currentLanguage);
+};
+
+
+/**
+ * @param {string} elapsedMs
+ * @param {function} t translate
+ * @returns {string}
+ */
+export const formatElapsedMs = (elapsedMs, t) => {
+    const formattedElapsedMs = parseInt(elapsedMs, 10) || parseFloat(elapsedMs).toFixed(2);
+    return `${formattedElapsedMs} ${t('milliseconds_abbreviation')}`;
 };

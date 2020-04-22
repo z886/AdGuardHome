@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import CustomTooltip from '../Tooltip/CustomTooltip';
 import getHintElement from './getHintElement';
 
 const getDomainCell = (row, isDetailed) => {
@@ -21,19 +20,27 @@ const getDomainCell = (row, isDetailed) => {
         className: lockIconClass,
         dataTip: answer_dnssec,
         xlinkHref: 'lock',
-        tooltipComponent: ({ id }) => <CustomTooltip id={id} className="custom-tooltip"
-                                                     content="validated_with_dnssec" />,
+        columnClass: 'w-100',
+        content: 'validated_with_dnssec',
     });
+
+    const data = {
+        name_table_header: tracker && tracker.name,
+        category_label: tracker && tracker.category,
+        source_label: tracker && tracker.sourceData && tracker.sourceData.name,
+    };
+
+    const link = data.source_label;
+    data.source_label = <a href={`//${link}`} key={link}>{link}</a>;
 
     const trackerHint = getHintElement({
         className: privacyIconClass,
         dataTip: hasTracker,
         xlinkHref: 'privacy',
-        tooltipComponent: ({ id }) => <CustomTooltip id={id} title="known_tracker" content={{
-            name_table_header: tracker.name,
-            category_label: tracker.category,
-            source_label: tracker.sourceData.name,
-        }} />,
+        contentItemClass: 'key-colon',
+        content: Object.entries(data),
+        title: 'known_tracker',
+        place: 'bottom',
     });
 
     return (
@@ -42,7 +49,8 @@ const getDomainCell = (row, isDetailed) => {
             {trackerHint}
             <div>
                 <div className="logs__text">{value}</div>
-                {isDetailed && <div className="detailed-info">test</div>}
+                {isDetailed &&
+                <div className="detailed-info">Ipv6, DNS-over-HTTPS stub</div>}
             </div>
         </div>
 

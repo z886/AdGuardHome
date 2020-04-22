@@ -282,3 +282,7 @@
     font-weight: 200 !important;
     font-size: 1rem;
 }
+
+.text-pre {
+    white-space: pre !important;
+}

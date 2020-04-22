@@ -1,12 +1,18 @@
 import React, { Fragment } from 'react';
 import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
+import CustomTooltip from '../Tooltip/CustomTooltip';
 
 const getHintElement = ({
     className,
+    contentItemClass,
+    columnClass,
     dataTip,
     xlinkHref,
-    tooltipComponent,
+    content,
+    title,
+    place,
+    tooltipClass,
 }) => {
     const id = nanoid();
 
@@ -16,15 +22,24 @@ const getHintElement = ({
                 <use xlinkHref={`#${xlinkHref}`} />
             </svg>}
         </div>
-        {dataTip && tooltipComponent({ id })}
+        <CustomTooltip className={tooltipClass} columnClass={columnClass}
+                       contentItemClass={contentItemClass}
+                       id={id} title={title} place={place} content={content} />
     </Fragment>;
 };
-
 getHintElement.propTypes = {
     className: PropTypes.string,
+    contentItemClass: PropTypes.string,
+    columnClass: PropTypes.string,
+    tooltipClass: PropTypes.string,
+    title: PropTypes.string,
+    place: PropTypes.string,
     dataTip: PropTypes.string,
     xlinkHref: PropTypes.string,
-    tooltipComponent: PropTypes.element.isRequired,
+    content: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array,
+    ]),
 };
 
 export default getHintElement;
