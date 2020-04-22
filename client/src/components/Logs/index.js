@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import escapeRegExp from 'lodash/escapeRegExp';
-import endsWith from 'lodash/endsWith';
-import { Trans, withNamespaces } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 
@@ -36,46 +34,6 @@ class Logs extends Component {
     refreshLogs = () => {
         this.getLogs(...INITIAL_REQUEST_DATA);
     };
-
-    toggleBlocking = (type, domain) => {
-        const { t, filtering: { userRules } } = this.props;
-        const lineEnding = !endsWith(userRules, '\n') ? '\n' : '';
-        const baseRule = `||${domain}^$important`;
-        const baseUnblocking = `@@${baseRule}`;
-        const blockingRule = type === 'block' ? baseUnblocking : baseRule;
-        const unblockingRule = type === 'block' ? baseRule : baseUnblocking;
-        const preparedBlockingRule = new RegExp(`(^|\n)${escapeRegExp(blockingRule)}($|\n)`);
-        const preparedUnblockingRule = new RegExp(`(^|\n)${escapeRegExp(unblockingRule)}($|\n)`);
-
-        if (userRules.match(preparedBlockingRule)) {
-            this.props.setRules(userRules.replace(`${blockingRule}`, ''));
-            this.props.addSuccessToast(`${t('rule_removed_from_custom_filtering_toast')}: ${blockingRule}`);
-        } else if (!userRules.match(preparedUnblockingRule)) {
-            this.props.setRules(`${userRules}${lineEnding}${unblockingRule}\n`);
-            this.props.addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
-        }
-
-        this.props.getFilteringStatus();
-    };
-
-    renderBlockingButton(isFiltered, domain) {
-        const buttonClass = isFiltered ? 'btn-outline-secondary' : 'btn-outline-danger';
-        const buttonText = isFiltered ? 'unblock_btn' : 'block_btn';
-        const buttonType = isFiltered ? 'unblock' : 'block';
-
-        return (
-            <div className="logs__action">
-                <button
-                    type="button"
-                    className={`btn btn-sm ${buttonClass}`}
-                    onClick={() => this.toggleBlocking(buttonType, domain)}
-                    disabled={this.props.filtering.processingRules}
-                >
-                    <Trans>{buttonText}</Trans>
-                </button>
-            </div>
-        );
-    }
 
     render() {
         const {
@@ -123,6 +81,9 @@ class Logs extends Component {
                             setLogsPage={setLogsPage}
                             toggleDetailedLogs={toggleDetailedLogs}
                             getLogs={this.getLogs}
+                            setRules={this.props.setRules}
+                            addSuccessToast={this.props.addSuccessToast}
+                            getFilteringStatus={this.props.getFilteringStatus}
                         />
                     </Fragment>
                 )}

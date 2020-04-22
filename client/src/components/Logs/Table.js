@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import ReactTable from 'react-table';
 import classNames from 'classnames';
-import {
-    checkFiltered,
-    checkRewrite,
-    checkRewriteHosts,
-    checkWhiteList,
-} from '../../helpers/helpers';
-import { TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
+import { FILTERED_STATUS, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
@@ -67,7 +61,15 @@ class Table extends Component {
                 </div>;
             },
             accessor: 'client',
-            Cell: row => getClientCell(row, this.props.t, this.props.isDetailed),
+            Cell: row => getClientCell(
+                row,
+                this.props.t,
+                this.props.isDetailed,
+                this.props.filtering.userRules,
+                this.props.setRules,
+                this.props.addSuccessToast,
+                this.props.getFilteringStatus,
+            ),
             headerClassName: 'logs__header',
         },
     ];
@@ -137,23 +139,20 @@ class Table extends Component {
 
                     const { reason } = rowInfo.original;
 
-                    if (checkFiltered(reason)) {
-                        return {
-                            className: 'red',
-                        };
-                    } else if (checkWhiteList(reason)) {
-                        return {
-                            className: 'green',
-                        };
-                    } else if (checkRewrite(reason) || checkRewriteHosts(reason)) {
-                        return {
-                            className: 'blue',
-                        };
+                    switch (reason) {
+                        case FILTERED_STATUS.FILTERED_SAFE_SEARCH:
+                            return { className: 'yellow' };
+                        case FILTERED_STATUS.FILTERED_BLACK_LIST:
+                        case FILTERED_STATUS.FILTERED_BLOCKED_SERVICE:
+                            return { className: 'red' };
+                        case FILTERED_STATUS.NOT_FILTERED_WHITE_LIST:
+                            return { className: 'green' };
+                        case FILTERED_STATUS.REWRITE:
+                        case FILTERED_STATUS.REWRITE_HOSTS:
+                            return { className: 'blue' };
+                        default:
+                            return { className: '' };
                     }
-
-                    return {
-                        className: '',
-                    };
                 }}
             />
         );
@@ -175,6 +174,9 @@ Table.propTypes = {
     getLogs: PropTypes.func.isRequired,
     toggleDetailedLogs: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    setRules: PropTypes.func.isRequired,
+    addSuccessToast: PropTypes.func.isRequired,
+    getFilteringStatus: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(Table);

@@ -19,3 +19,7 @@
 .rt-tr-group .blue {
     background-color: #e5effd;
 }
+
+.rt-tr-group .yellow {
+    background-color: var(--yellow-pale);
+}
