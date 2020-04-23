@@ -22,9 +22,9 @@ const getHintElement = ({
                 <use xlinkHref={`#${xlinkHref}`} />
             </svg>}
         </div>
-        <CustomTooltip className={tooltipClass} columnClass={columnClass}
-                       contentItemClass={contentItemClass}
-                       id={id} title={title} place={place} content={content} />
+        {dataTip && <CustomTooltip className={tooltipClass} columnClass={columnClass}
+                                   contentItemClass={contentItemClass}
+                                   id={id} title={title} place={place} content={content} />}
     </Fragment>;
 };
 getHintElement.propTypes = {

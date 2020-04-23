@@ -34,7 +34,7 @@ const queryLogs = handleActions(
         [actions.setLogsFilterFailure]: state => ({ ...state, processingGetLogs: false }),
         [actions.setLogsFilterSuccess]: (state, { payload }) => {
             const { logs, oldest, filter } = payload;
-            const pageSize = 100;
+            const pageSize = 10;
             const page = 0;
 
             const pages = Math.ceil(logs.length / pageSize);
