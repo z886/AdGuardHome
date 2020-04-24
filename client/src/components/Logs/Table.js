@@ -117,20 +117,25 @@ class Table extends Component {
                 resizable={false}
                 data={logs || []}
                 loading={isLoading}
-                showPagination={true}
                 showPageJump={false}
                 showPageSizeOptions={false}
                 onFetchData={this.fetchData}
                 onPageChange={this.changePage}
                 className="logs__table"
                 defaultPageSize={defaultPageSize || TABLE_DEFAULT_PAGE_SIZE}
-                previousText={t('previous_btn')}
-                nextText={t('next_btn')}
                 loadingText={t('loading_table_status')}
                 rowsText={t('rows_table_footer_text')}
                 noDataText={t('no_logs_found')}
                 pageText={''}
                 ofText={''}
+                showPagination
+                getPaginationProps={() => ({ className: 'custom-pagination' })}
+                previousText={<svg className="icons icon--small icon-gray">
+                    <use xlinkHref="#arrow-left" />
+                </svg>}
+                nextText={<svg className="icons icon--small icon-gray">
+                    <use xlinkHref="#arrow-right" />
+                </svg>}
                 renderTotalPagesCount={() => false}
                 getTrProps={(_state, rowInfo) => {
                     if (!rowInfo) {

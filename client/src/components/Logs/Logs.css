@@ -286,3 +286,60 @@
 .text-pre {
     white-space: pre !important;
 }
+
+.custom-pagination {
+    width: 11.875rem !important;
+    background-color: transparent;
+    box-shadow: none !important;
+    border: none !important;
+    width: 11.875rem !important;
+    padding: 5.25rem 0 2.75rem !important;
+    align-items: center !important;
+}
+
+.custom-pagination button {
+    --side-size: 2rem;
+    background-color: transparent !important;
+    border: 1px solid var(--gray-d8) !important;
+    border-radius: 4px !important;
+    width: var(--side-size) !important;
+    height: var(--side-size) !important;
+}
+
+.custom-pagination .-previous {
+    flex: 0 1 !important;
+}
+
+.custom-pagination .-next {
+    flex: 0 1 !important;
+}
+
+.-pageInfo {
+    --side-size: 2rem;
+    font-variant-numeric: tabular-nums !important;
+    background-color: transparent !important;
+    border: 1px solid var(--gray-d8) !important;
+    border-radius: 4px !important;
+    width: var(--side-size) !important;
+    height: var(--side-size) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.pagination-bottom {
+    justify-content: center !important;
+    display: flex !important;
+}
+
+.-center:before {
+    content: '...';
+    padding-bottom: 10px;
+    margin: auto;
+}
+
+.-center:after {
+    content: '...';
+    padding-bottom: 10px;
+    margin: auto;
+}

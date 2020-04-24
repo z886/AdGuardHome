@@ -314,6 +314,17 @@ const Icons = () => (
             <path d="M14,14 L19,19" id="Line"></path>
         </symbol>
 
+        <symbol id="arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M7 1L1 7l6 6" stroke="#888" strokeWidth="1.5" fill="none" fillRule="evenodd"
+                  strokeLinecap="round" />
+        </symbol>
+
+        <symbol id="arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
+            <path d="M1 1l6 6-6 6" stroke="#888" strokeWidth="1.5" fill="none" fillRule="evenodd" strokeLinecap="round"/>
+        </symbol>
+
         <symbol id="options_dots" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
             <g id="Log" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
