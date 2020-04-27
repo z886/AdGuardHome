@@ -16,7 +16,7 @@ const getDateCell = (row, isDetailed) => {
                 {formatTime(value, LONG_TIME_FORMAT)}
             </div>
             {isDetailed &&
-            <div className="detailed-info">
+            <div className="detailed-info d-none d-sm-block">
                 {formatDateTime(value, DEFAULT_SHORT_DATE_FORMAT_OPTIONS)}
             </div>
             }

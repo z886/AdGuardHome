@@ -5,10 +5,13 @@ import { Trans } from 'react-i18next';
 import Tooltip from './index';
 
 const CustomTooltip = ({
-    id, title, className, contentItemClass, place = 'right', columnClass = 'grid h-75', content,
+    id, title, className, contentItemClass, place = 'right', columnClass = 'grid h-75', content, trigger, overridePosition, scrollHide,
 }) =>
-    <Tooltip id={id} className={className} place={place}>
-        {title && <div className="pb-4 h-25"><Trans>{title}</Trans></div>}
+    <Tooltip id={id} className={className} place={place} trigger={trigger}
+             overridePosition={overridePosition}
+             scrollHide={scrollHide}
+    >
+        {title && <div className="pb-4 h-25 font-weight-bold"><Trans>{title}</Trans></div>}
         <div className={columnClass}>
             {React.Children.map(
                 content,
@@ -28,9 +31,15 @@ CustomTooltip.propTypes = {
     className: PropTypes.string,
     columnClass: PropTypes.string,
     contentItemClass: PropTypes.string,
+    overridePosition: PropTypes.func,
+    scrollHide: PropTypes.bool,
     content: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.array,
+    ]),
+    trigger: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
     ]),
 };
 

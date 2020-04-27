@@ -21,7 +21,7 @@ class Table extends Component {
         {
             Header: this.props.t('request_table_header'),
             accessor: 'domain',
-            Cell: row => getDomainCell(row, this.props.isDetailed),
+            Cell: row => getDomainCell(row, this.props.t, this.props.isDetailed),
             minWidth: 150,
             headerClassName: 'logs__header',
         },
@@ -31,7 +31,8 @@ class Table extends Component {
             Cell: row => getResponseCell(
                 row,
                 this.props.filtering,
-                this.props.t, this.props.isDetailed,
+                this.props.t,
+                this.props.isDetailed,
             ),
             headerClassName: 'logs__header',
         },
@@ -52,9 +53,8 @@ class Table extends Component {
                              onClick={() => this.props.toggleDetailedLogs(false)}>
                             <use xlinkHref='#list' />
                         </svg>
-                    <svg
-                        className={`icons icon--small icon--active ${detailedSelected}`}
-                        onClick={() => this.props.toggleDetailedLogs(true)}>
+                    <svg className={`icons icon--small icon--active ${detailedSelected}`}
+                         onClick={() => this.props.toggleDetailedLogs(true)}>
                         <use xlinkHref='#detailed_list' />
                     </svg>
                     </span>

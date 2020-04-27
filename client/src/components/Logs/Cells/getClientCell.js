@@ -65,7 +65,7 @@ const getClientCell = (
         <div className="logs__row logs__row--overflow justify-content-between">
             <div>
                 {<div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>}
-                {isDetailed && <div className="detailed-info">{name}</div>}
+                {isDetailed && <div className="detailed-info d-none d-sm-block">{name}</div>}
             </div>
             {<CustomTooltip id={id} place="left" title="client_details"
                             contentItemClass='key-colon'

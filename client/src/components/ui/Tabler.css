@@ -1923,6 +1923,9 @@ pre code {
     .text-wrap .table-responsive-xl>table {
         border: 0;
     }
+    .form-control--search {
+        width: 17rem !important;
+    }
 }
 
 .table-responsive {

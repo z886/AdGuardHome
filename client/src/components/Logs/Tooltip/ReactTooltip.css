@@ -30,6 +30,5 @@
 }
 
 .custom-tooltip:hover {
-    visibility: visible !important;
     opacity: 1 !important;
 }

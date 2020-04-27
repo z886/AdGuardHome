@@ -41,6 +41,7 @@ class Filters extends Component {
                     {getRefreshButton()}
                 </h1>
                 <Form
+                    responseStatusClass="d-none d-sm-block"
                     initialValues={filter}
                     onChange={this.handleFormChange}
                 />

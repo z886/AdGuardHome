@@ -46,18 +46,19 @@ const Form = (props) => {
     const {
         t,
         handleChange,
+        className,
+        responseStatusClass,
     } = props;
 
     return (
         <form onSubmit={handleChange}>
             <div className="input-group">
-
                 <Field
                     id="search"
                     name="search"
                     component={renderFilterField}
                     type="text"
-                    className="form-control--search form-control--transparent"
+                    className={`form-control--search form-control--transparent ${className}`}
                     placeholder="Domain or client"
                     tooltip={t('query_log_strict_search')}
                     onChange={handleChange}
@@ -65,7 +66,7 @@ const Form = (props) => {
                 <Field
                     name="response_status"
                     component="select"
-                    className="form-control custom-select form-control--transparent"
+                    className={`form-control custom-select form-control--transparent ${responseStatusClass}`}
                 >
                     <option value="">
                         <Trans>show_all_responses</Trans>
@@ -87,6 +88,8 @@ const Form = (props) => {
 
 Form.propTypes = {
     handleChange: PropTypes.func,
+    className: PropTypes.string,
+    responseStatusClass: PropTypes.string,
     t: PropTypes.func.isRequired,
 };
 

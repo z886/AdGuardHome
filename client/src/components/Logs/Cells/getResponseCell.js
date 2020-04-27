@@ -61,6 +61,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
             elapsed: formattedElapsedMs,
         },
     };
+
     const fields = FILTERED_STATUS_TO_FIELDS_MAP[reason] ? Object.entries(FILTERED_STATUS_TO_FIELDS_MAP[reason]) : 'placeholder';
 
     return (
@@ -75,7 +76,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
             })}
             <div>
                 <div className="logs__text">{t(statusLabel)}</div>
-                {isDetailed && <div className="detailed-info">{formattedElapsedMs}</div>}
+                {isDetailed && <div className="detailed-info d-none d-sm-block">{formattedElapsedMs}</div>}
             </div>
         </div>
     );

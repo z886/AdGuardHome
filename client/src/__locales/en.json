@@ -182,6 +182,7 @@
     "unblock_btn": "Unblock",
     "block_btn": "Block",
     "time_table_header": "Time",
+    "data": "Data",
     "domain_name_table_header": "Domain name",
     "type_table_header": "Type",
     "response_table_header": "Response",

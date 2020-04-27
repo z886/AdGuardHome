@@ -1,7 +1,8 @@
 .ReactTable .rt-th,
 .ReactTable .rt-td {
     padding: 10px 15px;
-    overflow: visible;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ReactTable .rt-tbody {
