@@ -1,5 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import nanoid from 'nanoid';
+import { Trans } from 'react-i18next';
 import getHintElement from './getHintElement';
 import {
     formatDateTime,
@@ -59,27 +61,26 @@ const getDomainCell = (row, t, isDetailed) => {
         place: 'bottom',
     });
 
-    const blockingTypes = {
-        block: 'block',
-        unblock: 'unblock',
-    };
-
     const formattedElapsedMs = formatElapsedMs(elapsedMs, t);
 
-    const isBlockedStatus = reason === FILTERED_STATUS.FILTERED_BLACK_LIST;
+    const isBlockedStatus = reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
+
+    const blockingTypeBtn = isBlockedStatus ? 'block_btn' : 'unblock_btn';
 
     const detailedData = {
         time_table_header: formatTime(time, LONG_TIME_FORMAT),
         data: formatDateTime(time, DEFAULT_SHORT_DATE_FORMAT_OPTIONS),
         encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
         domain,
+        details: 'title',
         install_settings_dns: domain,
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
+        client_details: 'title',
         country: 'country_stub',
         network: 'network_stub',
         source_label: tracker && tracker.sourceData && tracker.sourceData.name,
-        block_btn: blockingTypes.block,
+        [blockingTypeBtn]: 'title',
     };
 
     const detailedDataBlocked = {
@@ -87,16 +88,48 @@ const getDomainCell = (row, t, isDetailed) => {
         data: formatDateTime(time, DEFAULT_SHORT_DATE_FORMAT_OPTIONS),
         encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
         domain,
-        name: hasTracker && tracker.name,
-        category: hasTracker && tracker.category,
+        known_tracker: 'title',
+        table_name: hasTracker && tracker.name,
+        category_label: hasTracker && tracker.category,
         source_label: hasTracker && tracker.sourceData && tracker.sourceData.name,
+        details: 'title',
         install_settings_dns: domain,
         elapsed: formattedElapsedMs,
-        [answer_dnssec ? 'validated_with_dnssec' : '']: undefined,
-        unblock_btn: blockingTypes.unblock,
+        request_table_header: response && response.join('\n'),
+        validated_with_dnssec: answer_dnssec, // Boolean
+        [blockingTypeBtn]: 'title',
     };
 
     const detailedDataCurrent = isBlockedStatus ? detailedDataBlocked : detailedData;
+
+    const processContent = data => Object.entries(data)
+        .map(([key, value]) => {
+            if (!value) {
+                return undefined;
+            }
+
+            const isTitle = value === 'title';
+            const isBoolean = typeof value === 'boolean';
+
+            let keyClass = 'key-colon';
+
+            if (isTitle) {
+                keyClass = 'title--border';
+            }
+            if (isBoolean) {
+                keyClass = '';
+            }
+
+            return (
+                <React.Fragment key={nanoid()}>
+                    <div className={keyClass}>
+                        <Trans>{key}</Trans>
+                    </div>
+                    <div className="text-pre">
+                        <Trans>{(isTitle || isBoolean) ? '' : value}</Trans>
+                    </div>
+                </React.Fragment>);
+        });
 
     const detailedHint = getHintElement({
         className: 'icons icon--small d-block d-sm-none icon--active',
@@ -104,8 +137,7 @@ const getDomainCell = (row, t, isDetailed) => {
         dataTip: true,
         xlinkHref: 'options_dots',
         contentItemClass: 'text-pre key-colon',
-        content: Object.entries(detailedDataCurrent),
-        title: 'known_tracker',
+        renderContent: processContent(detailedDataCurrent),
         trigger: 'click',
         overridePosition: () => ({
             left: 0,

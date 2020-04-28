@@ -30,11 +30,12 @@ class Tooltip extends React.Component {
                 globalEventOff="click"
                 clickable
             >
-                <div onClick={() => {
+                <svg className="icon icon--small icon-cross d-block d-sm-none" onClick={() => {
                     this.tooltip.tooltipRef = null;
                     ReactTooltip.hide();
-                }} className="d-block d-sm-none">X
-                </div>
+                }}>
+                    <use xlinkHref="#cross" />
+                </svg>
                 {children}
             </ReactTooltip>
         );

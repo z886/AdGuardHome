@@ -6,21 +6,21 @@ import Tooltip from './index';
 
 const CustomTooltip = ({
     id, title, className, contentItemClass, place = 'right', columnClass = 'grid h-75', content, trigger, overridePosition, scrollHide,
+    renderContent = React.Children.map(
+        content,
+        item =>
+            <div key={nanoid()} className={contentItemClass}>
+                <Trans>{item}</Trans>
+            </div>,
+    ),
 }) =>
     <Tooltip id={id} className={className} place={place} trigger={trigger}
              overridePosition={overridePosition}
              scrollHide={scrollHide}
     >
-        {title && <div className="pb-4 h-25 font-weight-bold"><Trans>{title}</Trans></div>}
+        {title && <div className="pb-4 h-25 font-weight-bold grid-content"><Trans>{title}</Trans></div>}
         <div className={columnClass}>
-            {React.Children.map(
-                content,
-                item =>
-                    <div key={nanoid()}
-                         className={`justify-content-between w-100 text-truncate ${contentItemClass}`}>
-                        <Trans>{item}</Trans>
-                    </div>,
-            )}
+            {renderContent}
         </div>
     </Tooltip>;
 
@@ -41,6 +41,7 @@ CustomTooltip.propTypes = {
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string),
     ]),
+    renderContent: PropTypes.arrayOf(PropTypes.element),
 };
 
 export default CustomTooltip;

@@ -16,6 +16,7 @@ const getHintElement = ({
     trigger,
     overridePosition,
     scrollHide,
+    renderContent,
 }) => {
     const id = nanoid();
 
@@ -27,12 +28,14 @@ const getHintElement = ({
                 <use xlinkHref={`#${xlinkHref}`} />
             </svg>}
         </div>
-        {dataTip && <CustomTooltip className={tooltipClass} columnClass={columnClass}
-                                   contentItemClass={contentItemClass}
-                                   id={id} title={title} place={place} content={content}
-                                   trigger={trigger}
-                                   overridePosition={overridePosition}
-                                   scrollHide={scrollHide}
+        {dataTip &&
+        <CustomTooltip className={tooltipClass} columnClass={columnClass}
+                       contentItemClass={contentItemClass}
+                       id={id} title={title} place={place} content={content}
+                       trigger={trigger}
+                       overridePosition={overridePosition}
+                       scrollHide={scrollHide}
+                       renderContent={renderContent}
         />}
     </Fragment>;
 };
@@ -55,6 +58,7 @@ getHintElement.propTypes = {
         PropTypes.string,
         PropTypes.array,
     ]),
+    renderContent: PropTypes.arrayOf(PropTypes.element),
 };
 
 export default getHintElement;

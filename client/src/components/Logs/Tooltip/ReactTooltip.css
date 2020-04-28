@@ -32,3 +32,31 @@
 .custom-tooltip:hover {
     opacity: 1 !important;
 }
+
+.grid-content > * {
+    justify-content: space-between !important;
+    width: 100% !important;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.title--border {
+    padding-top: 2rem;
+}
+
+.title--border:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    border-top: 0.5px solid var(--gray-d8) !important;
+    width: 100%;
+    margin-top: -1rem;
+}
+
+.icon-cross {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+}
