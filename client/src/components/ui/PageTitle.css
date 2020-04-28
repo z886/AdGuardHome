@@ -8,6 +8,17 @@
     align-items: flex-end;
 }
 
+@media (max-width: 575px) {
+    .page-header--logs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .page-title {
+        padding-bottom: 2.5rem;;
+    }
+}
+
 .page-subtitle {
     margin-left: 0;
     font-size: 0.9rem;

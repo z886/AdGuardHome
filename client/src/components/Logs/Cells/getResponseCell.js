@@ -70,7 +70,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
                 className: 'icons mx-2 icon--small',
                 dataTip: true,
                 xlinkHref: 'question',
-                contentItemClass: 'text-pre key-colon',
+                contentItemClass: 'text-pre text-truncate key-colon',
                 title: 'details',
                 content: fields,
             })}

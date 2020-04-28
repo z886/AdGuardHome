@@ -130,7 +130,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
                     <div className={keyClass}>
                         <Trans>{isButton ? value : key}</Trans>
                     </div>
-                    <div className="text-pre">
+                    <div className="text-pre text-truncate">
                         <Trans>{(isTitle || isButton || isBoolean) ? '' : value}</Trans>
                     </div>
                 </React.Fragment>
@@ -139,10 +139,10 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
 
     const detailedHint = getHintElement({
         className: 'icons icon--small d-block d-sm-none icon--active icon--detailed-info',
-        tooltipClass: 'ml-0 w-100',
+        tooltipClass: 'ml-0 w-100 h-100',
         dataTip: true,
         xlinkHref: 'options_dots',
-        contentItemClass: 'text-pre key-colon',
+        contentItemClass: 'text-pre text-truncate key-colon',
         renderContent: processContent(detailedDataCurrent),
         trigger: 'click',
         overridePosition: () => ({

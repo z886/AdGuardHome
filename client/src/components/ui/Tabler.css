@@ -606,6 +606,13 @@ pre code {
     margin-left: auto;
 }
 
+@media (max-width: 575px) {
+    .container {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
 @media (min-width: 576px) {
     .container {
         max-width: 540px;
@@ -1926,6 +1933,14 @@ pre code {
     }
     .form-control--search {
         width: 17rem !important;
+        height: 2rem;
+    }
+}
+
+@media (max-width: 374.98px) {
+    .form-control--search {
+        width: 15rem !important;
+        height: 2rem;
     }
 }
 

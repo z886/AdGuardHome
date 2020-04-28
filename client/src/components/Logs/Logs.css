@@ -36,7 +36,12 @@ justify-content-between
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 8.75rem;
+}
+
+@media (max-width: 425px) {
+    .logs__text {
+        max-width: 8.75rem;
+    }
 }
 
 .logs__text--full {
