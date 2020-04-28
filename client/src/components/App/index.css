@@ -8,13 +8,19 @@ body {
     margin-top: 30px;
 }
 
-.container--wrap {
-    min-height: calc(100vh - 160px);
-}
-
 @media screen and (min-width: 992px) {
     .container--wrap {
         min-height: calc(100vh - 117px);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .container {
+        padding: 0;
+    }
+
+    .container--wrap {
+        min-height: calc(100vh);
     }
 }
 

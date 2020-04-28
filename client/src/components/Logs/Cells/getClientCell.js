@@ -1,16 +1,12 @@
 import React from 'react';
 import nanoid from 'nanoid';
-import escapeRegExp from 'lodash/escapeRegExp';
-import endsWith from 'lodash/endsWith';
 import { formatClientCell } from '../../../helpers/formatClientCell';
 import getHintElement from './getHintElement';
 import CustomTooltip from '../Tooltip/CustomTooltip';
 import { checkFiltered } from '../../../helpers/helpers';
+import { BLOCK_ACTIONS } from '../../../helpers/constants';
 
-const getClientCell = (
-    row, t, isDetailed, userRules,
-    setRules, addSuccessToast, getFilteringStatus,
-) => {
+const getClientCell = (row, t, isDetailed, toggleBlocking) => {
     const {
         reason, client, domain, info: { name },
     } = row.original;
@@ -24,34 +20,8 @@ const getClientCell = (
         network: 'network_stub',
     };
 
-    const blockingTypes = {
-        block: 'block',
-        unblock: 'unblock',
-    };
-
-    const toggleBlocking = (type, domain) => {
-        const lineEnding = !endsWith(userRules, '\n') ? '\n' : '';
-        const baseRule = `||${domain}^$important`;
-        const baseUnblocking = `@@${baseRule}`;
-
-        const blockingRule = type === blockingTypes.block ? baseUnblocking : baseRule;
-        const unblockingRule = type === blockingTypes.block ? baseRule : baseUnblocking;
-        const preparedBlockingRule = new RegExp(`(^|\n)${escapeRegExp(blockingRule)}($|\n)`);
-        const preparedUnblockingRule = new RegExp(`(^|\n)${escapeRegExp(unblockingRule)}($|\n)`);
-
-        if (userRules.match(preparedBlockingRule)) {
-            setRules(userRules.replace(`${blockingRule}`, ''));
-            addSuccessToast(`${t('rule_removed_from_custom_filtering_toast')}: ${blockingRule}`);
-        } else if (!userRules.match(preparedUnblockingRule)) {
-            setRules(`${userRules}${lineEnding}${unblockingRule}\n`);
-            addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
-        }
-
-        getFilteringStatus();
-    };
-
     const isFiltered = checkFiltered(reason);
-    const buttonType = isFiltered ? blockingTypes.unblock : blockingTypes.block;
+    const buttonType = isFiltered ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
     const optionName = isFiltered ? 'remove_domain_from_whitelist' : 'add_domain_to_whitelist';
 
     const optionsToHandlerMap = {

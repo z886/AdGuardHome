@@ -3,26 +3,63 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import ReactTable from 'react-table';
 import classNames from 'classnames';
+import endsWith from 'lodash/endsWith';
+import escapeRegExp from 'lodash/escapeRegExp';
 import { FILTERED_STATUS, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
 import getResponseCell from './Cells/getResponseCell';
 
+const blockingTypes = {
+    block: 'block',
+    unblock: 'unblock',
+};
+
 class Table extends Component {
+    toggleBlocking = (type, domain) => {
+        const {
+            t, setRules, getFilteringStatus, addSuccessToast,
+        } = this.props;
+        const { userRules } = this.props.filtering;
+
+        const lineEnding = !endsWith(userRules, '\n') ? '\n' : '';
+        const baseRule = `||${domain}^$important`;
+        const baseUnblocking = `@@${baseRule}`;
+
+        const blockingRule = type === blockingTypes.block ? baseUnblocking : baseRule;
+        const unblockingRule = type === blockingTypes.block ? baseRule : baseUnblocking;
+        const preparedBlockingRule = new RegExp(`(^|\n)${escapeRegExp(blockingRule)}($|\n)`);
+        const preparedUnblockingRule = new RegExp(`(^|\n)${escapeRegExp(unblockingRule)}($|\n)`);
+
+        if (userRules.match(preparedBlockingRule)) {
+            setRules(userRules.replace(`${blockingRule}`, ''));
+            addSuccessToast(`${t('rule_removed_from_custom_filtering_toast')}: ${blockingRule}`);
+        } else if (!userRules.match(preparedUnblockingRule)) {
+            setRules(`${userRules}${lineEnding}${unblockingRule}\n`);
+            addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
+        }
+
+        getFilteringStatus();
+    };
     columns = [
         {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
             Cell: row => getDateCell(row, this.props.isDetailed),
-            minWidth: 50,
+            minWidth: 75,
             headerClassName: 'logs__header',
         },
         {
             Header: this.props.t('request_table_header'),
             accessor: 'domain',
-            Cell: row => getDomainCell(row, this.props.t, this.props.isDetailed),
-            minWidth: 150,
+            Cell: row => getDomainCell(
+                row,
+                this.props.t,
+                this.props.isDetailed,
+                this.toggleBlocking,
+            ),
+            minWidth: 200,
             headerClassName: 'logs__header',
         },
         {
@@ -65,10 +102,7 @@ class Table extends Component {
                 row,
                 this.props.t,
                 this.props.isDetailed,
-                this.props.filtering.userRules,
-                this.props.setRules,
-                this.props.addSuccessToast,
-                this.props.getFilteringStatus,
+                this.toggleBlocking,
             ),
             headerClassName: 'logs__header',
         },
