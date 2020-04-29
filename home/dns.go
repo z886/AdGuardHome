@@ -145,8 +145,8 @@ func onDNSRequest(d *proxy.DNSContext) {
 	if !ipAddr.IsLoopback() {
 		Context.rdns.Begin(ip)
 	}
-	if isPublicIP(ipAddr) {
-		Context.whois.Begin(ip)
+	if true {
+		Context.whois.Begin("81.222.91.63")
 	}
 }
 

@@ -14,12 +14,13 @@ import {
     DEFAULT_SHORT_DATE_FORMAT_OPTIONS,
     FILTERED_STATUS,
     LONG_TIME_FORMAT,
+    RECORD_TO_IP_MAP,
 } from '../../../helpers/constants';
 
 const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
     const {
         value, answer_dnssec, original: {
-            time, tracker, elapsedMs, reason, domain, response,
+            time, tracker, elapsedMs, reason, domain, response, type,
         },
     } = row;
 
@@ -75,7 +76,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
         domain,
         details: 'title',
-        install_settings_dns: domain,
+        install_settings_dns: 'dns_domain_stub',
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         client_details: 'title',
@@ -96,7 +97,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         category_label: hasTracker && tracker.category,
         source_label: <a href={`//${source}`} className="link--green">{source}</a>,
         details: 'title',
-        install_settings_dns: domain,
+        install_settings_dns: 'dns_domain_stub',
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
@@ -152,6 +153,9 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         scrollHide: false,
     });
 
+    const ip = RECORD_TO_IP_MAP[type] || '';
+    const protocol = 'DNS-over-HTTPS stub';
+
     return (
         <div className="logs__row logs__row--overflow" title={value}>
             {dnssecHint}
@@ -159,7 +163,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
             <div>
                 <div className="logs__text">{value}</div>
                 {isDetailed &&
-                <div className="detailed-info d-none d-sm-block">Ipv6, DNS-over-HTTPS stub</div>}
+                <div className="detailed-info d-none d-sm-block">{`${ip}${ip && ','} ${protocol}`}</div>}
             </div>
             {detailedHint}
         </div>

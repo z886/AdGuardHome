@@ -5,16 +5,11 @@ import ReactTable from 'react-table';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
 import escapeRegExp from 'lodash/escapeRegExp';
-import { FILTERED_STATUS, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
+import { BLOCK_ACTIONS, FILTERED_STATUS, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
 import getResponseCell from './Cells/getResponseCell';
-
-const blockingTypes = {
-    block: 'block',
-    unblock: 'unblock',
-};
 
 class Table extends Component {
     toggleBlocking = (type, domain) => {
@@ -27,8 +22,8 @@ class Table extends Component {
         const baseRule = `||${domain}^$important`;
         const baseUnblocking = `@@${baseRule}`;
 
-        const blockingRule = type === blockingTypes.block ? baseUnblocking : baseRule;
-        const unblockingRule = type === blockingTypes.block ? baseRule : baseUnblocking;
+        const blockingRule = type === BLOCK_ACTIONS.block ? baseUnblocking : baseRule;
+        const unblockingRule = type === BLOCK_ACTIONS.block ? baseRule : baseUnblocking;
         const preparedBlockingRule = new RegExp(`(^|\n)${escapeRegExp(blockingRule)}($|\n)`);
         const preparedUnblockingRule = new RegExp(`(^|\n)${escapeRegExp(unblockingRule)}($|\n)`);
 
@@ -48,6 +43,7 @@ class Table extends Component {
             accessor: 'time',
             Cell: row => getDateCell(row, this.props.isDetailed),
             minWidth: 75,
+            maxHeight: 50,
             headerClassName: 'logs__header',
         },
         {
@@ -60,6 +56,7 @@ class Table extends Component {
                 this.toggleBlocking,
             ),
             minWidth: 200,
+            maxHeight: 50,
             headerClassName: 'logs__header',
         },
         {
@@ -71,6 +68,7 @@ class Table extends Component {
                 this.props.t,
                 this.props.isDetailed,
             ),
+            maxHeight: 50,
             headerClassName: 'logs__header',
         },
         {
@@ -104,10 +102,10 @@ class Table extends Component {
                 this.props.isDetailed,
                 this.toggleBlocking,
             ),
+            maxHeight: 50,
             headerClassName: 'logs__header',
         },
     ];
-
 
     fetchData = (state) => {
         const { pages } = state;

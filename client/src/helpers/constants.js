@@ -383,3 +383,8 @@ export const BLOCK_ACTIONS = {
     block: 'block',
     unblock: 'unblock',
 };
+
+export const RECORD_TO_IP_MAP = {
+    A: 'Ipv4',
+    AAAA: 'Ipv6',
+};

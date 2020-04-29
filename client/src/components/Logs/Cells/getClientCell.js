@@ -22,10 +22,9 @@ const getClientCell = (row, t, isDetailed, toggleBlocking) => {
 
     const isFiltered = checkFiltered(reason);
     const buttonType = isFiltered ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
-    const optionName = isFiltered ? 'remove_domain_from_whitelist' : 'add_domain_to_whitelist';
 
     const optionsToHandlerMap = {
-        [optionName]: () => toggleBlocking(buttonType, domain),
+        [`${buttonType}_btn`]: () => toggleBlocking(buttonType, domain),
     };
 
     const options = Object.entries(optionsToHandlerMap)
