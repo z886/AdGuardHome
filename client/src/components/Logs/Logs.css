@@ -304,8 +304,11 @@ justify-content-between
     box-shadow: none !important;
     border: none !important;
     width: 11.875rem !important;
-    padding: 5.25rem 0 2.75rem !important;
     align-items: center !important;
+}
+
+.custom-pagination--padding {
+    padding: 5.25rem 0 2.75rem !important;
 }
 
 .custom-pagination button {
@@ -323,6 +326,10 @@ justify-content-between
 
 .custom-pagination .-next {
     flex: 0 1 !important;
+}
+
+.custom-pagination .-btn {
+    display: flex !important;
 }
 
 .-pageInfo {

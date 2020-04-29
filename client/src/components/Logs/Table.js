@@ -160,16 +160,18 @@ class Table extends Component {
                 loadingText={t('loading_table_status')}
                 rowsText={t('rows_table_footer_text')}
                 noDataText={t('no_logs_found')}
-                pageText={''}
-                ofText={''}
+                pageText=''
+                ofText=''
                 showPagination
-                getPaginationProps={() => ({ className: 'custom-pagination' })}
-                previousText={<svg className="icons icon--small icon-gray">
-                    <use xlinkHref="#arrow-left" />
-                </svg>}
-                nextText={<svg className="icons icon--small icon-gray">
-                    <use xlinkHref="#arrow-right" />
-                </svg>}
+                getPaginationProps={() => ({ className: 'custom-pagination custom-pagination--padding' })}
+                previousText={
+                    <svg className="icons icon--small icon-gray w-100 h-100">
+                        <use xlinkHref="#arrow-left" />
+                    </svg>}
+                nextText={
+                    <svg className="icons icon--small icon-gray w-100 h-100">
+                        <use xlinkHref="#arrow-right" />
+                    </svg>}
                 renderTotalPagesCount={() => false}
                 getTrProps={(_state, rowInfo) => {
                     if (!rowInfo) {

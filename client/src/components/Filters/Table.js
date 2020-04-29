@@ -127,17 +127,26 @@ class Table extends Component {
             <ReactTable
                 data={filters}
                 columns={this.columns}
-                showPagination={true}
+                showPagination
                 defaultPageSize={10}
+                showPageSizeOptions={false}
+                showPageJump={false}
+                renderTotalPagesCount={() => false}
                 loading={loading}
                 minRows={6}
-                previousText={t('previous_btn')}
-                nextText={t('next_btn')}
+                pageText=''
+                ofText=''
                 loadingText={t('loading_table_status')}
-                pageText={t('page_table_footer_text')}
-                ofText="/"
-                rowsText={t('rows_table_footer_text')}
                 noDataText={whitelist ? t('no_whitelist_added') : t('no_blocklist_added')}
+                getPaginationProps={() => ({ className: 'custom-pagination' })}
+                previousText={
+                    <svg className="icons icon--small icon-gray w-100 h-100">
+                        <use xlinkHref="#arrow-left" />
+                    </svg>}
+                nextText={
+                    <svg className="icons icon--small icon-gray w-100 h-100">
+                        <use xlinkHref="#arrow-right" />
+                    </svg>}
             />
         );
     }
