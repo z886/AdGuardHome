@@ -1267,6 +1267,7 @@ Response:
 			}
 			...
 		],
+		"upstream":"...", // Upstream URL starting with tcp://, tls://, https://, or with an IP address
 		"answer_dnssec": true,
 		"client":"127.0.0.1",
 		"elapsedMs":"0.098403",
