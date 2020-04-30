@@ -26,6 +26,7 @@ import {
     DEFAULT_LANGUAGE,
     FILTERED_STATUS,
     FILTERED,
+    SCHEME_TO_PROTOCOL_MAP,
 } from './constants';
 
 /**
@@ -508,4 +509,25 @@ export const formatNumber = (num) => {
 export const formatElapsedMs = (elapsedMs, t) => {
     const formattedElapsedMs = parseInt(elapsedMs, 10) || parseFloat(elapsedMs).toFixed(2);
     return `${formattedElapsedMs} ${t('milliseconds_abbreviation')}`;
+};
+
+/**
+ *
+ * @param {string} upstream
+ * @returns {string}
+ */
+export const getProtocolName = (upstream) => {
+    if (!upstream) {
+        return '';
+    }
+    if (upstream.startsWith('https')) {
+        return SCHEME_TO_PROTOCOL_MAP.HTTPS;
+    }
+    if (upstream.startsWith('tcp')) {
+        return SCHEME_TO_PROTOCOL_MAP.TCP;
+    }
+    if (upstream.startsWith('tls')) {
+        return SCHEME_TO_PROTOCOL_MAP.TLS;
+    }
+    return SCHEME_TO_PROTOCOL_MAP.PLAIN;
 };

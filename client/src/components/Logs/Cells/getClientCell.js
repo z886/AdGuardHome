@@ -6,18 +6,21 @@ import CustomTooltip from '../Tooltip/CustomTooltip';
 import { checkFiltered } from '../../../helpers/helpers';
 import { BLOCK_ACTIONS } from '../../../helpers/constants';
 
-const getClientCell = (row, t, isDetailed, toggleBlocking) => {
+const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
         reason, client, domain, info: { name },
     } = row.original;
+
+    const autoClient = autoClients.find(autoClient => autoClient.name === client);
+
     const id = nanoid();
 
     const data = {
         table_name: domain,
         ip: client,
         dhcp_table_hostname: 'hostname_stub',
-        country: 'country_stub',
-        network: 'network_stub',
+        country: autoClient && autoClient.country,
+        network: autoClient && autoClient.orgname,
     };
 
     const isFiltered = checkFiltered(reason);

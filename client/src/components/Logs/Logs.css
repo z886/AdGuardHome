@@ -295,7 +295,8 @@ justify-content-between
 }
 
 .text-pre {
-    white-space: pre !important;
+    white-space: pre-wrap !important;
+    overflow: visible;
 }
 
 .custom-pagination {

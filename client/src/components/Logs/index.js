@@ -21,6 +21,7 @@ class Logs extends Component {
         this.getLogs(...INITIAL_REQUEST_DATA);
         this.props.getFilteringStatus();
         this.props.getLogsConfig();
+        this.props.getClients();
     }
 
     getLogs = (older_than, page, initial) => {
@@ -42,6 +43,7 @@ class Logs extends Component {
             setLogsPagination,
             setLogsFilter,
             toggleDetailedLogs,
+            dashboard,
             queryLogs: {
                 filter,
                 enabled,
@@ -72,6 +74,7 @@ class Logs extends Component {
                             logs={logs}
                             pages={pages}
                             page={page}
+                            autoClients={dashboard.autoClients}
                             oldest={oldest}
                             filtering={filtering}
                             processingGetLogs={processingGetLogs}

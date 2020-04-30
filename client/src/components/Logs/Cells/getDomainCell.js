@@ -6,7 +6,7 @@ import getHintElement from './getHintElement';
 import {
     formatDateTime,
     formatElapsedMs,
-    formatTime,
+    formatTime, getProtocolName,
     REQ_STATUS_TO_LABEL_MAP,
 } from '../../../helpers/helpers';
 import {
@@ -17,15 +17,44 @@ import {
     RECORD_TO_IP_MAP,
 } from '../../../helpers/constants';
 
-const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
+const processContent = (data, buttonType) => Object.entries(data)
+    .map(([key, value]) => {
+        const isTitle = value === 'title';
+        const isButton = key === buttonType;
+        const isBoolean = typeof value === 'boolean';
+
+        let keyClass = 'key-colon';
+
+        if (isTitle) {
+            keyClass = 'title--border';
+        }
+        if (isButton || isBoolean) {
+            keyClass = '';
+        }
+
+        return (
+            <React.Fragment key={nanoid()}>
+                <div className={keyClass}>
+                    <Trans>{isButton ? value : key}</Trans>
+                </div>
+                <div className="text-pre text-truncate">
+                    <Trans>{(isTitle || isButton || isBoolean) ? '' : value || '—'}</Trans>
+                </div>
+            </React.Fragment>
+        );
+    });
+
+const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
-        value, answer_dnssec, original: {
-            time, tracker, elapsedMs, reason, domain, response, type,
+        value, answer_dnssec, upstream, original: {
+            time, tracker, elapsedMs, reason, domain, response, type, client,
         },
     } = row;
 
+    const autoClient = autoClients.find(autoClient => autoClient.name === client);
     const hasTracker = !!tracker;
-    const source = hasTracker && tracker.sourceData && tracker.sourceData.name;
+
+    const source = tracker && tracker.sourceData && tracker.sourceData.name;
 
     const lockIconClass = classNames('icons', 'icon--small', 'd-none', 'd-sm-block', {
         'icon--active': answer_dnssec,
@@ -48,7 +77,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
     const data = {
         name_table_header: tracker && tracker.name,
         category_label: tracker && tracker.category,
-        source_label: <a href={`//${source}`} className="link--green">{source}</a>,
+        source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
     };
 
     const trackerHint = getHintElement({
@@ -62,8 +91,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
     });
 
     const formattedElapsedMs = formatElapsedMs(elapsedMs, t);
-
     const isBlockedStatus = reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
+
     const buttonType = isBlockedStatus ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
 
     const onToggleBlock = () => {
@@ -76,15 +105,15 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
         domain,
         details: 'title',
-        install_settings_dns: 'dns_domain_stub',
+        install_settings_dns: upstream,
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         client_details: 'title',
-        country: 'country_stub',
-        network: 'network_stub',
-        source_label: <a href={`//${source}`} className="link--green">{source}</a>,
+        country: autoClient && autoClient.country,
+        network: autoClient && autoClient.orgname,
+        source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
         [buttonType]: <div onClick={onToggleBlock}
-                                   className="title--border">{t(`${buttonType}_btn`)}</div>,
+                           className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
     const detailedDataBlocked = {
@@ -95,48 +124,17 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         known_tracker: 'title',
         table_name: hasTracker && tracker.name,
         category_label: hasTracker && tracker.category,
-        source_label: <a href={`//${source}`} className="link--green">{source}</a>,
+        source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
         details: 'title',
-        install_settings_dns: 'dns_domain_stub',
+        install_settings_dns: upstream,
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
         [buttonType]: <div onClick={onToggleBlock}
-                                   className="title--border">{t(`${buttonType}_btn`)}</div>,
+                           className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
     const detailedDataCurrent = isBlockedStatus ? detailedDataBlocked : detailedData;
-
-    const processContent = data => Object.entries(data)
-        .map(([key, value]) => {
-            if (!value) {
-                return undefined;
-            }
-
-            const isTitle = value === 'title';
-            const isButton = key === buttonType;
-            const isBoolean = typeof value === 'boolean';
-
-            let keyClass = 'key-colon';
-
-            if (isTitle) {
-                keyClass = 'title--border';
-            }
-            if (isButton || isBoolean) {
-                keyClass = '';
-            }
-
-            return (
-                <React.Fragment key={nanoid()}>
-                    <div className={keyClass}>
-                        <Trans>{isButton ? value : key}</Trans>
-                    </div>
-                    <div className="text-pre text-truncate">
-                        <Trans>{(isTitle || isButton || isBoolean) ? '' : value}</Trans>
-                    </div>
-                </React.Fragment>
-            );
-        });
 
     const detailedHint = getHintElement({
         className: 'icons icon--small d-block d-sm-none icon--active icon--detailed-info',
@@ -144,7 +142,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
         dataTip: true,
         xlinkHref: 'options_dots',
         contentItemClass: 'text-pre text-truncate key-colon',
-        renderContent: processContent(detailedDataCurrent),
+        renderContent: processContent(detailedDataCurrent, buttonType),
         trigger: 'click',
         overridePosition: () => ({
             left: 0,
@@ -154,7 +152,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
     });
 
     const ip = RECORD_TO_IP_MAP[type] || '';
-    const protocol = 'DNS-over-HTTPS stub';
+    const protocol = t(getProtocolName(upstream));
 
     return (
         <div className="logs__row logs__row--overflow" title={value}>
@@ -163,7 +161,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking) => {
             <div>
                 <div className="logs__text">{value}</div>
                 {isDetailed &&
-                <div className="detailed-info d-none d-sm-block">{`${ip}${ip && ','} ${protocol}`}</div>}
+                <div className="detailed-info d-none d-sm-block">{`${ip}${ip && protocol && ', '}${protocol}`}</div>}
             </div>
             {detailedHint}
         </div>

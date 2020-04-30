@@ -388,3 +388,10 @@ export const RECORD_TO_IP_MAP = {
     A: 'Ipv4',
     AAAA: 'Ipv6',
 };
+
+export const SCHEME_TO_PROTOCOL_MAP = {
+    HTTPS: 'dns_over_https',
+    TCP: 'dns_over_tcp',
+    TLS: 'dns_over_tls',
+    PLAIN: 'plain',
+};

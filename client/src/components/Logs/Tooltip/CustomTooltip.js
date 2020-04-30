@@ -10,7 +10,7 @@ const CustomTooltip = ({
         content,
         item =>
             <div key={nanoid()} className={contentItemClass}>
-                <Trans>{item}</Trans>
+                <Trans>{item || '—'}</Trans>
             </div>,
     ),
 }) =>
