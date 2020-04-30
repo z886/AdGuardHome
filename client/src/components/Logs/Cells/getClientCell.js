@@ -8,7 +8,7 @@ import { BLOCK_ACTIONS } from '../../../helpers/constants';
 
 const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
-        reason, client, domain, info: { name },
+        upstream, reason, client, domain, info: { name },
     } = row.original;
 
     const autoClient = autoClients.find(autoClient => autoClient.name === client);
@@ -18,7 +18,7 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const data = {
         table_name: domain,
         ip: client,
-        dhcp_table_hostname: 'hostname_stub',
+        dhcp_table_hostname: upstream,
         country: autoClient && autoClient.country,
         network: autoClient && autoClient.orgname,
     };
