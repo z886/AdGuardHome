@@ -137,7 +137,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const detailedDataCurrent = isBlockedStatus ? detailedDataBlocked : detailedData;
 
     const detailedHint = getHintElement({
-        className: 'icons icon--small d-block d-sm-none icon--active icon--detailed-info',
+        className: 'icons icon--small d-block d-md-none icon--active icon--detailed-info',
         tooltipClass: 'ml-0 w-100 h-100',
         dataTip: true,
         xlinkHref: 'options_dots',
