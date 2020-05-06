@@ -18,17 +18,12 @@ Dashboard UI
     --red: #cd201f;
     --orange: #fd9644;
     --yellow: #f1c40f;
-    --yellow-pale: rgba(247, 181, 0, 0.1);
     --green: #5eba00;
-    --green79: #67B279;
     --teal: #2bcbba;
     --cyan: #17a2b8;
     --white: #fff;
     --gray: #868e96;
     --gray-dark: #343a40;
-    --gray-a5: #a5a5a5;
-    --gray-d8: #d8d8d8;
-    --gray-f3: #F3F3F3;
     --azure: #45aaf2;
     --lime: #7bd235;
     --primary: #467fcf;
@@ -604,13 +599,6 @@ pre code {
     padding-left: 0.75rem;
     margin-right: auto;
     margin-left: auto;
-}
-
-@media (max-width: 575px) {
-    .container {
-        padding-right: 0;
-        padding-left: 0;
-    }
 }
 
 @media (min-width: 576px) {
@@ -1931,17 +1919,6 @@ pre code {
     .text-wrap .table-responsive-xl>table {
         border: 0;
     }
-    .form-control--search {
-        width: 17rem !important;
-        height: 2rem;
-    }
-}
-
-@media (max-width: 374.98px) {
-    .form-control--search {
-        width: 15rem !important;
-        height: 2rem;
-    }
 }
 
 .table-responsive {
@@ -1969,26 +1946,6 @@ pre code {
     border: 1px solid rgba(0, 40, 100, 0.12);
     border-radius: 3px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.form-control--search {
-    width: 39.125rem;
-    box-shadow: 0 1px 0 #ddd;
-    padding: 0 2.5rem;
-}
-
-.form-control--transparent {
-    border: 0 solid transparent !important;
-    background-color: transparent !important;
-}
-
-.input-group-search {
-    background-color: transparent;
-    position: relative;
-    left: 2rem;
-    top: 0.4rem;
-    width: 1.5rem;
-    height: 1.5rem;
 }
 
 .form-control::-ms-expand {
@@ -3833,7 +3790,6 @@ tbody.collapse.show {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin-left: 3.3125rem;
 }
 
 .custom-select:focus {
@@ -14330,10 +14286,6 @@ Icon input
 
 .input-icon .form-control:not(:first-child) {
     padding-left: 2.5rem;
-}
-
-.input-icon-question{
-
 }
 
 .input-icon-addon {

@@ -188,7 +188,7 @@ class Settings extends Component {
                                 <Field
                                     name="web.ip"
                                     component="select"
-                                    className="form-control custom-select"
+                                    className="form-control custom-select ml-small"
                                     onChange={handleChange}
                                 >
                                     <option value={ALL_INTERFACES_IP}>
@@ -258,7 +258,7 @@ class Settings extends Component {
                                 <Field
                                     name="dns.ip"
                                     component="select"
-                                    className="form-control custom-select"
+                                    className="form-control custom-select ml-small"
                                     onChange={handleChange}
                                 >
                                     <option value={ALL_INTERFACES_IP}>

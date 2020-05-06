@@ -92,7 +92,7 @@ let Form = (props) => {
                             <Field
                                 name="interface_name"
                                 component="select"
-                                className="form-control custom-select"
+                                className="form-control custom-select ml-small"
                                 validate={[required]}
                             >
                                 <option value="" disabled={enabled}>
