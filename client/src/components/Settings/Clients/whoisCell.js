@@ -35,7 +35,7 @@ const whoisCell = t =>
 
         return (
             <div className="logs__row logs__row--overflow">
-                <span className="logs__text logs__text--wrap">{getFormattedWhois(value, t)}</span>
+                <div className="logs__text logs__text--wrap">{getFormattedWhois(value, t)}</div>
             </div>
         );
     };

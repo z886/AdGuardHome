@@ -5,7 +5,7 @@ import ReactTable from 'react-table';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
 import escapeRegExp from 'lodash/escapeRegExp';
-import { BLOCK_ACTIONS, FILTERED_STATUS, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
+import { BLOCK_ACTIONS, REASON_TO_COLOR_CLASS_MAP, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
 import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
@@ -42,9 +42,9 @@ class Table extends Component {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
             Cell: row => getDateCell(row, this.props.isDetailed),
-            minWidth: 75,
-            maxHeight: 50,
-            headerClassName: 'logs__header',
+            minWidth: 62,
+            minHeight: 60,
+            headerClassName: 'logs__text',
         },
         {
             Header: this.props.t('request_table_header'),
@@ -56,9 +56,9 @@ class Table extends Component {
                 this.toggleBlocking,
                 this.props.autoClients,
             ),
-            minWidth: 200,
-            maxHeight: 50,
-            headerClassName: 'logs__header',
+            minWidth: 180,
+            minHeight: 60,
+            headerClassName: 'logs__text',
         },
         {
             Header: this.props.t('response_table_header'),
@@ -69,8 +69,9 @@ class Table extends Component {
                 this.props.t,
                 this.props.isDetailed,
             ),
-            maxHeight: 50,
-            headerClassName: 'logs__header',
+            minWidth: 85,
+            minHeight: 60,
+            headerClassName: 'logs__text',
         },
         {
             Header: () => {
@@ -104,8 +105,9 @@ class Table extends Component {
                 this.toggleBlocking,
                 this.props.autoClients,
             ),
-            maxHeight: 50,
-            headerClassName: 'logs__header',
+            minWidth: 140,
+            minHeight: 60,
+            headerClassName: 'logs__text',
         },
     ];
 
@@ -179,21 +181,9 @@ class Table extends Component {
                     }
 
                     const { reason } = rowInfo.original;
+                    const colorClass = REASON_TO_COLOR_CLASS_MAP[reason] || '';
 
-                    switch (reason) {
-                        case FILTERED_STATUS.FILTERED_SAFE_SEARCH:
-                            return { className: 'yellow' };
-                        case FILTERED_STATUS.FILTERED_BLACK_LIST:
-                        case FILTERED_STATUS.FILTERED_BLOCKED_SERVICE:
-                            return { className: 'red' };
-                        case FILTERED_STATUS.NOT_FILTERED_WHITE_LIST:
-                            return { className: 'green' };
-                        case FILTERED_STATUS.REWRITE:
-                        case FILTERED_STATUS.REWRITE_HOSTS:
-                            return { className: 'blue' };
-                        default:
-                            return { className: '' };
-                    }
+                    return { className: `${this.props.isDetailed ? 'row--detailed' : ''} ${colorClass}` };
                 }}
             />
         );

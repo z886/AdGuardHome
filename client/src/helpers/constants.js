@@ -385,8 +385,8 @@ export const BLOCK_ACTIONS = {
 };
 
 export const RECORD_TO_IP_MAP = {
-    A: 'Ipv4',
-    AAAA: 'Ipv6',
+    A: 'IPv4',
+    AAAA: 'IPv6',
 };
 
 export const SCHEME_TO_PROTOCOL_MAP = {
@@ -394,4 +394,12 @@ export const SCHEME_TO_PROTOCOL_MAP = {
     TCP: 'dns_over_tcp',
     TLS: 'dns_over_tls',
     PLAIN: 'plain',
+};
+
+export const REASON_TO_COLOR_CLASS_MAP = {
+    [FILTERED_STATUS.FILTERED_SAFE_SEARCH]: 'yellow',
+    [FILTERED_STATUS.FILTERED_BLACK_LIST]: 'red',
+    [FILTERED_STATUS.FILTERED_BLOCKED_SERVICE]: 'red',
+    [FILTERED_STATUS.NOT_FILTERED_WHITE_LIST]: 'green',
+    [FILTERED_STATUS.REWRITE]: 'blue',
 };

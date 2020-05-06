@@ -35,9 +35,9 @@ export const formatClientCell = (row, t, isDetailed = false) => {
         if (name) {
             nameContainer = (
                 isDetailed ? <small>{value}</small> :
-                    <span className="logs__text logs__text--wrap" title={`${name} (${value})`}>
+                    <div className="logs__text logs__text--wrap" title={`${name} (${value})`}>
                     {name} <small>{`(${value})`}</small>
-                </span>
+                </div>
             );
         }
 
@@ -51,11 +51,11 @@ export const formatClientCell = (row, t, isDetailed = false) => {
     }
 
     return (
-        <span className="logs__text">
+        <div className="logs__text">
             <Fragment>
                 {nameContainer}
                 {whoisContainer}
             </Fragment>
-        </span>
+        </div>
     );
 };

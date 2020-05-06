@@ -59,11 +59,13 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const lockIconClass = classNames('icons', 'icon--small', 'd-none', 'd-sm-block', {
         'icon--active': answer_dnssec,
         'icon--disabled': !answer_dnssec,
+        'my-3': isDetailed,
     });
 
     const privacyIconClass = classNames('icons', 'mx-2', 'icon--small', 'd-none', 'd-sm-block', {
         'icon--active': hasTracker,
         'icon--disabled': !hasTracker,
+        'my-3': isDetailed,
     });
 
     const dnssecHint = getHintElement({
@@ -158,7 +160,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         <div className="logs__row logs__row--overflow" title={value}>
             {dnssecHint}
             {trackerHint}
-            <div>
+            <div className={`${isDetailed ? 'px-2' : ''}`}>
                 <div className="logs__text">{value}</div>
                 {isDetailed &&
                 <div className="detailed-info d-none d-sm-block">{`${ip}${ip && protocol && ', '}${protocol}`}</div>}

@@ -34,16 +34,16 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         .map(([option, handler]) => <div key={option} onClick={handler}>{t(option)}</div>);
 
     return (
-        <div className="logs__row logs__row--overflow justify-content-between">
+        <div className="logs__row logs__row--overflow justify-content-between h-100">
             <div>
-                {<div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>}
+                <div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>
                 {isDetailed && <div className="detailed-info d-none d-sm-block">{name}</div>}
             </div>
-            {<CustomTooltip id={id} place="left" title="client_details"
-                            contentItemClass='key-colon'
-                            content={Object.entries(data)} />}
+            <CustomTooltip id={id} place="left" title="client_details"
+                           contentItemClass='key-colon'
+                           content={Object.entries(data)} />
             {getHintElement({
-                className: 'icons mt-3 icon--small',
+                className: `icons menu--dots icon--small ${isDetailed ? 'my-3' : ''}`,
                 dataTip: true,
                 xlinkHref: 'options_dots',
                 contentItemClass: 'tooltip__option py-3 px-5 key-colon',

@@ -67,7 +67,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
     return (
         <div className="logs__row">
             {fields && getHintElement({
-                className: 'icons mx-2 icon--small',
+                className: `icons mr-4 icon--small ${isDetailed ? 'my-3' : ''}`,
                 dataTip: true,
                 xlinkHref: 'question',
                 contentItemClass: 'text-pre text-truncate key-colon',
@@ -75,8 +75,8 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
                 content: fields,
             })}
             <div>
-                <div className="logs__text">{t(statusLabel)}</div>
-                {isDetailed && <div className="detailed-info d-none d-sm-block">{formattedElapsedMs}</div>}
+                <div>{t(statusLabel)}</div>
+                {isDetailed && <div className="detailed-info d-none d-sm-block pt-1">{formattedElapsedMs}</div>}
             </div>
         </div>
     );

@@ -1,7 +1,10 @@
-.logs__row {
+:root {
+    --font-family-helvetica: Helvetica var(--font-family-sans-serif);
+}
+
+.logs__row.logs__row {
     position: relative;
     display: flex;
-    align-items: center;
     min-height: 26px;
 }
 
@@ -35,10 +38,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 1rem;
+    font-family: var(--font-family-helvetica);
 }
 
 @media (max-width: 425px) {
-    .logs__text {
+    .rt-tr .logs__row .logs__text {
         max-width: 8.75rem;
     }
 }
@@ -206,6 +211,8 @@
     background-color: #fff;
     border: 0;
     border-radius: 8px;
+    max-width: 71rem;
+    margin: auto;
 }
 
 .logs__table .rt-thead.-header {
@@ -213,14 +220,13 @@
 }
 
 .logs__table .rt-thead .rt-th {
-    padding: 15px 15px 15px 0;
-    font-weight: 700;
+    padding: 0.9375rem 0.9375rem 0.875rem 0;
     text-align: left;
     border-right: 0;
 }
 
 .logs__table .rt-tbody .rt-td {
-    padding: 15px 15px 17px 0;
+    padding: 1rem 1rem 0.5rem 0;
     border-right: 0;
 }
 
@@ -288,11 +294,6 @@
     }
 }
 
-.logs__header {
-    font-weight: 200 !important;
-    font-size: 1rem;
-}
-
 .text-pre {
     white-space: pre-wrap !important;
     overflow-wrap: break-word;
@@ -304,12 +305,11 @@
     background-color: transparent;
     box-shadow: none !important;
     border: none !important;
-    width: 11.875rem !important;
     align-items: center !important;
 }
 
 .custom-pagination--padding {
-    padding: 5.25rem 0 2.75rem !important;
+    padding: 4.3rem 0 2.75rem !important;
 }
 
 .custom-pagination button {
@@ -341,9 +341,7 @@
     border-radius: 4px !important;
     width: var(--side-size) !important;
     height: var(--side-size) !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    margin: 0 !important;
 }
 
 .pagination-bottom {
@@ -353,13 +351,13 @@
 
 .-center:before {
     content: '...';
-    padding-bottom: 10px;
+    transform: translateY(-0.5rem);
     margin: auto;
 }
 
 .-center:after {
     content: '...';
-    padding-bottom: 10px;
+    transform: translateY(-0.5rem);
     margin: auto;
 }
 
@@ -371,4 +369,13 @@
 
 .link--green {
     color: var(--green79);
+}
+
+.menu--dots {
+    height: 2.25rem !important;
+    transform: translate(10px, 2px);
+}
+
+.row--detailed {
+    height: 4.9rem
 }
