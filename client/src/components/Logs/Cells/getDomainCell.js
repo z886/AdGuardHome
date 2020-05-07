@@ -74,6 +74,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         xlinkHref: 'lock',
         columnClass: 'w-100',
         content: 'validated_with_dnssec',
+        place: 'bottom',
     });
 
     const data = {
@@ -157,13 +158,14 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const protocol = t(getProtocolName(upstream));
 
     return (
-        <div className="logs__row logs__row--overflow" title={value}>
+        <div className="logs__row o-hidden" title={value}>
             {dnssecHint}
             {trackerHint}
             <div className={`${isDetailed ? 'px-2' : ''}`}>
-                <div className="logs__text">{value}</div>
+                <div className="logs__text o-hidden text-truncate">{value}</div>
                 {isDetailed &&
-                <div className="detailed-info d-none d-sm-block">{`${ip}${ip && protocol && ', '}${protocol}`}</div>}
+                <div
+                    className="detailed-info d-none d-sm-block">{`${ip}${ip && protocol && ', '}${protocol}`}</div>}
             </div>
             {detailedHint}
         </div>

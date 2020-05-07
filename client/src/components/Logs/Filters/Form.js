@@ -20,7 +20,7 @@ const renderFilterField = ({
 }) => (
     <Fragment>
         <div className="input-group-search">
-            <svg className="icons icon--small icon-gray">
+            <svg className="icons icon--small icon--gray">
                 <use xlinkHref="#magnifier" />
             </svg>
         </div>
@@ -51,7 +51,9 @@ const Form = (props) => {
     } = props;
 
     return (
-        <form onSubmit={handleChange}>
+        <form onSubmit={(e) => {
+            e.preventDefault();
+        }}>
             <div className="input-group">
                 <Field
                     id="search"
@@ -59,7 +61,7 @@ const Form = (props) => {
                     component={renderFilterField}
                     type="text"
                     className={`form-control--search form-control--transparent ${className}`}
-                    placeholder="Domain or client"
+                    placeholder={t('domain_or_client')}
                     tooltip={t('query_log_strict_search')}
                     onChange={handleChange}
                 />

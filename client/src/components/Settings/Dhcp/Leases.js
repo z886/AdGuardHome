@@ -6,7 +6,7 @@ import { LEASES_TABLE_DEFAULT_PAGE_SIZE } from '../../../helpers/constants';
 
 class Leases extends Component {
     cellWrap = ({ value }) => (
-        <div className="logs__row logs__row--overflow">
+        <div className="logs__row o-hidden">
             <span className="logs__text" title={value}>
                 {value}
             </span>

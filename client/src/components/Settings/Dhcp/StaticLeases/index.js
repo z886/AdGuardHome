@@ -8,7 +8,7 @@ import Modal from './Modal';
 
 class StaticLeases extends Component {
     cellWrap = ({ value }) => (
-        <div className="logs__row logs__row--overflow">
+        <div className="logs__row o-hidden">
             <span className="logs__text" title={value}>
                 {value}
             </span>

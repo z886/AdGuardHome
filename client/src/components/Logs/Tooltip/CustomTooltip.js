@@ -18,7 +18,7 @@ const CustomTooltip = ({
              overridePosition={overridePosition}
              scrollHide={scrollHide}
     >
-        {title && <div className="pb-4 h-25 font-weight-bold grid-content"><Trans>{title}</Trans></div>}
+        {title && <div className="pb-4 h-25 grid-content"><Trans>{title}</Trans></div>}
         <div className={columnClass}>
             {renderContent}
         </div>

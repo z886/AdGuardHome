@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
+import { TABLE_DEFAULT_PAGE_SIZE, TABLE_FIRST_PAGE, TRANSITION_TIMEOUT } from '../../helpers/constants';
 
 import Loading from '../ui/Loading';
 import Filters from './Filters';
@@ -11,11 +11,21 @@ import Disabled from './Disabled';
 
 import './Logs.css';
 
-const TABLE_FIRST_PAGE = 0;
 const INITIAL_REQUEST = true;
 const INITIAL_REQUEST_DATA = ['', TABLE_FIRST_PAGE, INITIAL_REQUEST];
 
 class Logs extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+        };
+    }
+
+    setLoading = (loading) => {
+        this.setState(() => ({ loading }));
+    };
+
     componentDidMount() {
         this.props.setLogsPage(TABLE_FIRST_PAGE);
         this.getLogs(...INITIAL_REQUEST_DATA);
@@ -33,7 +43,10 @@ class Logs extends Component {
     };
 
     refreshLogs = () => {
+        this.setLoading(true);
+        this.props.setLogsPage(TABLE_FIRST_PAGE);
         this.getLogs(...INITIAL_REQUEST_DATA);
+        setTimeout(() => this.setLoading(false), TRANSITION_TIMEOUT);
     };
 
     render() {
@@ -71,6 +84,8 @@ class Logs extends Component {
                             refreshLogs={this.refreshLogs}
                         />
                         <Table
+                            loading={this.state.loading}
+                            setLoading={this.setLoading}
                             logs={logs}
                             pages={pages}
                             page={page}

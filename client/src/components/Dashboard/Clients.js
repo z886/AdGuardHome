@@ -66,7 +66,7 @@ const clientCell = (t, toggleClientStatus, processing, disallowedClients) =>
 
         return (
             <Fragment>
-                <div className="logs__row logs__row--overflow logs__row--column">
+                <div className="logs__row o-hidden logs__row--column">
                     {formatClientCell(row, t)}
                 </div>
                 {renderBlockingButton(blocked, value, toggleClientStatus, processing)}

@@ -53,7 +53,8 @@ export const STANDARD_HTTPS_PORT = 443;
 export const EMPTY_DATE = '0001-01-01T00:00:00Z';
 
 export const DEBOUNCE_TIMEOUT = 300;
-export const DEBOUNCE_FILTER_TIMEOUT = 500;
+export const DEBOUNCE_FILTER_TIMEOUT = 200;
+export const TRANSITION_TIMEOUT = 250;
 export const CHECK_TIMEOUT = 1000;
 export const STOP_TIMEOUT = 10000;
 
@@ -342,6 +343,8 @@ export const DEFAULT_LOGS_FILTER = {
 export const DEFAULT_LANGUAGE = 'en';
 
 export const TABLE_DEFAULT_PAGE_SIZE = 10;
+
+export const TABLE_FIRST_PAGE = 0;
 
 export const LEASES_TABLE_DEFAULT_PAGE_SIZE = 20;
 

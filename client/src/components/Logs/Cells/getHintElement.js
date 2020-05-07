@@ -29,13 +29,17 @@ const getHintElement = ({
             </svg>}
         </div>
         {dataTip &&
-        <CustomTooltip className={tooltipClass} columnClass={columnClass}
-                       contentItemClass={contentItemClass}
-                       id={id} title={title} place={place} content={content}
-                       trigger={trigger}
-                       overridePosition={overridePosition}
-                       scrollHide={scrollHide}
-                       renderContent={renderContent}
+        <CustomTooltip
+            className={tooltipClass}
+            id={id}
+            columnClass={columnClass}
+            contentItemClass={contentItemClass}
+            title={title}
+            place={place} content={content}
+            trigger={trigger}
+            overridePosition={overridePosition}
+            scrollHide={scrollHide}
+            renderContent={renderContent}
         />}
     </Fragment>;
 };

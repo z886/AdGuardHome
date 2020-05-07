@@ -45,14 +45,14 @@ body {
     display: none;
 }
 
-@media (max-width: 1279.98px) {
+@media (max-width: 1280px) {
     .form-control--search {
         width: 17rem !important;
         height: 2rem;
     }
 }
 
-@media (max-width: 374.98px) {
+@media (max-width: 375px) {
     .form-control--search {
         width: 15rem !important;
         height: 2rem;

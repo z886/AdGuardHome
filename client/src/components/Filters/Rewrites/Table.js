@@ -5,7 +5,7 @@ import { withNamespaces } from 'react-i18next';
 
 class Table extends Component {
     cellWrap = ({ value }) => (
-        <div className="logs__row logs__row--overflow">
+        <div className="logs__row o-hidden">
             <span className="logs__text" title={value}>
                 {value}
             </span>
@@ -64,11 +64,11 @@ class Table extends Component {
                 defaultPageSize={10}
                 minRows={5}
                 previousText={
-                    <svg className="icons icon--small icon-gray">
+                    <svg className="icons icon--small icon--gray">
                         <use xlinkHref="#arrow-left" />
                     </svg>}
                 nextText={
-                    <svg className="icons icon--small icon-gray">
+                    <svg className="icons icon--small icon--gray">
                         <use xlinkHref="#arrow-right" />
                     </svg>}
                 loadingText={t('loading_table_status')}

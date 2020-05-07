@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 import apiClient from '../api/Api';
 import { addErrorToast, addSuccessToast } from './index';
 import { normalizeLogs, getParamsForClientsSearch, addClientInfo } from '../helpers/helpers';
-import { TABLE_DEFAULT_PAGE_SIZE } from '../helpers/constants';
+import { TABLE_DEFAULT_PAGE_SIZE, TABLE_FIRST_PAGE } from '../helpers/constants';
 
 const getLogsWithParams = async (config) => {
     const { older_than, filter, ...values } = config;
@@ -94,7 +94,7 @@ export const setLogsFilter = filter => async (dispatch) => {
         const updatedData = additionalData.logs ? { ...data, ...additionalData } : data;
 
         dispatch(setLogsFilterSuccess({ ...updatedData, filter }));
-        dispatch(setLogsPage(0));
+        dispatch(setLogsPage(TABLE_FIRST_PAGE));
     } catch (error) {
         dispatch(addErrorToast({ error }));
         dispatch(setLogsFilterFailure(error));

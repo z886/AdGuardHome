@@ -5,7 +5,12 @@ import ReactTable from 'react-table';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
 import escapeRegExp from 'lodash/escapeRegExp';
-import { BLOCK_ACTIONS, REASON_TO_COLOR_CLASS_MAP, TABLE_DEFAULT_PAGE_SIZE } from '../../helpers/constants';
+import {
+    BLOCK_ACTIONS,
+    REASON_TO_COLOR_CLASS_MAP,
+    TABLE_DEFAULT_PAGE_SIZE,
+    TRANSITION_TIMEOUT,
+} from '../../helpers/constants';
 import getDateCell from './Cells/getDateCell';
 import getDomainCell from './Cells/getDomainCell';
 import getClientCell from './Cells/getClientCell';
@@ -43,7 +48,7 @@ class Table extends Component {
             accessor: 'time',
             Cell: row => getDateCell(row, this.props.isDetailed),
             minWidth: 62,
-            minHeight: 60,
+            maxHeight: 60,
             headerClassName: 'logs__text',
         },
         {
@@ -57,7 +62,7 @@ class Table extends Component {
                 this.props.autoClients,
             ),
             minWidth: 180,
-            minHeight: 60,
+            maxHeight: 60,
             headerClassName: 'logs__text',
         },
         {
@@ -70,7 +75,7 @@ class Table extends Component {
                 this.props.isDetailed,
             ),
             minWidth: 85,
-            minHeight: 60,
+            maxHeight: 60,
             headerClassName: 'logs__text',
         },
         {
@@ -85,7 +90,7 @@ class Table extends Component {
 
                 return <div className="d-flex justify-content-between">
                     {this.props.t('client_table_header')}
-                    <span>
+                    {<span>
                         <svg className={`icons icon--small icon--active mr-2 ${plainSelected}`}
                              onClick={() => this.props.toggleDetailedLogs(false)}>
                             <use xlinkHref='#list' />
@@ -94,7 +99,7 @@ class Table extends Component {
                          onClick={() => this.props.toggleDetailedLogs(true)}>
                         <use xlinkHref='#detailed_list' />
                     </svg>
-                    </span>
+                    </span>}
                 </div>;
             },
             accessor: 'client',
@@ -106,7 +111,7 @@ class Table extends Component {
                 this.props.autoClients,
             ),
             minWidth: 140,
-            minHeight: 60,
+            maxHeight: 60,
             headerClassName: 'logs__text',
         },
     ];
@@ -122,12 +127,23 @@ class Table extends Component {
     };
 
     changePage = (page) => {
+        this.props.setLoading(true);
         this.props.setLogsPage(page);
         this.props.setLogsPagination({
             page,
             pageSize: TABLE_DEFAULT_PAGE_SIZE,
         });
     };
+
+    componentDidMount() {
+        this.props.setLoading(false);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.page !== this.props.page) {
+            setTimeout(() => this.props.setLoading(false), TRANSITION_TIMEOUT);
+        }
+    }
 
     render() {
         const {
@@ -139,12 +155,13 @@ class Table extends Component {
             page,
             defaultPageSize,
         } = this.props;
-        const isLoading = processingGetLogs || processingGetConfig;
+
+        const isLoading = processingGetLogs || processingGetConfig || this.props.loading;
 
         return (
             <ReactTable
                 manual
-                minRows={5}
+                minRows={0}
                 page={page}
                 pages={pages}
                 columns={this.columns}
@@ -161,17 +178,18 @@ class Table extends Component {
                 defaultPageSize={defaultPageSize || TABLE_DEFAULT_PAGE_SIZE}
                 loadingText={t('loading_table_status')}
                 rowsText={t('rows_table_footer_text')}
-                noDataText={t('no_logs_found')}
+                noDataText={!isLoading && <label className="logs__text logs__text--bold">{t('empty_log')}</label>}
                 pageText=''
                 ofText=''
-                showPagination
+                showPagination={logs.length > 0}
                 getPaginationProps={() => ({ className: 'custom-pagination custom-pagination--padding' })}
+                getTbodyProps={() => ({ className: 'd-block' })}
                 previousText={
-                    <svg className="icons icon--small icon-gray w-100 h-100">
+                    <svg className="icons icon--small icon--gray w-100 h-100">
                         <use xlinkHref="#arrow-left" />
                     </svg>}
                 nextText={
-                    <svg className="icons icon--small icon-gray w-100 h-100">
+                    <svg className="icons icon--small icon--gray w-100 h-100">
                         <use xlinkHref="#arrow-right" />
                     </svg>}
                 renderTotalPagesCount={() => false}
@@ -209,6 +227,8 @@ Table.propTypes = {
     setRules: PropTypes.func.isRequired,
     addSuccessToast: PropTypes.func.isRequired,
     getFilteringStatus: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    setLoading: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(Table);

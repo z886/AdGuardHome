@@ -23,6 +23,9 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         network: autoClient && autoClient.orgname,
     };
 
+    const processedData = Object.entries(data)
+        .filter(([, value]) => Boolean(value));
+
     const isFiltered = checkFiltered(reason);
     const buttonType = isFiltered ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
 
@@ -34,14 +37,15 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         .map(([option, handler]) => <div key={option} onClick={handler}>{t(option)}</div>);
 
     return (
-        <div className="logs__row logs__row--overflow justify-content-between h-100">
-            <div>
+        <div className="logs__row o-hidden justify-content-between h-100">
+            <div className="w-90 o-hidden">
                 <div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>
-                {isDetailed && <div className="detailed-info d-none d-sm-block">{name}</div>}
+                {isDetailed && <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>
-            <CustomTooltip id={id} place="left" title="client_details"
+            {processedData.length > 0 &&
+            <CustomTooltip id={id} place='bottom' title="client_details"
                            contentItemClass='key-colon'
-                           content={Object.entries(data)} />
+                           content={processedData} />}
             {getHintElement({
                 className: `icons menu--dots icon--small ${isDetailed ? 'my-3' : ''}`,
                 dataTip: true,
@@ -49,7 +53,7 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
                 contentItemClass: 'tooltip__option py-3 px-5 key-colon',
                 columnClass: 'h-100 grid__one-row',
                 content: options,
-                place: 'left',
+                place: 'bottom',
                 tooltipClass: 'px-0 py-3',
             })}
         </div>

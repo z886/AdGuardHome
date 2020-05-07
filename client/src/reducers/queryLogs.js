@@ -71,7 +71,7 @@ const queryLogs = handleActions(
                 allLogs = [...state.allLogs, ...logs];
             }
 
-            const pages = Math.ceil(logsWithOffset.length / pageSize);
+            const pages = Math.floor(logsWithOffset.length / pageSize);
             const total = logsWithOffset.length;
             const rowsStart = pageSize * page;
             const rowsEnd = (pageSize * page) + pageSize;
