@@ -3,7 +3,7 @@
     --gray-4d: #4D4D4D;
 }
 
-.logs__row.logs__row {
+.logs__row {
     position: relative;
     display: flex;
     min-height: 26px;

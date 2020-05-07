@@ -6,6 +6,12 @@
     pointer-events: auto !important;
 }
 
+@media (max-width: 768px) {
+    .custom-tooltip {
+        overflow-y: scroll;
+    }
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(2, min-content);

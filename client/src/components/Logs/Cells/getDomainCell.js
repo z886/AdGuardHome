@@ -4,6 +4,7 @@ import nanoid from 'nanoid';
 import { Trans } from 'react-i18next';
 import getHintElement from './getHintElement';
 import {
+    checkFiltered,
     formatDateTime,
     formatElapsedMs,
     formatTime, getProtocolName,
@@ -12,7 +13,6 @@ import {
 import {
     BLOCK_ACTIONS,
     DEFAULT_SHORT_DATE_FORMAT_OPTIONS,
-    FILTERED_STATUS,
     LONG_TIME_FORMAT,
     RECORD_TO_IP_MAP,
 } from '../../../helpers/constants';
@@ -20,7 +20,7 @@ import {
 const processContent = (data, buttonType) => Object.entries(data)
     .map(([key, value]) => {
         const isTitle = value === 'title';
-        const isButton = key === buttonType;
+        const isButton = key === `${buttonType}_btn`;
         const isBoolean = typeof value === 'boolean';
 
         let keyClass = 'key-colon';
@@ -46,8 +46,8 @@ const processContent = (data, buttonType) => Object.entries(data)
 
 const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
-        value, answer_dnssec, upstream, original: {
-            time, tracker, elapsedMs, reason, domain, response, type, client,
+        value, upstream, original: {
+            time, tracker, elapsedMs, reason, domain, response, type, client, answer_dnssec,
         },
     } = row;
 
@@ -94,9 +94,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     });
 
     const formattedElapsedMs = formatElapsedMs(elapsedMs, t);
-    const isBlockedStatus = reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
-
-    const buttonType = isBlockedStatus ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
+    const isFiltered = checkFiltered(reason);
+    const buttonType = isFiltered ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
 
     const onToggleBlock = () => {
         toggleBlocking(buttonType, domain);
@@ -115,7 +114,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         country: autoClient && autoClient.country,
         network: autoClient && autoClient.orgname,
         source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
-        [buttonType]: <div onClick={onToggleBlock}
+        [`${buttonType}_btn`]: <div onClick={onToggleBlock}
                            className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
@@ -133,11 +132,11 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
-        [buttonType]: <div onClick={onToggleBlock}
+        [`${buttonType}_btn`]: <div onClick={onToggleBlock}
                            className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
-    const detailedDataCurrent = isBlockedStatus ? detailedDataBlocked : detailedData;
+    const detailedDataCurrent = isFiltered ? detailedDataBlocked : detailedData;
 
     const detailedHint = getHintElement({
         className: 'icons icon--small d-block d-md-none icon--active icon--detailed-info',

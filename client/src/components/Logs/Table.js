@@ -38,6 +38,9 @@ class Table extends Component {
         } else if (!userRules.match(preparedUnblockingRule)) {
             setRules(`${userRules}${lineEnding}${unblockingRule}\n`);
             addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
+        } else {
+            // TODO: replace with toast with message
+            alert('Already in filters');
         }
 
         getFilteringStatus();
