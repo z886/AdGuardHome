@@ -44,7 +44,7 @@ func (l *queryLog) handleQueryLog(w http.ResponseWriter, r *http.Request) {
 
 	params := getDataParams{
 		Domain:         req.search,
-		Client:         req.search,
+		//Client:         req.search,
 		ResponseStatus: responseStatusAll,
 	}
 	if len(req.olderThan) != 0 {
