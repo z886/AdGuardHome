@@ -23,10 +23,17 @@
     grid-column-gap: 1.5rem;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 768px) {
     .grid {
         grid-template-columns: 35% 55%;
-        padding: 2rem 0;
+    }
+
+    .grid .key-colon {
+        font-weight: bold;
+    }
+
+    .grid .title--border {
+        font-weight: bold;
     }
 }
 

@@ -70,7 +70,7 @@ const Form = (props) => {
                         <Field
                             name="response_status"
                             component="select"
-                            className={`form-control custom-select ml-small form-control--transparent ${responseStatusClass}`}
+                            className={`form-control custom-select custom-select__arrow--left ml-small form-control--transparent ${responseStatusClass}`}
                         >
                             <option value="">
                                 <Trans>show_all_responses</Trans>

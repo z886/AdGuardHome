@@ -1,6 +1,7 @@
 :root {
     --gray-4d: #4D4D4D;
     --gray-8: #888;
+    --danger: #DF3812;
 }
 
 .logs__row {
@@ -227,6 +228,12 @@
     min-height: 50rem;
 }
 
+@media (max-width: 575px) {
+    .logs__table {
+        min-height: 42rem;
+    }
+}
+
 .logs__table .rt-thead.-header {
     box-shadow: none;
     font-weight: bold;
@@ -263,7 +270,7 @@
     }
 
     .logs__table .rt-tbody .rt-td {
-        padding: 0.625rem 1rem 0.875rem 1.5rem;
+        padding: 0.625rem 1rem 0.875rem 0;
     }
 }
 
@@ -343,7 +350,7 @@
 }
 
 .custom-pagination--padding {
-    padding: 2.75rem 0 2.75rem !important;
+    padding: 2.5rem 0 2.5rem !important;
 }
 
 .custom-pagination button {
@@ -376,6 +383,9 @@
     width: var(--side-size) !important;
     height: var(--side-size) !important;
     margin: 0 !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 }
 
 .pagination-bottom {
@@ -385,13 +395,13 @@
 
 .-center:before {
     content: '...';
-    transform: translateY(-0.5rem);
+    transform: translateY(-0.25rem);
     margin: auto;
 }
 
 .-center:after {
     content: '...';
-    transform: translateY(-0.5rem);
+    transform: translateY(-0.25rem);
     margin: auto;
 }
 
@@ -439,10 +449,27 @@
     padding-bottom: 1.25rem !important;
 }
 
+.mh-100 {
+    max-height: 100% !important;
+}
+
 .field__wide {
     width: 8.5rem
 }
 
 .cursor--pointer {
     cursor: pointer;
+}
+
+.custom-select__arrow--left {
+    background: #fff url('./chevron-down.svg') no-repeat left 0.2rem center;
+    background-size: 1.5rem;
+}
+
+.custom-select {
+    padding: 0.5rem 0.75rem 0.5rem 1.75rem !important;
+}
+
+.bg--danger {
+    color: var(--danger);
 }

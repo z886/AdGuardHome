@@ -1,6 +1,7 @@
 .page-header {
     flex-direction: column;
     align-items: flex-start;
+    margin: 2rem 0 3rem !important;
 }
 
 .page-header--logs {

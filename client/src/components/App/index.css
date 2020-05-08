@@ -45,20 +45,6 @@ body {
     display: none;
 }
 
-@media (max-width: 1280px) {
-    .form-control--search {
-        width: 17rem !important;
-        height: 2rem;
-    }
-}
-
-@media (max-width: 375px) {
-    .form-control--search {
-        width: 15rem !important;
-        height: 2rem;
-    }
-}
-
 @media (max-width: 575px) {
     .container {
         padding-right: 0;
@@ -70,6 +56,19 @@ body {
     width: 39.125rem;
     box-shadow: 0 1px 0 #ddd;
     padding: 0 2.5rem;
+    height: 2.25rem;
+}
+
+@media (max-width: 991px) {
+    .form-control--search {
+        width: 17rem !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .form-control--search {
+        width: 15rem !important;
+    }
 }
 
 .form-control--transparent {

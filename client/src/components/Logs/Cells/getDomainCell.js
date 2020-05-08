@@ -34,10 +34,10 @@ const processContent = (data, buttonType) => Object.entries(data)
 
         return (
             <React.Fragment key={nanoid()}>
-                <div className={keyClass}>
+                <div className={`${keyClass} ${isBoolean ? 'font-weight-bold' : ''}`}>
                     <Trans>{isButton ? value : key}</Trans>
                 </div>
-                <div className="text-pre text-truncate">
+                <div className='text-pre text-truncate'>
                     <Trans>{(isTitle || isButton || isBoolean) ? '' : value || '—'}</Trans>
                 </div>
             </React.Fragment>
@@ -104,10 +104,13 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         toggleBlocking(buttonType, domain);
     };
 
+    const status = t(REQ_STATUS_TO_LABEL_MAP[reason] || reason);
+    const statusBlocked = <div className="bg--danger">{status}</div>;
+
     const detailedData = {
         time_table_header: formatTime(time, LONG_TIME_FORMAT),
         data: formatDateTime(time, DEFAULT_SHORT_DATE_FORMAT_OPTIONS),
-        encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
+        encryption_status: status,
         domain,
         details: 'title',
         install_settings_dns: upstream,
@@ -116,15 +119,14 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         client_details: 'title',
         country: autoClient && autoClient.country,
         network: autoClient && autoClient.orgname,
-        source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
         [`${buttonType}_btn`]: <div onClick={onToggleBlock}
-                                    className="title--border">{t(`${buttonType}_btn`)}</div>,
+                                    className="title--border bg--danger">{t(`${buttonType}_btn`)}</div>,
     };
 
     const detailedDataBlocked = {
         time_table_header: formatTime(time, LONG_TIME_FORMAT),
         data: formatDateTime(time, DEFAULT_SHORT_DATE_FORMAT_OPTIONS),
-        encryption_status: REQ_STATUS_TO_LABEL_MAP[reason] || reason,
+        encryption_status: statusBlocked,
         domain,
         known_tracker: 'title',
         table_name: hasTracker && tracker.name,
@@ -143,7 +145,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
 
     const detailedHint = getHintElement({
         className: 'icons icon--small d-block d-md-none icon--active icon--detailed-info',
-        tooltipClass: 'ml-0 w-100 h-100',
+        tooltipClass: 'ml-0 w-100 mh-100 pt-4 pb-2',
         dataTip: true,
         xlinkHref: 'options_dots',
         contentItemClass: 'text-pre text-truncate key-colon',
