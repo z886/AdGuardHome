@@ -151,6 +151,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         contentItemClass: 'text-pre text-truncate key-colon',
         renderContent: processContent(detailedDataCurrent, buttonType),
         trigger: 'click',
+        columnClass: `pb-2 ${isFiltered ? 'logs--detailed--blocked' : 'logs--detailed'}`,
         overridePosition: () => ({
             left: 0,
             top: 0,

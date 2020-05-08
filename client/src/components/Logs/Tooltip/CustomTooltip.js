@@ -19,7 +19,7 @@ const CustomTooltip = ({
              scrollHide={scrollHide}
     >
         {title && <div className="pb-4 h-25 grid-content font-weight-bold"><Trans>{title}</Trans></div>}
-        <div className={`grid pb-2 ${columnClass}`}>
+        <div className={`grid ${columnClass}`}>
             {renderContent}
         </div>
     </Tooltip>;
