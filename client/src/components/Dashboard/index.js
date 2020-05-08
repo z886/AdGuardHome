@@ -75,7 +75,7 @@ class Dashboard extends Component {
         const refreshButton = (
             <button
                 type="button"
-                className="btn btn-icon btn-outline-primary btn-sm"
+                className="btn btn-icon btn-icon--green btn-outline-primary btn-sm"
                 onClick={() => this.getAllStats()}
             >
                 <svg className="icons">

@@ -34,27 +34,34 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     };
 
     const options = Object.entries(optionsToHandlerMap)
-        .map(([option, handler]) => <div key={option} onClick={handler}>{t(option)}</div>);
+        .map(([option, handler]) => <div key={option} onClick={handler}
+                                         className='text-truncate'>{t(option)}</div>);
 
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
             <div className="w-90 o-hidden">
                 <div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>
-                {isDetailed && <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
+                {isDetailed &&
+                <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>
             {processedData.length > 0 &&
-            <CustomTooltip id={id} place='bottom' title="client_details"
-                           contentItemClass='key-colon'
-                           content={processedData} />}
+            <CustomTooltip
+                id={id}
+                place='bottom'
+                title='client_details'
+                contentItemClass='key-colon'
+                className='pt-4 pb-5 px-5'
+                content={processedData}
+            />}
             {getHintElement({
                 className: `icons menu--dots icon--small ${isDetailed ? 'my-3' : ''}`,
                 dataTip: true,
                 xlinkHref: 'options_dots',
-                contentItemClass: 'tooltip__option py-3 px-5 key-colon',
+                contentItemClass: 'tooltip__option key-colon',
                 columnClass: 'h-100 grid__one-row',
                 content: options,
                 place: 'bottom',
-                tooltipClass: 'px-0 py-3',
+                tooltipClass: 'p-0 py-45',
             })}
         </div>
     );

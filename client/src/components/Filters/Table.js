@@ -89,7 +89,7 @@ class Table extends Component {
                     <div className="logs__row logs__row--center">
                         <button
                             type="button"
-                            className="btn btn-icon btn-outline-primary btn-sm mr-2"
+                            className="btn btn-icon btn-icon--green btn-outline-primary btn-sm mr-2"
                             title={t('edit_table_action')}
                             onClick={() =>
                                 toggleFilteringModal({
@@ -104,7 +104,7 @@ class Table extends Component {
                         </button>
                         <button
                             type="button"
-                            className="btn btn-icon btn-outline-secondary btn-sm"
+                            className="btn btn-icon btn-icon--green btn-outline-secondary btn-sm"
                             onClick={() => handleDelete(value)}
                             title={t('delete_table_action')}
                         >

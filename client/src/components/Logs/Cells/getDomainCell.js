@@ -70,6 +70,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
 
     const dnssecHint = getHintElement({
         className: lockIconClass,
+        tooltipClass: 'py-4 px-5 pb-45',
         dataTip: answer_dnssec,
         xlinkHref: 'lock',
         columnClass: 'w-100',
@@ -85,6 +86,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
 
     const trackerHint = getHintElement({
         className: privacyIconClass,
+        tooltipClass: 'pt-4 pb-5 px-5',
         dataTip: hasTracker,
         xlinkHref: 'privacy',
         contentItemClass: 'key-colon',

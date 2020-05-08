@@ -1,5 +1,4 @@
 :root {
-    --font-bold: LucidaGrande-Bold, var(--font-family-sans-serif);
     --gray-4d: #4D4D4D;
 }
 
@@ -45,7 +44,7 @@
 }
 
 .logs__text--bold {
-    font-family: var(--font-bold);
+    font-weight: bold;
 }
 
 @media (max-width: 425px) {
@@ -76,6 +75,12 @@
     top: 0;
     margin-left: 0;
     margin-right: 5px;
+}
+
+.tooltip__option {
+    height: 2.5rem !important;
+    width: 10.5rem;
+    padding: 0.3125rem 1.5rem 0.6875rem;
 }
 
 .tooltip__option:hover {
@@ -399,4 +404,17 @@
 
 .w-85 {
     width: 85% !important;
+}
+
+.pt-45 {
+    padding-top: 1.25rem !important;
+}
+
+.pb-45 {
+    padding-bottom: 1.25rem !important;
+}
+
+.py-45 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
 }

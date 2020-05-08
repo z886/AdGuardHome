@@ -31,7 +31,7 @@ class Table extends Component {
                 <div className="logs__row logs__row--center">
                     <button
                         type="button"
-                        className="btn btn-icon btn-outline-secondary btn-sm"
+                        className="btn btn-icon btn-icon--green btn-outline-secondary btn-sm"
                         onClick={() =>
                             this.props.handleDelete({
                                 answer: value.row.answer,
