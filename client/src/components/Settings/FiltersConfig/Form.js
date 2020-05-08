@@ -20,7 +20,7 @@ const getTitleForInterval = (interval, t) => {
 const getIntervalSelect = (processing, t, handleChange, toNumber) => (
     <Field
         name="interval"
-        className="custom-select ml-small"
+        className="custom-select"
         component="select"
         onChange={handleChange}
         normalize={toNumber}

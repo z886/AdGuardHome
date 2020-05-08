@@ -25,7 +25,7 @@ class Filters extends Component {
         const getRefreshButton = () => (
             <button
                 type="button"
-                className="btn btn-icon--green ml-3"
+                className="btn btn-icon--green ml-3 bg-transparent"
                 onClick={refreshLogs}
             >
                 <svg className="icons icon--small">
@@ -41,7 +41,7 @@ class Filters extends Component {
                     {getRefreshButton()}
                 </h1>
                 <Form
-                    responseStatusClass="d-none d-sm-block"
+                    responseStatusClass="d-sm-block"
                     initialValues={filter}
                     onChange={this.handleFormChange}
                 />

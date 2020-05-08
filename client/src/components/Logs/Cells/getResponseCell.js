@@ -35,29 +35,30 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
     const { filters, whitelistFilters } = filtering;
     const formattedElapsedMs = formatElapsedMs(elapsedMs, t);
 
-    const statusLabel = REQ_STATUS_TO_LABEL_MAP[reason] || reason;
+    const statusLabel = t(REQ_STATUS_TO_LABEL_MAP[reason] || reason);
+    const boldStatusLabel = <span className="font-weight-bold">{statusLabel}</span>;
     const filter = getFilterName(filters, whitelistFilters, filterId, t);
 
     const FILTERED_STATUS_TO_FIELDS_MAP = {
         [FILTERED_STATUS.NOT_FILTERED_NOT_FOUND]: {
-            encryption_status: statusLabel,
+            encryption_status: boldStatusLabel,
             install_settings_dns: domain,
             elapsed: formattedElapsedMs,
             request_table_header: responses && responses.join('\n'),
         },
         [FILTERED_STATUS.FILTERED_BLOCKED_SERVICE]: {
-            encryption_status: statusLabel,
+            encryption_status: boldStatusLabel,
             filter,
             rule_label: rule,
             response_table_header: status,
         },
         [FILTERED_STATUS.FILTERED_SAFE_SEARCH]: {
-            encryption_status: statusLabel,
+            encryption_status: boldStatusLabel,
             install_settings_dns: domain,
             elapsed: formattedElapsedMs,
         },
         [FILTERED_STATUS.FILTERED_BLACK_LIST]: {
-            encryption_status: statusLabel,
+            encryption_status: boldStatusLabel,
             install_settings_dns: domain,
             elapsed: formattedElapsedMs,
         },
@@ -71,7 +72,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
     return (
         <div className="logs__row">
             {fields && getHintElement({
-                className: `icons mr-4 icon--small ${isDetailed ? 'my-3' : ''}`,
+                className: `icons mr-4 icon--small cursor--pointer icon--light-gray ${isDetailed ? 'my-3' : ''}`,
                 tooltipClass: 'px-5 pb-5 pt-4',
                 dataTip: true,
                 xlinkHref: 'question',
@@ -81,7 +82,7 @@ const getResponseCell = (row, filtering, t, isDetailed) => {
                 place: 'bottom',
             })}
             <div>
-                <div>{t(statusLabel)}</div>
+                <div>{statusLabel}</div>
                 {isDetailed && <div
                     className="detailed-info d-none d-sm-block pt-1 w-85 o-hidden text-truncate">{detailedInfo}</div>}
             </div>

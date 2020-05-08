@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next';
 import Tooltip from './index';
 
 const CustomTooltip = ({
-    id, title, className, contentItemClass, place = 'right', columnClass = 'grid h-100', content, trigger, overridePosition, scrollHide,
+    id, title, className, contentItemClass, place = 'right', columnClass = '', content, trigger, overridePosition, scrollHide,
     renderContent = React.Children.map(
         content,
         item =>
@@ -18,8 +18,8 @@ const CustomTooltip = ({
              overridePosition={overridePosition}
              scrollHide={scrollHide}
     >
-        {title && <div className="pb-4 h-25 grid-content"><Trans>{title}</Trans></div>}
-        <div className={columnClass}>
+        {title && <div className="pb-4 h-25 grid-content font-weight-bold"><Trans>{title}</Trans></div>}
+        <div className={`grid h-100 ${columnClass}`}>
             {renderContent}
         </div>
     </Tooltip>;

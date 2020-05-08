@@ -86,6 +86,20 @@ body {
     height: 1.5rem;
 }
 
-.ml-small {
-    margin-left: 3.3125rem;
+@media (min-width: 768px) {
+    .ml-small {
+        margin-left: 3.3125rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .ml-small {
+        margin-left: 1.5rem;
+    }
+}
+
+@media (max-width: 473px) {
+    .ml-small {
+        margin-top: 1.5rem;
+    }
 }

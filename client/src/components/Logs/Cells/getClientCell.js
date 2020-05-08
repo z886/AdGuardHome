@@ -40,7 +40,7 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
             <div className="w-90 o-hidden">
-                <div data-tip={true} data-for={id}>{formatClientCell(row, t, isDetailed)}</div>
+                <div data-tip={true} data-for={id} className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
                 {isDetailed &&
                 <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>
@@ -54,10 +54,10 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
                 content={processedData}
             />}
             {getHintElement({
-                className: `icons menu--dots icon--small ${isDetailed ? 'my-3' : ''}`,
+                className: `icons menu--dots icon--small cursor--pointer ${isDetailed ? 'my-3' : ''}`,
                 dataTip: true,
                 xlinkHref: 'options_dots',
-                contentItemClass: 'tooltip__option key-colon',
+                contentItemClass: 'tooltip__option w-100',
                 columnClass: 'h-100 grid__one-row',
                 content: options,
                 place: 'bottom',

@@ -56,13 +56,13 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
 
     const source = tracker && tracker.sourceData && tracker.sourceData.name;
 
-    const lockIconClass = classNames('icons', 'icon--small', 'd-none', 'd-sm-block', {
+    const lockIconClass = classNames('icons', 'icon--small', 'd-none', 'd-sm-block', 'cursor--pointer', {
         'icon--active': answer_dnssec,
         'icon--disabled': !answer_dnssec,
         'my-3': isDetailed,
     });
 
-    const privacyIconClass = classNames('icons', 'mx-2', 'icon--small', 'd-none', 'd-sm-block', {
+    const privacyIconClass = classNames('icons', 'mx-2', 'icon--small', 'd-none', 'd-sm-block', 'cursor--pointer', {
         'icon--active': hasTracker,
         'icon--disabled': !hasTracker,
         'my-3': isDetailed,
@@ -91,6 +91,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         xlinkHref: 'privacy',
         contentItemClass: 'key-colon',
         content: Object.entries(data),
+        columnClass: 'grid--gap-bg',
         title: 'known_tracker',
         place: 'bottom',
     });
@@ -117,7 +118,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         network: autoClient && autoClient.orgname,
         source_label: source && <a href={`//${source}`} className="link--green">{source}</a>,
         [`${buttonType}_btn`]: <div onClick={onToggleBlock}
-                           className="title--border">{t(`${buttonType}_btn`)}</div>,
+                                    className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
     const detailedDataBlocked = {
@@ -135,7 +136,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
         [`${buttonType}_btn`]: <div onClick={onToggleBlock}
-                           className="title--border">{t(`${buttonType}_btn`)}</div>,
+                                    className="title--border">{t(`${buttonType}_btn`)}</div>,
     };
 
     const detailedDataCurrent = isFiltered ? detailedDataBlocked : detailedData;

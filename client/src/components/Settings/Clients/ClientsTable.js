@@ -219,7 +219,7 @@ class ClientsTable extends Component {
                     <div className="logs__row logs__row--center">
                         <button
                             type="button"
-                            className="btn btn-icon btn-icon--green btn-outline-primary btn-sm mr-2"
+                            className="btn btn-icon btn-outline-primary btn-sm mr-2"
                             onClick={() =>
                                 toggleClientModal({
                                     type: MODAL_TYPE.EDIT,
@@ -235,7 +235,7 @@ class ClientsTable extends Component {
                         </button>
                         <button
                             type="button"
-                            className="btn btn-icon btn-icon--green btn-outline-secondary btn-sm"
+                            className="btn btn-icon btn-outline-secondary btn-sm"
                             onClick={() => this.handleDelete({ name: clientName })}
                             disabled={processingDeleting}
                             title={t('delete_table_action')}

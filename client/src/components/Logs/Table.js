@@ -83,22 +83,22 @@ class Table extends Component {
         },
         {
             Header: () => {
-                const plainSelected = classNames({
+                const plainSelected = classNames('cursor--pointer', {
                     'icon--selected': !this.props.isDetailed,
                 });
 
-                const detailedSelected = classNames({
+                const detailedSelected = classNames('cursor--pointer', {
                     'icon--selected': this.props.isDetailed,
                 });
 
                 return <div className="d-flex justify-content-between">
                     {this.props.t('client_table_header')}
                     {<span>
-                        <svg className={`icons icon--small icon--active mr-2 ${plainSelected}`}
+                        <svg className={`icons icon--small icon--active mr-2 cursor--pointer ${plainSelected}`}
                              onClick={() => this.props.toggleDetailedLogs(false)}>
                             <use xlinkHref='#list' />
                         </svg>
-                    <svg className={`icons icon--small icon--active ${detailedSelected}`}
+                    <svg className={`icons icon--small icon--active cursor--pointer ${detailedSelected}`}
                          onClick={() => this.props.toggleDetailedLogs(true)}>
                         <use xlinkHref='#detailed_list' />
                     </svg>
@@ -188,11 +188,11 @@ class Table extends Component {
                 getPaginationProps={() => ({ className: 'custom-pagination custom-pagination--padding' })}
                 getTbodyProps={() => ({ className: 'd-block' })}
                 previousText={
-                    <svg className="icons icon--small icon--gray w-100 h-100">
+                    <svg className="icons icon--small icon--gray w-100 h-100 cursor--pointer">
                         <use xlinkHref="#arrow-left" />
                     </svg>}
                 nextText={
-                    <svg className="icons icon--small icon--gray w-100 h-100">
+                    <svg className="icons icon--small icon--gray w-100 h-100 cursor--pointer">
                         <use xlinkHref="#arrow-right" />
                     </svg>}
                 renderTotalPagesCount={() => false}

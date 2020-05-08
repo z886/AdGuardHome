@@ -30,7 +30,7 @@ class Tooltip extends React.Component {
                 globalEventOff="click"
                 clickable
             >
-                <svg className="icon icon--small icon-cross d-block d-md-none" onClick={() => {
+                <svg className="icon icon--small icon-cross d-block d-md-none cursor--pointer" onClick={() => {
                     this.tooltip.tooltipRef = null;
                     ReactTooltip.hide();
                 }}>

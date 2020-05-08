@@ -1,5 +1,6 @@
 :root {
     --gray-4d: #4D4D4D;
+    --gray-8: #888;
 }
 
 .logs__row {
@@ -223,12 +224,12 @@
     border: 0;
     border-radius: 8px;
     max-width: 71rem;
-    margin: auto;
     min-height: 50rem;
 }
 
 .logs__table .rt-thead.-header {
     box-shadow: none;
+    font-weight: bold;
 }
 
 .logs__table .rt-thead .rt-th {
@@ -249,6 +250,21 @@
 
 .logs__table .rt-tbody .rt-tr-group {
     border-bottom: 0;
+}
+
+.logs__table .rt-tr {
+    position: relative;
+    padding: 0 24px;
+}
+
+@media (max-width: 575px) {
+    .logs__table .rt-tr {
+        height: 3.125rem;
+    }
+
+    .logs__table .rt-tbody .rt-td {
+        padding: 0.625rem 1rem 0.875rem 1.5rem;
+    }
 }
 
 .logs__table .rt-tr {
@@ -327,7 +343,7 @@
 }
 
 .custom-pagination--padding {
-    padding: 4.3rem 0 2.75rem !important;
+    padding: 2.75rem 0 2.75rem !important;
 }
 
 .custom-pagination button {
@@ -385,6 +401,10 @@
     top: 0.5rem;
 }
 
+.icon--light-gray {
+    color: var(--gray-8);
+}
+
 .link--green {
     color: var(--green79);
 }
@@ -399,7 +419,7 @@
 }
 
 .w-90 {
-    width: 90% !important;
+    max-width: 90% !important;
 }
 
 .w-85 {
@@ -417,4 +437,12 @@
 .py-45 {
     padding-top: 1.25rem !important;
     padding-bottom: 1.25rem !important;
+}
+
+.field__wide {
+    width: 8.5rem
+}
+
+.cursor--pointer {
+    cursor: pointer;
 }

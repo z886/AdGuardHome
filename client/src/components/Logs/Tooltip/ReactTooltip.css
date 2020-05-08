@@ -15,12 +15,18 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(2, min-content);
-    grid-gap: 0.5rem 1rem;
+    grid-row-gap: 0.5rem;
+    grid-column-gap: 1rem;
+}
+
+.grid--gap-bg {
+    grid-column-gap: 1.5rem;
 }
 
 @media (max-width: 400px) {
     .grid {
         grid-template-columns: 35% 55%;
+        padding: 2rem 0;
     }
 }
 

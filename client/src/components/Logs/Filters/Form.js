@@ -55,34 +55,38 @@ const Form = (props) => {
             e.preventDefault();
         }}>
             <div className="input-group">
-                <Field
-                    id="search"
-                    name="search"
-                    component={renderFilterField}
-                    type="text"
-                    className={`form-control--search form-control--transparent ${className}`}
-                    placeholder={t('domain_or_client')}
-                    tooltip={t('query_log_strict_search')}
-                    onChange={handleChange}
-                />
-                <Field
-                    name="response_status"
-                    component="select"
-                    className={`form-control custom-select ml-small form-control--transparent ${responseStatusClass}`}
-                >
-                    <option value="">
-                        <Trans>show_all_responses</Trans>
-                    </option>
-                    <option value={RESPONSE_FILTER.BLOCKED}>
-                        <Trans>show_blocked_responses</Trans>
-                    </option>
-                    <option value={RESPONSE_FILTER.PROCESSED}>
-                        <Trans>show_processed_responses</Trans>
-                    </option>
-                    <option value={RESPONSE_FILTER.WHITELISTED}>
-                        <Trans>show_whitelisted_responses</Trans>
-                    </option>
-                </Field>
+                <div className="input-group">
+                    <Field
+                        id="search"
+                        name="search"
+                        component={renderFilterField}
+                        type="text"
+                        className={`form-control--search form-control--transparent ${className}`}
+                        placeholder={t('domain_or_client')}
+                        tooltip={t('query_log_strict_search')}
+                        onChange={handleChange}
+                    />
+                    <div className="field__wide">
+                        <Field
+                            name="response_status"
+                            component="select"
+                            className={`form-control custom-select ml-small form-control--transparent ${responseStatusClass}`}
+                        >
+                            <option value="">
+                                <Trans>show_all_responses</Trans>
+                            </option>
+                            <option value={RESPONSE_FILTER.BLOCKED}>
+                                <Trans>show_blocked_responses</Trans>
+                            </option>
+                            <option value={RESPONSE_FILTER.PROCESSED}>
+                                <Trans>show_processed_responses</Trans>
+                            </option>
+                            <option value={RESPONSE_FILTER.WHITELISTED}>
+                                <Trans>show_whitelisted_responses</Trans>
+                            </option>
+                        </Field>
+                    </div>
+                </div>
             </div>
         </form>
     );

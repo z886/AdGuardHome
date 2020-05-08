@@ -55,7 +55,6 @@
 .tooltip-custom--logs {
     border-radius: 50%;
     background-image: url("./svg/help-circle-gray.svg");
-    background-color: #fff;
 }
 
 .tooltip-custom--logs:before {
