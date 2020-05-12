@@ -30,11 +30,11 @@
         margin: -0.5rem 0 0;
     }
 
-    .grid > :nth-child(1), .grid > :nth-child(3), .grid > :nth-child(5), .logs--detailed :nth-child(13), .logs--detailed--blocked :nth-child(21) {
+    .grid > .key__time_table_header, .grid > .key__data, .grid > .key__encryption_status, .grid > .key__elapsed {
         grid-column: 1 / span 1;
     }
 
-    .grid > :nth-child(2), .grid > :nth-child(4), .grid > :nth-child(6), .logs--detailed :nth-child(14), .logs--detailed--blocked :nth-child(22) {
+    .grid > .value__time_table_header, .grid > .value__data, .grid > .value__encryption_status, .grid > .value__elapsed {
         grid-column: 2 / span 1;
         margin: 0 !important;
     }

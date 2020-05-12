@@ -34,10 +34,10 @@ const processContent = (data, buttonType) => Object.entries(data)
 
         return (
             <React.Fragment key={nanoid()}>
-                <div className={`${keyClass} ${isBoolean ? 'font-weight-bold' : ''}`}>
+                <div className={`key__${key} ${keyClass} ${isBoolean ? 'font-weight-bold' : ''}`}>
                     <Trans>{isButton ? value : key}</Trans>
                 </div>
-                <div className='text-pre text-truncate'>
+                <div className={`value__${key} text-pre text-truncate`}>
                     <Trans>{(isTitle || isButton || isBoolean) ? '' : value || '—'}</Trans>
                 </div>
             </React.Fragment>
@@ -120,7 +120,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         country: autoClient && autoClient.country,
         network: autoClient && autoClient.orgname,
         [buttonType]: <div onClick={onToggleBlock}
-                                    className="title--border bg--danger">{t(buttonType)}</div>,
+                           className="title--border bg--danger">{t(buttonType)}</div>,
     };
 
     const detailedDataBlocked = {
@@ -138,7 +138,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
         [buttonType]: <div onClick={onToggleBlock}
-                                    className="title--border">{t(buttonType)}</div>,
+                           className="title--border">{t(buttonType)}</div>,
     };
 
     const detailedDataCurrent = isFiltered ? detailedDataBlocked : detailedData;
