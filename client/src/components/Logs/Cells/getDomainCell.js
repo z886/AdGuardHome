@@ -20,7 +20,7 @@ import {
 const processContent = (data, buttonType) => Object.entries(data)
     .map(([key, value]) => {
         const isTitle = value === 'title';
-        const isButton = key === `${buttonType}_btn`;
+        const isButton = key === buttonType;
         const isBoolean = typeof value === 'boolean';
 
         let keyClass = 'key-colon';
@@ -119,8 +119,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         client_details: 'title',
         country: autoClient && autoClient.country,
         network: autoClient && autoClient.orgname,
-        [`${buttonType}_btn`]: <div onClick={onToggleBlock}
-                                    className="title--border bg--danger">{t(`${buttonType}_btn`)}</div>,
+        [buttonType]: <div onClick={onToggleBlock}
+                                    className="title--border bg--danger">{t(buttonType)}</div>,
     };
 
     const detailedDataBlocked = {
@@ -137,8 +137,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         validated_with_dnssec: answer_dnssec, // Boolean
-        [`${buttonType}_btn`]: <div onClick={onToggleBlock}
-                                    className="title--border">{t(`${buttonType}_btn`)}</div>,
+        [buttonType]: <div onClick={onToggleBlock}
+                                    className="title--border">{t(buttonType)}</div>,
     };
 
     const detailedDataCurrent = isFiltered ? detailedDataBlocked : detailedData;
@@ -166,7 +166,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         <div className="logs__row o-hidden" title={value}>
             {dnssecHint}
             {trackerHint}
-            <div className={`${isDetailed ? 'px-2' : ''}`}>
+            <div className={`${isDetailed ? 'px-2 w-100' : ''}`}>
                 <div className="logs__text o-hidden text-truncate">{value}</div>
                 {isDetailed &&
                 <div

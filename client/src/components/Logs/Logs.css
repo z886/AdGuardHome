@@ -49,9 +49,9 @@
     font-weight: bold;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 767px) {
     .rt-tr .logs__row .logs__text {
-        max-width: 8.75rem;
+        max-width: calc(100% - 1.5rem);
     }
 }
 

@@ -31,14 +31,14 @@ const countCell = dnsQueries =>
 const renderBlockingButton = (blocked, ip, handleClick, processing) => {
     let buttonProps = {
         className: 'btn-outline-danger',
-        text: 'block_btn',
+        text: 'block',
         type: 'block',
     };
 
     if (blocked) {
         buttonProps = {
             className: 'btn-outline-secondary',
-            text: 'unblock_btn',
+            text: 'unblock',
             type: 'unblock',
         };
     }

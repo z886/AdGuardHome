@@ -30,17 +30,18 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const buttonType = isFiltered ? BLOCK_ACTIONS.unblock : BLOCK_ACTIONS.block;
 
     const optionsToHandlerMap = {
-        [`${buttonType}_btn`]: () => toggleBlocking(buttonType, domain),
+        [buttonType]: () => toggleBlocking(buttonType, domain),
     };
 
     const options = Object.entries(optionsToHandlerMap)
-        .map(([option, handler]) => <div key={option} onClick={handler}
-                                         className='text-truncate'>{t(option)}</div>);
+        .map(([option, handler]) =>
+            <div key={option} onClick={handler} className='text-truncate'>{t(option)}</div>);
 
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
             <div className="w-90 o-hidden">
-                <div data-tip={true} data-for={id} className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
+                <div data-tip={true} data-for={id}
+                     className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
                 {isDetailed &&
                 <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>

@@ -32,15 +32,21 @@ class Table extends Component {
         const preparedBlockingRule = new RegExp(`(^|\n)${escapeRegExp(blockingRule)}($|\n)`);
         const preparedUnblockingRule = new RegExp(`(^|\n)${escapeRegExp(unblockingRule)}($|\n)`);
 
-        if (userRules.match(preparedBlockingRule)) {
+        const matchPreparedBlockingRule = userRules.match(preparedBlockingRule);
+        const matchPreparedUnblockingRule = userRules.match(preparedUnblockingRule);
+
+        if (matchPreparedBlockingRule) {
             setRules(userRules.replace(`${blockingRule}`, ''));
             addSuccessToast(`${t('rule_removed_from_custom_filtering_toast')}: ${blockingRule}`);
-        } else if (!userRules.match(preparedUnblockingRule)) {
+        } else if (!matchPreparedUnblockingRule) {
             setRules(`${userRules}${lineEnding}${unblockingRule}\n`);
             addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
-        } else {
-            // TODO: replace with toast with message
-            alert('Already in filters');
+        } else if (matchPreparedUnblockingRule) {
+            addSuccessToast(`${t('rule_added_to_custom_filtering_toast')}: ${unblockingRule}`);
+            return;
+        } else if (!matchPreparedBlockingRule) {
+            addSuccessToast(`${t('rule_removed_from_custom_filtering_toast')}: ${blockingRule}`);
+            return;
         }
 
         getFilteringStatus();
@@ -94,12 +100,14 @@ class Table extends Component {
                 return <div className="d-flex justify-content-between">
                     {this.props.t('client_table_header')}
                     {<span>
-                        <svg className={`icons icon--small icon--active mr-2 cursor--pointer ${plainSelected}`}
-                             onClick={() => this.props.toggleDetailedLogs(false)}>
+                        <svg
+                            className={`icons icon--small icon--active mr-2 cursor--pointer ${plainSelected}`}
+                            onClick={() => this.props.toggleDetailedLogs(false)}>
                             <use xlinkHref='#list' />
                         </svg>
-                    <svg className={`icons icon--small icon--active cursor--pointer ${detailedSelected}`}
-                         onClick={() => this.props.toggleDetailedLogs(true)}>
+                    <svg
+                        className={`icons icon--small icon--active cursor--pointer ${detailedSelected}`}
+                        onClick={() => this.props.toggleDetailedLogs(true)}>
                         <use xlinkHref='#detailed_list' />
                     </svg>
                     </span>}
@@ -181,7 +189,8 @@ class Table extends Component {
                 defaultPageSize={defaultPageSize || TABLE_DEFAULT_PAGE_SIZE}
                 loadingText={t('loading_table_status')}
                 rowsText={t('rows_table_footer_text')}
-                noDataText={!isLoading && <label className="logs__text logs__text--bold">{t('empty_log')}</label>}
+                noDataText={!isLoading &&
+                <label className="logs__text logs__text--bold">{t('empty_log')}</label>}
                 pageText=''
                 ofText=''
                 showPagination={logs.length > 0}
