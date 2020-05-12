@@ -436,6 +436,10 @@
     width: 85% !important;
 }
 
+.h-85 {
+    height: 85% !important;
+}
+
 .pt-45 {
     padding-top: 1.25rem !important;
 }
