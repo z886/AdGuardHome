@@ -56,7 +56,8 @@ export const DEBOUNCE_TIMEOUT = 300;
 export const DEBOUNCE_FILTER_TIMEOUT = 200;
 export const TRANSITION_TIMEOUT = 250;
 export const CHECK_TIMEOUT = 1000;
-export const STOP_TIMEOUT = 10000;
+export const SUCCESS_TOAST_TIMEOUT = 5000;
+export const FAILURE_TOAST_TIMEOUT = 30000;
 
 export const UNSAFE_PORTS = [
     1,

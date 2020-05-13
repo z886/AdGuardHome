@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
+import { FAILURE_TOAST_TIMEOUT, SUCCESS_TOAST_TIMEOUT } from '../../helpers/constants';
 
 class Toast extends Component {
     state = {
@@ -18,7 +19,7 @@ class Toast extends Component {
     preventToastRemoval = () => clearTimeout(this.state.timerId);
 
     removeToast = () => {
-        const timeout = this.props.type === 'success' ? 5000 : 30000;
+        const timeout = this.props.type === 'success' ? SUCCESS_TOAST_TIMEOUT : FAILURE_TOAST_TIMEOUT;
 
         const timerId = setTimeout(() => {
             this.props.removeToast(this.props.id);
