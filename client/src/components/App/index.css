@@ -49,7 +49,7 @@ body {
 }
 
 .form-control--search {
-    width: 39.125rem;
+    width: 49vw;
     box-shadow: 0 1px 0 #ddd;
     padding: 0 2.5rem;
     height: 2.25rem;
@@ -63,7 +63,7 @@ body {
 
 @media (max-width: 469px) {
     .form-control--search {
-        max-width: 85% !important;
+        max-width: 85vw !important;
     }
 }
 

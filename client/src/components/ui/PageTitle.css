@@ -9,7 +9,7 @@
     align-items: flex-end;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 991px) {
     .page-header--logs {
         flex-direction: column;
         align-items: center;

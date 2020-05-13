@@ -46,12 +46,12 @@ const Form = (props) => {
     const {
         t,
         handleChange,
-        className,
+        className = '',
         responseStatusClass,
     } = props;
 
     return (
-        <form className="w-100" onSubmit={(e) => {
+        <form className="mw-100" onSubmit={(e) => {
             e.preventDefault();
         }}>
             <div className="input-group">
