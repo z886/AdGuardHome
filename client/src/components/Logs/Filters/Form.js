@@ -51,7 +51,7 @@ const Form = (props) => {
     } = props;
 
     return (
-        <form onSubmit={(e) => {
+        <form className="w-100" onSubmit={(e) => {
             e.preventDefault();
         }}>
             <div className="input-group">
@@ -66,7 +66,7 @@ const Form = (props) => {
                         tooltip={t('query_log_strict_search')}
                         onChange={handleChange}
                     />
-                    <div className="field__wide">
+                    <div className="field__select">
                         <Field
                             name="response_status"
                             component="select"

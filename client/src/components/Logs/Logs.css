@@ -457,8 +457,10 @@
     max-height: 100% !important;
 }
 
-.field__wide {
-    width: 8.5rem
+@media (max-width: 469px) {
+    .field__select {
+        margin-top: 1.5rem;
+    }
 }
 
 .cursor--pointer {

@@ -154,7 +154,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         columnClass: `pb-2 ${isFiltered ? 'logs--detailed--blocked' : 'logs--detailed'}`,
         overridePosition: () => ({
             left: 0,
-            top: 0,
+            top: 47,
         }),
         scrollHide: false,
     });
