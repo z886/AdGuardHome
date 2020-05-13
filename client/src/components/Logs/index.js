@@ -2,7 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { TABLE_DEFAULT_PAGE_SIZE, TABLE_FIRST_PAGE, TRANSITION_TIMEOUT } from '../../helpers/constants';
+import {
+    DEFAULT_LOGS_FILTER,
+    TABLE_DEFAULT_PAGE_SIZE,
+    TABLE_FIRST_PAGE,
+    TRANSITION_TIMEOUT,
+} from '../../helpers/constants';
 
 import Loading from '../ui/Loading';
 import Filters from './Filters';
@@ -27,17 +32,31 @@ class Logs extends Component {
     };
 
     componentDidMount() {
+        const filter = {
+            response_status: '',
+            search: (this.props.location && this.props.location.params && this.props.location.params.search) || '',
+        };
+
+        this.props.setLogsFilter(filter);
         this.props.setLogsPage(TABLE_FIRST_PAGE);
-        this.getLogs(...INITIAL_REQUEST_DATA);
+        this.getLogs(...INITIAL_REQUEST_DATA, filter);
         this.props.getFilteringStatus();
         this.props.getLogsConfig();
         this.props.getClients();
     }
 
-    getLogs = (older_than, page, initial) => {
+    async componentWillUnmount() {
+        this.props.setLogsFilter(DEFAULT_LOGS_FILTER);
+    }
+
+    getLogs = (older_than, page, initial, filter) => {
         if (this.props.queryLogs.enabled) {
             this.props.getLogs({
-                older_than, page, pageSize: TABLE_DEFAULT_PAGE_SIZE, initial,
+                older_than,
+                page,
+                pageSize: TABLE_DEFAULT_PAGE_SIZE,
+                initial,
+                filter,
             });
         }
     };
@@ -128,6 +147,7 @@ Logs.propTypes = {
     setLogsPage: PropTypes.func.isRequired,
     toggleDetailedLogs: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    location: PropTypes.object,
 };
 
 export default withNamespaces()(Logs);

@@ -66,7 +66,7 @@ export const getLogs = config => async (dispatch, getState) => {
     dispatch(getLogsRequest());
     try {
         const { isFiltered, filter, page } = getState().queryLogs;
-        const data = await getLogsWithParams({ ...config, filter });
+        const data = await getLogsWithParams({ ...config, filter: config.filter || filter });
 
         if (isFiltered) {
             const additionalData = await checkFilteredLogs(data, filter, dispatch);

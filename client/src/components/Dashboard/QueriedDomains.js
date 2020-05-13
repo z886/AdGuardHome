@@ -25,7 +25,10 @@ const countCell = dnsQueries =>
         const percent = getPercent(dnsQueries, value);
         const percentColor = getQueriedPercentColor(percent);
 
-        return <Cell value={value} percent={percent} color={percentColor} />;
+        return <Cell value={value}
+                     percent={percent}
+                     color={percentColor}
+                     search={row.original.domain} />;
     };
 
 const QueriedDomains = ({

@@ -103,5 +103,6 @@ export default flow([
     withNamespaces(),
     reduxForm({
         form: 'logsFilterForm',
+        enableReinitialize: true,
     }),
 ])(Form);

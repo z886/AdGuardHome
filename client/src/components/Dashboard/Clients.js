@@ -25,7 +25,10 @@ const countCell = dnsQueries =>
         const percent = getPercent(dnsQueries, value);
         const percentColor = getClientsPercentColor(percent);
 
-        return <Cell value={value} percent={percent} color={percentColor} />;
+        return <Cell value={value}
+                     percent={percent}
+                     color={percentColor}
+                     search={row.original.ip} />;
     };
 
 const renderBlockingButton = (blocked, ip, handleClick, processing) => {
