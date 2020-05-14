@@ -6,24 +6,61 @@ import PageTitle from '../ui/PageTitle';
 import Card from '../ui/Card';
 import Modal from './Modal';
 import Actions from './Actions';
-import Table from './Table';
 
+import Table from './Table';
 import { MODAL_TYPE } from '../../helpers/constants';
-import { getCurrentFilter } from '../../helpers/helpers';
+
+import {
+    enrichWithKey,
+    flattenObject,
+    getCurrentFilter,
+    getObjDiff,
+} from '../../helpers/helpers';
+
+const filtersCatalog = require('../../../../filters');
+
+export const normalizeFiltersCatalog = (filtersCatalog) => {
+    const allFilters = flattenObject(filtersCatalog);
+    return enrichWithKey(allFilters);
+};
+
+const normalizedFiltersCatalog = normalizeFiltersCatalog(filtersCatalog);
 
 class DnsBlocklist extends Component {
     componentDidMount() {
         this.props.getFilteringStatus();
     }
 
-    handleSubmit = (values) => {
-        const { name, url } = values;
-        const { filtering } = this.props;
+    handleSubmit = (values, _, three) => {
+        const { initialValues } = three;
+        const { filtering: { modalFilterUrl, modalType } } = this.props;
 
-        if (filtering.modalType === MODAL_TYPE.EDIT) {
-            this.props.editFilter(filtering.modalFilterUrl, values);
-        } else {
-            this.props.addFilter(url, name);
+        switch (modalType) {
+            case MODAL_TYPE.EDIT_FILTERS:
+                this.props.editFilter(modalFilterUrl, values);
+                break;
+            case MODAL_TYPE.ADD_FILTERS: {
+                const { name, url } = values;
+                this.props.addFilter(url, name);
+                break;
+            }
+            case MODAL_TYPE.CHOOSE_FILTERING_LIST: {
+                const changedValues = getObjDiff(initialValues, values);
+
+                Object.entries(changedValues)
+                    .forEach(([name, shouldAddFilter]) => {
+                        const url = normalizedFiltersCatalog[name].source;
+
+                        if (shouldAddFilter) {
+                            this.props.addFilter(url, name);
+                        } else {
+                            this.props.removeFilter(url);
+                        }
+                    });
+                break;
+            }
+            default:
+                break;
         }
     };
 
@@ -39,6 +76,10 @@ class DnsBlocklist extends Component {
 
     handleRefresh = () => {
         this.props.refreshFilters({ whitelist: false });
+    };
+
+    openSelectTypeModal = () => {
+        this.props.toggleFilteringModal({ type: MODAL_TYPE.SELECT_MODAL_TYPE });
     };
 
     render() {
@@ -85,7 +126,7 @@ class DnsBlocklist extends Component {
                                     toggleFilter={this.toggleFilter}
                                 />
                                 <Actions
-                                    handleAdd={() => toggleFilteringModal({ type: MODAL_TYPE.ADD })}
+                                    handleAdd={this.openSelectTypeModal}
                                     handleRefresh={this.handleRefresh}
                                     processingRefreshFilters={processingRefreshFilters}
                                 />
@@ -94,8 +135,11 @@ class DnsBlocklist extends Component {
                     </div>
                 </div>
                 <Modal
+                    filtersCatalog={filtersCatalog}
+                    normalizedFiltersCatalog={normalizedFiltersCatalog}
+                    filters={filters}
                     isOpen={isModalOpen}
-                    toggleModal={toggleFilteringModal}
+                    toggleFilteringModal={toggleFilteringModal}
                     addFilter={addFilter}
                     isFilterAdded={isFilterAdded}
                     processingAddFilter={processingAddFilter}

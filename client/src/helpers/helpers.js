@@ -13,17 +13,17 @@ import uniqBy from 'lodash/uniqBy';
 import versionCompare from './versionCompare';
 
 import {
-    STANDARD_DNS_PORT,
-    STANDARD_WEB_PORT,
-    STANDARD_HTTPS_PORT,
     CHECK_TIMEOUT,
-    DNS_RECORD_TYPES,
-    DEFAULT_TIME_FORMAT,
     DEFAULT_DATE_FORMAT_OPTIONS,
-    DETAILED_DATE_FORMAT_OPTIONS,
     DEFAULT_LANGUAGE,
-    FILTERED_STATUS,
+    DEFAULT_TIME_FORMAT,
+    DETAILED_DATE_FORMAT_OPTIONS,
+    DNS_RECORD_TYPES,
     FILTERED,
+    FILTERED_STATUS,
+    STANDARD_DNS_PORT,
+    STANDARD_HTTPS_PORT,
+    STANDARD_WEB_PORT,
 } from './constants';
 
 /**
@@ -456,6 +456,19 @@ export const getCurrentFilter = (url, filters) => {
 };
 
 /**
+ * @param {object} initialValues
+ * @param {object} values
+ * @returns {object} Returns different values of objects
+ */
+export const getObjDiff = (initialValues, values) => Object.entries(values)
+    .reduce((acc, [key, value]) => {
+        if (value !== initialValues[key]) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+
+/**
  * @param number Number to format
  * @returns string Returns a string with a language-sensitive representation of this number
  */
@@ -463,3 +476,21 @@ export const formatNumber = (num) => {
     const currentLanguage = i18n.languages[0] || DEFAULT_LANGUAGE;
     return num.toLocaleString(currentLanguage);
 };
+
+export const flattenObject = (obj) => Object.values(obj)
+    .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+export const enrichWithKey = (filters, propName = 'name') => Object.entries(filters)
+    .reduce((acc, [key, value]) => {
+        // eslint-disable-next-line no-param-reassign
+        value[propName] = key;
+        acc[key] = value;
+        return acc;
+    }, {});
+
+export const flagPresentValues = (arr, obj) => arr.reduce((acc, curr) => {
+    if (Object.prototype.hasOwnProperty.call(obj, curr)) {
+        acc[curr] = true;
+    }
+    return acc;
+}, {});

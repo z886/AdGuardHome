@@ -56,6 +56,7 @@ export const DEBOUNCE_TIMEOUT = 300;
 export const DEBOUNCE_FILTER_TIMEOUT = 500;
 export const CHECK_TIMEOUT = 1000;
 export const STOP_TIMEOUT = 10000;
+export const MODAL_OPEN_TIMEOUT = 150;
 
 export const UNSAFE_PORTS = [
     1,
@@ -133,8 +134,10 @@ export const DHCP_STATUS_RESPONSE = {
 };
 
 export const MODAL_TYPE = {
-    ADD: 'add',
-    EDIT: 'edit',
+    SELECT_MODAL_TYPE: 'SELECT_MODAL_TYPE',
+    ADD_FILTERS: 'ADD_FILTERS',
+    EDIT_FILTERS: 'EDIT_FILTERS',
+    CHOOSE_FILTERING_LIST: 'CHOOSE_FILTERING_LIST',
 };
 
 export const CLIENT_ID = {
