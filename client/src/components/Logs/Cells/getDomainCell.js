@@ -166,11 +166,12 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         <div className="logs__row o-hidden" title={value}>
             {dnssecHint}
             {trackerHint}
-            <div className={`${isDetailed ? 'px-2 w-100' : ''}`}>
+            <div className={`${isDetailed ? 'px-2 w-100 d-flex justify-content-center flex-column' : ''}`}>
                 <div className="logs__text o-hidden text-truncate">{value}</div>
-                {isDetailed &&
-                <div
-                    className="detailed-info d-none d-sm-block">{`${ip}${ip && protocol && ', '}${protocol}`}</div>}
+                {(ip || protocol) && isDetailed &&
+                <div className="detailed-info d-none d-sm-block">
+                    {`${ip}${ip && protocol && ', '}${protocol}`}
+                </div>}
             </div>
             {detailedHint}
         </div>

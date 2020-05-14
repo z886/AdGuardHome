@@ -49,21 +49,27 @@ body {
 }
 
 .form-control--search {
-    width: 49vw;
+    width: 39.125rem;
     box-shadow: 0 1px 0 #ddd;
     padding: 0 2.5rem;
     height: 2.25rem;
 }
 
+@media (max-width: 1279px) {
+    .form-control--search {
+        max-width: 30.125rem;
+    }
+}
+
 @media (max-width: 991px) {
     .form-control--search {
-        max-width: 17rem !important;
+        max-width: 17rem;
     }
 }
 
 @media (max-width: 469px) {
     .form-control--search {
-        max-width: 85vw !important;
+        max-width: 85%;
     }
 }
 

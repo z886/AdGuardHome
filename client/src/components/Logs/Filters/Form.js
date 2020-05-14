@@ -51,42 +51,39 @@ const Form = (props) => {
     } = props;
 
     return (
-        <form className="mw-100" onSubmit={(e) => {
-            e.preventDefault();
-        }}>
-            <div className="input-group">
-                <div className="input-group">
-                    <Field
-                        id="search"
-                        name="search"
-                        component={renderFilterField}
-                        type="text"
-                        className={`form-control--search form-control--transparent ${className}`}
-                        placeholder={t('domain_or_client')}
-                        tooltip={t('query_log_strict_search')}
-                        onChange={handleChange}
-                    />
-                    <div className="field__select">
-                        <Field
-                            name="response_status"
-                            component="select"
-                            className={`form-control custom-select custom-select__arrow--left ml-small form-control--transparent ${responseStatusClass}`}
-                        >
-                            <option value="">
-                                <Trans>show_all_responses</Trans>
-                            </option>
-                            <option value={RESPONSE_FILTER.BLOCKED}>
-                                <Trans>show_blocked_responses</Trans>
-                            </option>
-                            <option value={RESPONSE_FILTER.PROCESSED}>
-                                <Trans>show_processed_responses</Trans>
-                            </option>
-                            <option value={RESPONSE_FILTER.WHITELISTED}>
-                                <Trans>show_whitelisted_responses</Trans>
-                            </option>
-                        </Field>
-                    </div>
-                </div>
+        <form className="mw-100 d-flex flex-wrap"
+              onSubmit={(e) => {
+                  e.preventDefault();
+              }}>
+            <Field
+                id="search"
+                name="search"
+                component={renderFilterField}
+                type="text"
+                className={`form-control--search form-control--transparent ${className}`}
+                placeholder={t('domain_or_client')}
+                tooltip={t('query_log_strict_search')}
+                onChange={handleChange}
+            />
+            <div className="field__select">
+                <Field
+                    name="response_status"
+                    component="select"
+                    className={`form-control custom-select custom-select__arrow--left ml-small form-control--transparent ${responseStatusClass}`}
+                >
+                    <option value="">
+                        <Trans>show_all_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.BLOCKED}>
+                        <Trans>show_blocked_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.PROCESSED}>
+                        <Trans>show_processed_responses</Trans>
+                    </option>
+                    <option value={RESPONSE_FILTER.WHITELISTED}>
+                        <Trans>show_whitelisted_responses</Trans>
+                    </option>
+                </Field>
             </div>
         </form>
     );
