@@ -39,10 +39,10 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
 
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
-            <div className="w-90 o-hidden">
+            <div className="w-90 o-hidden d-flex justify-content-center flex-column">
                 <div data-tip={true} data-for={id}
                      className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
-                {isDetailed &&
+                {isDetailed && name &&
                 <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>
             {processedData.length > 0 &&

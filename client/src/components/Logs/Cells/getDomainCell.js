@@ -22,6 +22,7 @@ const processContent = (data, buttonType) => Object.entries(data)
         const isTitle = value === 'title';
         const isButton = key === buttonType;
         const isBoolean = typeof value === 'boolean';
+        const isHidden = isBoolean && value === false;
 
         let keyClass = 'key-colon';
 
@@ -32,26 +33,29 @@ const processContent = (data, buttonType) => Object.entries(data)
             keyClass = '';
         }
 
-        return (
-            <React.Fragment key={nanoid()}>
-                <div className={`key__${key} ${keyClass} ${isBoolean ? 'font-weight-bold' : ''}`}>
-                    <Trans>{isButton ? value : key}</Trans>
-                </div>
-                <div className={`value__${key} text-pre text-truncate`}>
-                    <Trans>{(isTitle || isButton || isBoolean) ? '' : value || '—'}</Trans>
-                </div>
-            </React.Fragment>
-        );
+        return isHidden ? null : <React.Fragment key={nanoid()}>
+            <div
+                className={`key__${key} ${keyClass} ${(isBoolean && value === true) ? 'font-weight-bold' : ''}`}>
+                <Trans>{isButton ? value : key}</Trans>
+            </div>
+            <div className={`value__${key} text-pre text-truncate`}>
+                <Trans>{(isTitle || isButton || isBoolean) ? '' : value || '—'}</Trans>
+            </div>
+        </React.Fragment>;
     });
 
 const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
-        value, upstream, original: {
-            time, tracker, elapsedMs, reason, domain, response, type, client, answer_dnssec,
+        value, original: {
+            time, tracker, elapsedMs, reason, domain, response,
+            type, client, answer_dnssec, upstream,
         },
     } = row;
 
     const autoClient = autoClients.find(autoClient => autoClient.name === client);
+    const country = autoClient && autoClient.whois_info && autoClient.whois_info.country;
+    const network = autoClient && autoClient.whois_info && autoClient.whois_info.orgname;
+
     const hasTracker = !!tracker;
 
     const source = tracker && tracker.sourceData && tracker.sourceData.name;
@@ -117,8 +121,9 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         client_details: 'title',
-        country: autoClient && autoClient.country,
-        network: autoClient && autoClient.orgname,
+        country,
+        network,
+        validated_with_dnssec: Boolean(answer_dnssec),
         [buttonType]: <div onClick={onToggleBlock}
                            className="title--border bg--danger">{t(buttonType)}</div>,
     };
@@ -136,7 +141,6 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         install_settings_dns: upstream,
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
-        validated_with_dnssec: answer_dnssec, // Boolean
         [buttonType]: <div onClick={onToggleBlock}
                            className="title--border">{t(buttonType)}</div>,
     };
