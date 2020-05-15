@@ -48,7 +48,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     const {
         value, original: {
             time, tracker, elapsedMs, reason, domain, response,
-            type, client, answer_dnssec, upstream,
+            type, client, answer_dnssec, upstream, info,
         },
     } = row;
 
@@ -121,6 +121,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         elapsed: formattedElapsedMs,
         request_table_header: response && response.join('\n'),
         client_details: 'title',
+        name: info && info.name,
+        ip_address: client,
         country,
         network,
         validated_with_dnssec: Boolean(answer_dnssec),

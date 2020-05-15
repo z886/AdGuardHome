@@ -361,6 +361,7 @@
     "form_enter_id": "Enter identifier",
     "form_add_id": "Add identifier",
     "form_client_name": "Enter client name",
+    "name": "Name",
     "client_global_settings": "Use global settings",
     "client_deleted": "Client \"{{key}}\" successfully deleted",
     "client_added": "Client \"{{key}}\" successfully added",

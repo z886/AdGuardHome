@@ -12,6 +12,8 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     } = row.original;
 
     const autoClient = autoClients.find(autoClient => autoClient.name === client);
+    const country = autoClient && autoClient.whois_info && autoClient.whois_info.country;
+    const network = autoClient && autoClient.whois_info && autoClient.whois_info.orgname;
 
     const id = nanoid();
 
@@ -19,8 +21,8 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         table_name: domain,
         ip: client,
         dhcp_table_hostname: upstream,
-        country: autoClient && autoClient.country,
-        network: autoClient && autoClient.orgname,
+        country,
+        network,
     };
 
     const processedData = Object.entries(data)
