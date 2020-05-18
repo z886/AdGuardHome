@@ -1238,7 +1238,12 @@ Request:
 
 `older_than` setting is used for paging.  UI uses an empty value for `older_than` on the first request and gets the latest log entries.  To get the older entries, UI sets `older_than` to the `oldest` value from the server's response.
 
-If search settings are set, server returns only entries that match the specified request.  For `search` value, the server matches substrings by default: `adguard.com` matches `www.adguard.com`.  Strict matching can be enabled by enclosing the value in double quotes: `"adguard.com"` matches `adguard.com` but doesn't match `www.adguard.com`.
+If search settings are set, server returns only entries that match the specified request.  
+
+`search`:
+match by domain name or client IP address.
+The server matches substrings by default: e.g. `adguard.com` matches `www.adguard.com`.
+Strict matching can be enabled by enclosing the value in double quotes: e.g. `"adguard.com"` matches `adguard.com` but doesn't match `www.adguard.com`.
 
 `response_status`:
 * blocked: only blocked entries
