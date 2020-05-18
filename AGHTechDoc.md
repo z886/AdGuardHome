@@ -1203,7 +1203,6 @@ When a new DNS request is received and processed, we store information about thi
 	"Answer":"base64 data",
 	"OrigAnswer":"base64 data",
 	"Result":{
-		"IsFiltered":true,
 		"Reason":3,
 		"Rule":"...",
 		"FilterID":1,

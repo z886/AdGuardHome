@@ -97,7 +97,7 @@ func (l *queryLog) readNextEntry(r *QLogReader, params getDataParams) (*logEntry
 	}
 
 	entry := logEntry{}
-	if !decodeLogEntry(&entry, line, params) {
+	if !decodeLogEntry(&entry, line) {
 		return nil, timestamp, nil
 	}
 
@@ -127,38 +127,13 @@ func (l *queryLog) openReader() (*QLogReader, error) {
 // this method does not guarantee anything and the reason is to do a quick check
 // without deserializing anything
 func quickMatchesGetDataParams(line string, params getDataParams) bool {
-	if len(params.Domain) != 0 {
-		val := readJSONValue(line, "QH")
-		if len(val) == 0 {
-			return false
-		}
-
-		if (params.StrictMatchDomain && val != params.Domain) ||
-			(!params.StrictMatchDomain && strings.Index(val, params.Domain) == -1) {
+	if len(params.Match) != 0 {
+		host := readJSONValue(line, "QH")
+		ip := readJSONValue(line, "IP")
+		if !matchesHostIP(host, ip, params) {
 			return false
 		}
 	}
-
-	if len(params.QuestionType) != 0 {
-		val := readJSONValue(line, "QT")
-		if val != params.QuestionType {
-			return false
-		}
-	}
-
-	if len(params.Client) != 0 {
-		val := readJSONValue(line, "IP")
-		if len(val) == 0 {
-			log.Debug("QueryLog: failed to decodeLogEntry")
-			return false
-		}
-
-		if (params.StrictMatchClient && val != params.Client) ||
-			(!params.StrictMatchClient && strings.Index(val, params.Client) == -1) {
-			return false
-		}
-	}
-
 	return true
 }
 
@@ -186,30 +161,39 @@ func matchesResponseStatus(entry *logEntry, params getDataParams) bool {
 	return true
 }
 
+// Return TRUE if host and IP match the search
+func matchesHostIP(host string, ip string, params getDataParams) bool {
+	if len(params.Match) != 0 {
+		if params.StrictMatch {
+			if !(host == params.Match ||
+				ip == params.Match) {
+				return false
+			}
+
+		} else {
+			if !(strings.Index(host, params.Match) != -1 ||
+				strings.Index(ip, params.Match) != -1) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 // matchesGetDataParams - returns true if the entry matches the search parameters
 func matchesGetDataParams(entry *logEntry, params getDataParams) bool {
 	if !matchesResponseStatus(entry, params) {
 		return false
 	}
 
-	if len(params.QuestionType) != 0 {
-		if entry.QType != params.QuestionType {
-			return false
-		}
-	}
+	// if len(params.QuestionType) != 0 {
+	// 	if entry.QType != params.QuestionType {
+	// 		return false
+	// 	}
+	// }
 
-	if len(params.Domain) != 0 {
-		if (params.StrictMatchDomain && entry.QHost != params.Domain) ||
-			(!params.StrictMatchDomain && strings.Index(entry.QHost, params.Domain) == -1) {
-			return false
-		}
-	}
-
-	if len(params.Client) != 0 {
-		if (params.StrictMatchClient && entry.IP != params.Client) ||
-			(!params.StrictMatchClient && strings.Index(entry.IP, params.Client) == -1) {
-			return false
-		}
+	if !matchesHostIP(entry.QHost, entry.IP, params) {
+		return false
 	}
 
 	return true
@@ -217,8 +201,7 @@ func matchesGetDataParams(entry *logEntry, params getDataParams) bool {
 
 // decodeLogEntry - decodes query log entry from a line
 // nolint (gocyclo)
-func decodeLogEntry(ent *logEntry, str string, params getDataParams) bool {
-	var b bool
+func decodeLogEntry(ent *logEntry, str string) bool {
 	var i int
 	var err error
 	for {
@@ -246,9 +229,6 @@ func decodeLogEntry(ent *logEntry, str string, params getDataParams) bool {
 		case "OrigAnswer":
 			ent.OrigAnswer, err = base64.StdEncoding.DecodeString(v)
 
-		case "IsFiltered":
-			b, err = strconv.ParseBool(v)
-			ent.Result.IsFiltered = b
 		case "Rule":
 			ent.Result.Rule = v
 		case "FilterID":
@@ -257,9 +237,6 @@ func decodeLogEntry(ent *logEntry, str string, params getDataParams) bool {
 		case "Reason":
 			i, err = strconv.Atoi(v)
 			ent.Result.Reason = dnsfilter.Reason(i)
-			if !matchesResponseStatus(ent, params) {
-				return false
-			}
 
 		case "Upstream":
 			ent.Upstream = v

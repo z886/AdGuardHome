@@ -176,13 +176,11 @@ func (l *queryLog) Add(params AddParams) {
 
 // Parameters for getData()
 type getDataParams struct {
-	OlderThan         time.Time          // return entries that are older than this value
-	Domain            string             // filter by domain name in question
-	Client            string             // filter by client IP
-	QuestionType      string             // filter by question type
-	ResponseStatus    responseStatusType // filter by response status
-	StrictMatchDomain bool               // if Domain value must be matched strictly
-	StrictMatchClient bool               // if Client value must be matched strictly
+	OlderThan   time.Time // return entries that are older than this value
+	Match       string    // filter by domain name in question or client IP
+	StrictMatch bool      // if value must be matched strictly
+	// QuestionType      string             // filter by question type
+	ResponseStatus responseStatusType // filter by response status
 }
 
 // Response status
@@ -199,10 +197,6 @@ const (
 // Gets log entries
 func (l *queryLog) getData(params getDataParams) map[string]interface{} {
 	now := time.Now()
-
-	if len(params.Client) != 0 && l.conf.AnonymizeClientIP {
-		params.Client = l.getClientIP(params.Client)
-	}
 
 	// add from file
 	fileEntries, oldest, total := l.searchFiles(params)

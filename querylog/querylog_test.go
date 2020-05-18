@@ -57,9 +57,9 @@ func TestQueryLog(t *testing.T) {
 
 	// search by domain (strict)
 	params = getDataParams{
-		OlderThan:         time.Time{},
-		Domain:            "test.example.org",
-		StrictMatchDomain: true,
+		OlderThan:   time.Time{},
+		Match:       "test.example.org",
+		StrictMatch: true,
 	}
 	d = l.getData(params)
 	mdata = d["data"].([]map[string]interface{})
@@ -68,9 +68,9 @@ func TestQueryLog(t *testing.T) {
 
 	// search by domain (not strict)
 	params = getDataParams{
-		OlderThan:         time.Time{},
-		Domain:            "example.org",
-		StrictMatchDomain: false,
+		OlderThan:   time.Time{},
+		Match:       "example.org",
+		StrictMatch: false,
 	}
 	d = l.getData(params)
 	mdata = d["data"].([]map[string]interface{})
@@ -81,9 +81,9 @@ func TestQueryLog(t *testing.T) {
 
 	// search by client IP (strict)
 	params = getDataParams{
-		OlderThan:         time.Time{},
-		Client:            "2.2.2.2",
-		StrictMatchClient: true,
+		OlderThan:   time.Time{},
+		Match:       "2.2.2.2",
+		StrictMatch: true,
 	}
 	d = l.getData(params)
 	mdata = d["data"].([]map[string]interface{})
@@ -92,9 +92,9 @@ func TestQueryLog(t *testing.T) {
 
 	// search by client IP (part of)
 	params = getDataParams{
-		OlderThan:         time.Time{},
-		Client:            "2.2.2",
-		StrictMatchClient: false,
+		OlderThan:   time.Time{},
+		Match:       "2.2.2",
+		StrictMatch: false,
 	}
 	d = l.getData(params)
 	mdata = d["data"].([]map[string]interface{})

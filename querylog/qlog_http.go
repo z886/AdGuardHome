@@ -43,8 +43,7 @@ func (l *queryLog) handleQueryLog(w http.ResponseWriter, r *http.Request) {
 	req.responseStatus = q.Get("response_status")
 
 	params := getDataParams{
-		Domain:         req.search,
-		//Client:         req.search,
+		Match:          req.search,
 		ResponseStatus: responseStatusAll,
 	}
 	if len(req.olderThan) != 0 {
@@ -55,11 +54,8 @@ func (l *queryLog) handleQueryLog(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if getDoubleQuotesEnclosedValue(&params.Domain) {
-		params.StrictMatchDomain = true
-	}
-	if getDoubleQuotesEnclosedValue(&params.Client) {
-		params.StrictMatchClient = true
+	if getDoubleQuotesEnclosedValue(&params.Match) {
+		params.StrictMatch = true
 	}
 
 	if len(req.responseStatus) != 0 {
