@@ -97,9 +97,7 @@ func (l *queryLog) readNextEntry(r *QLogReader, params getDataParams) (*logEntry
 	}
 
 	entry := logEntry{}
-	if !decodeLogEntry(&entry, line) {
-		return nil, timestamp, nil
-	}
+	decodeLogEntry(&entry, line)
 
 	// Full check of the deserialized log entry
 	if !matchesGetDataParams(&entry, params) {
@@ -201,7 +199,7 @@ func matchesGetDataParams(entry *logEntry, params getDataParams) bool {
 
 // decodeLogEntry - decodes query log entry from a line
 // nolint (gocyclo)
-func decodeLogEntry(ent *logEntry, str string) bool {
+func decodeLogEntry(ent *logEntry, str string) {
 	var i int
 	var err error
 	for {
@@ -272,7 +270,6 @@ func decodeLogEntry(ent *logEntry, str string) bool {
 			break
 		}
 	}
-	return true
 }
 
 // Get value from "key":"value"
