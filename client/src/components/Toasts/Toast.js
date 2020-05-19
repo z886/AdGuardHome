@@ -9,16 +9,16 @@ class Toast extends Component {
     };
 
     componentDidMount() {
-        this.removeToast();
+        this.setRemoveToastTimeout();
     }
 
     shouldComponentUpdate() {
         return false;
     }
 
-    preventToastRemoval = () => clearTimeout(this.state.timerId);
+    clearRemoveToastTimeout = () => clearTimeout(this.state.timerId);
 
-    removeToast = () => {
+    setRemoveToastTimeout = () => {
         const timeout = this.props.type === 'success' ? SUCCESS_TOAST_TIMEOUT : FAILURE_TOAST_TIMEOUT;
 
         const timerId = setTimeout(() => {
@@ -43,8 +43,8 @@ class Toast extends Component {
 
         return (
             <div className={`toast toast--${type}`}
-                 onMouseOver={this.preventToastRemoval}
-                 onMouseOut={this.removeToast}>
+                 onMouseOver={this.clearRemoveToastTimeout}
+                 onMouseOut={this.setRemoveToastTimeout}>
                 <p className="toast__content">
                     {this.showMessage(t, type, message)}
                 </p>
