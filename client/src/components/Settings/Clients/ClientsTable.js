@@ -213,7 +213,7 @@ class ClientsTable extends Component {
                 if (!row.value) {
                     return content;
                 }
-
+                // TODO: find out correct ids
                 return <SearchLink search={row.original.ids[0]}>{content}</SearchLink>;
             },
         },

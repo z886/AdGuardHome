@@ -7,6 +7,7 @@ import Card from '../../ui/Card';
 import CellWrap from '../../ui/CellWrap';
 
 import whoisCell from './whoisCell';
+import SearchLink from '../../ui/SearchLink';
 
 const COLUMN_MIN_WIDTH = 200;
 
@@ -49,7 +50,7 @@ class AutoClients extends Component {
                     return (
                         <div className="logs__row">
                             <div className="logs__text" title={clientStats}>
-                                {clientStats}
+                                <SearchLink search={row.original.ip}>{clientStats}</SearchLink>
                             </div>
                         </div>
                     );
