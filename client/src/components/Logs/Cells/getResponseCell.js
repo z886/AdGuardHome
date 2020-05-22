@@ -11,8 +11,8 @@ const getFilterName = (filters, whitelistFilters, filterId, t) => {
         return t('custom_filter_rules');
     }
 
-    const filter = filters.find(filter => filter.id === filterId)
-        || whitelistFilters.find(filter => filter.id === filterId);
+    const filter = filters.find((filter) => filter.id === filterId)
+        || whitelistFilters.find((filter) => filter.id === filterId);
     let filterName = '';
 
     if (filter) {

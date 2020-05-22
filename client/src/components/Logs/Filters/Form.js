@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { withNamespaces, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import flow from 'lodash/flow';
 
 import { RESPONSE_FILTER } from '../../../helpers/constants';
@@ -17,30 +17,43 @@ const renderFilterField = ({
     autoComplete,
     tooltip,
     meta: { touched, error },
-}) => (
-    <Fragment>
-        <div className="input-group-search">
-            <svg className="icons icon--small icon--gray">
-                <use xlinkHref="#magnifier" />
-            </svg>
-        </div>
-        <input
-            {...input}
-            id={id}
-            placeholder={placeholder}
-            type={type}
-            className={className}
-            disabled={disabled}
-            autoComplete={autoComplete}
-            aria-label={placeholder} />
-        <span className="logs__notice">
+}) => <Fragment>
+    <div className="input-group-search">
+        <svg className="icons icon--small icon--gray">
+            <use xlinkHref="#magnifier" />
+        </svg>
+    </div>
+    <input
+        {...input}
+        id={id}
+        placeholder={placeholder}
+        type={type}
+        className={className}
+        disabled={disabled}
+        autoComplete={autoComplete}
+        aria-label={placeholder} />
+    <span className="logs__notice">
                 <Tooltip text={tooltip} type='tooltip-custom--logs' />
             </span>
-        {!disabled &&
-        touched &&
-        (error && <span className="form__message form__message--error">{error}</span>)}
-    </Fragment>
-);
+    {!disabled
+    && touched
+    && (error && <span className="form__message form__message--error">{error}</span>)}
+</Fragment>;
+
+renderFilterField.propTypes = {
+    input: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    placeholder: PropTypes.string,
+    type: PropTypes.string,
+    disabled: PropTypes.string,
+    autoComplete: PropTypes.string,
+    tooltip: PropTypes.string,
+    meta: PropTypes.shape({
+        touched: PropTypes.bool,
+        error: PropTypes.object,
+    }).isRequired,
+};
 
 const Form = (props) => {
     const {
@@ -72,16 +85,16 @@ const Form = (props) => {
                     className={`form-control custom-select custom-select__arrow--left ml-small form-control--transparent ${responseStatusClass}`}
                 >
                     <option value="">
-                        <Trans>show_all_responses</Trans>
+                        {t('show_all_responses')}
                     </option>
                     <option value={RESPONSE_FILTER.BLOCKED}>
-                        <Trans>show_blocked_responses</Trans>
+                        {t('show_blocked_responses')}
                     </option>
                     <option value={RESPONSE_FILTER.PROCESSED}>
-                        <Trans>show_processed_responses</Trans>
+                        {t('show_processed_responses')}
                     </option>
                     <option value={RESPONSE_FILTER.WHITELISTED}>
-                        <Trans>show_whitelisted_responses</Trans>
+                        {t('show_whitelisted_responses')}
                     </option>
                 </Field>
             </div>
@@ -97,7 +110,7 @@ Form.propTypes = {
 };
 
 export default flow([
-    withNamespaces(),
+    withTranslation(),
     reduxForm({
         form: 'logsFilterForm',
     }),

@@ -3,13 +3,13 @@ import adguardDb from './adguard.json';
 import { REPOSITORY } from '../constants';
 
 /**
-  @typedef TrackerData
-  @type {object}
-  @property {string} id - tracker ID.
-  @property {string} name - tracker name.
-  @property {string} url - tracker website url.
-  @property {number} category - tracker category.
-  @property {source} source - tracker data source.
+ @typedef TrackerData
+ @type {object}
+ @property {string} id - tracker ID.
+ @property {string} name - tracker name.
+ @property {string} url - tracker website url.
+ @property {number} category - tracker category.
+ @property {source} source - tracker data source.
  */
 
 /**
@@ -35,7 +35,8 @@ export const getSourceData = (trackerData) => {
             name: 'Whotracks.me',
             url: `https://whotracks.me/trackers/${trackerData.id}.html`,
         };
-    } else if (trackerData.source === sources.ADGUARD) {
+    }
+    if (trackerData.source === sources.ADGUARD) {
         return {
             name: 'AdGuard',
             url: REPOSITORY.TRACKERS_DB,
@@ -58,7 +59,8 @@ const getTrackerDataFromDb = (domainName, trackersDb, source) => {
         return null;
     }
 
-    const parts = domainName.split(/\./g).reverse();
+    const parts = domainName.split(/\./g)
+        .reverse();
     let hostToCheck = '';
 
     // Check every subdomain

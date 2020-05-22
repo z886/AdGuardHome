@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import CustomTooltip from '../Tooltip/CustomTooltip';
 
@@ -28,8 +28,8 @@ const getHintElement = ({
                 <use xlinkHref={`#${xlinkHref}`} />
             </svg>}
         </div>
-        {dataTip &&
-        <CustomTooltip
+        {dataTip
+        && <CustomTooltip
             className={tooltipClass}
             id={id}
             columnClass={columnClass}

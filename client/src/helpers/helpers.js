@@ -10,9 +10,8 @@ import round from 'lodash/round';
 import axios from 'axios';
 import i18n from 'i18next';
 import uniqBy from 'lodash/uniqBy';
-
 import versionCompare from './versionCompare';
-import { getTrackerData } from '../helpers/trackers/trackers';
+import { getTrackerData } from './trackers/trackers';
 
 import {
     STANDARD_DNS_PORT,
@@ -49,16 +48,17 @@ export const formatDateTime = (dateTime, options = DEFAULT_DATE_FORMAT_OPTIONS) 
     return parsedTime.toLocaleString(currentLanguage, options);
 };
 
-export const formatDetailedDateTime = dateTime =>
-    formatDateTime(dateTime, DETAILED_DATE_FORMAT_OPTIONS);
+export const formatDetailedDateTime = (dateTime) => formatDateTime(
+    dateTime, DETAILED_DATE_FORMAT_OPTIONS,
+);
 
 /**
  * @param string
  * @returns boolean
  */
-export const isToday = date => isSameDay(new Date(date), new Date());
+export const isToday = (date) => isSameDay(new Date(date), new Date());
 
-export const normalizeLogs = logs => logs.map((log) => {
+export const normalizeLogs = (logs) => logs.map((log) => {
     const {
         answer: response,
         answer_dnssec,
@@ -113,8 +113,8 @@ export const normalizeHistory = (history, interval) => {
     }));
 };
 
-export const normalizeTopStats = stats => (
-    stats.map(item => ({
+export const normalizeTopStats = (stats) => (
+    stats.map((item) => ({
         name: Object.keys(item)[0],
         count: Object.values(item)[0],
     }))
@@ -123,7 +123,7 @@ export const normalizeTopStats = stats => (
 export const addClientInfo = (data, clients, param) => (
     data.map((row) => {
         const clientIp = row[param];
-        const info = clients.find(item => item[clientIp]) || '';
+        const info = clients.find((item) => item[clientIp]) || '';
         return {
             ...row,
             info: (info && info[clientIp]) || '',
@@ -131,7 +131,7 @@ export const addClientInfo = (data, clients, param) => (
     })
 );
 
-export const normalizeFilters = filters => (
+export const normalizeFilters = (filters) => (
     filters ? filters.map((filter) => {
         const {
             id,
@@ -139,7 +139,7 @@ export const normalizeFilters = filters => (
             enabled,
             last_updated,
             name = 'Default name',
-            rules_count: rules_count = 0,
+            rules_count = 0,
         } = filter;
 
         return {
@@ -175,13 +175,10 @@ export const getPercent = (amount, number) => {
     return 0;
 };
 
-export const captitalizeWords = text => text.split(/[ -_]/g)
-    .map(str => str.charAt(0)
-        .toUpperCase() + str.substr(1))
-    .join(' ');
+export const captitalizeWords = (text) => text.split(/[ -_]/g).map((str) => str.charAt(0).toUpperCase() + str.substr(1)).join(' ');
 
 export const getInterfaceIp = (option) => {
-    const onlyIPv6 = option.ip_addresses.every(ip => ip.includes(':'));
+    const onlyIPv6 = option.ip_addresses.every((ip) => ip.includes(':'));
     let interfaceIP = option.ip_addresses[0];
 
     if (!onlyIPv6) {
@@ -244,7 +241,7 @@ export const checkRedirect = (url, attempts) => {
         return false;
     }
 
-    const rmTimeout = t => t && clearTimeout(t);
+    const rmTimeout = (t) => t && clearTimeout(t);
     const setRecursiveTimeout = (time, ...args) => setTimeout(
         checkRedirect,
         time,
@@ -295,9 +292,7 @@ export const normalizeTextarea = (text) => {
         return [];
     }
 
-    return text.replace(/[;, ]/g, '\n')
-        .split('\n')
-        .filter(n => n);
+    return text.replace(/[;, ]/g, '\n').split('\n').filter((n) => n);
 };
 
 /**
@@ -313,21 +308,20 @@ export const normalizeTextarea = (text) => {
  * @returns {Object.<string, number>} normalizedTopClients.configured - configured clients
  */
 
-export const normalizeTopClients = topClients => topClients.reduce((nameToCountMap, clientObj) => {
-    const { name, count, info: { name: infoName } } = clientObj;
-    // eslint-disable-next-line no-param-reassign
-    nameToCountMap.auto[name] = count;
-    // eslint-disable-next-line no-param-reassign
-    nameToCountMap.configured[infoName] = count;
-    return nameToCountMap;
-}, {
-    auto: {},
-    configured: {},
-});
+export const normalizeTopClients = (topClients) => topClients.reduce(
+    (nameToCountMap, clientObj) => {
+        const { name, count, info: { name: infoName } } = clientObj;
+        // eslint-disable-next-line no-param-reassign
+        nameToCountMap.auto[name] = count;
+        // eslint-disable-next-line no-param-reassign
+        nameToCountMap.configured[infoName] = count;
+        return nameToCountMap;
+    }, { auto: {}, configured: {} },
+);
 
 export const getClientInfo = (clients, ip) => {
     const client = clients
-        .find(item => item.ip_addrs && item.ip_addrs.find(clientIp => clientIp === ip));
+        .find((item) => item.ip_addrs && item.ip_addrs.find((clientIp) => clientIp === ip));
 
     if (!client) {
         return '';
@@ -336,14 +330,11 @@ export const getClientInfo = (clients, ip) => {
     const { name, whois_info } = client;
     const whois = Object.keys(whois_info).length > 0 ? whois_info : '';
 
-    return {
-        name,
-        whois,
-    };
+    return { name, whois };
 };
 
 export const getAutoClientInfo = (clients, ip) => {
-    const client = clients.find(item => ip === item.ip);
+    const client = clients.find((item) => ip === item.ip);
 
     if (!client) {
         return '';
@@ -352,10 +343,7 @@ export const getAutoClientInfo = (clients, ip) => {
     const { name, whois_info } = client;
     const whois = Object.keys(whois_info).length > 0 ? whois_info : '';
 
-    return {
-        name,
-        whois,
-    };
+    return { name, whois };
 };
 
 export const sortClients = (clients) => {
@@ -365,7 +353,7 @@ export const sortClients = (clients) => {
 
         if (nameA > nameB) {
             return 1;
-        } else if (nameA < nameB) {
+        } if (nameA < nameB) {
             return -1;
         }
 
@@ -376,7 +364,7 @@ export const sortClients = (clients) => {
 };
 
 export const toggleAllServices = (services, change, isSelected) => {
-    services.forEach(service => change(`blocked_services.${service.id}`, isSelected));
+    services.forEach((service) => change(`blocked_services.${service.id}`, isSelected));
 };
 
 export const secondsToMilliseconds = (seconds) => {
@@ -387,8 +375,7 @@ export const secondsToMilliseconds = (seconds) => {
     return seconds;
 };
 
-export const normalizeRulesTextarea = text => text && text.replace(/^\n/g, '')
-    .replace(/\n\s*\n/g, '\n');
+export const normalizeRulesTextarea = (text) => text && text.replace(/^\n/g, '').replace(/\n\s*\n/g, '\n');
 
 export const isVersionGreater = (currentVersion, previousVersion) => (
     versionCompare(currentVersion, previousVersion) === -1
@@ -420,7 +407,7 @@ export const normalizeWhois = (whois) => {
     return whois;
 };
 
-export const isValidQuestionType = type => type && DNS_RECORD_TYPES.includes(type.toUpperCase());
+export const isValidQuestionType = (type) => type && DNS_RECORD_TYPES.includes(type.toUpperCase());
 
 export const getPathWithQueryString = (path, params) => {
     const searchParams = new URLSearchParams(params);
@@ -454,16 +441,17 @@ export const createOnBlurHandler = (event, input, normalizeOnBlur) => (
         ? input.onBlur(normalizeOnBlur(event.target.value))
         : input.onBlur());
 
-export const checkFiltered = reason => reason.indexOf(FILTERED) === 0;
-export const checkRewrite = reason => reason === FILTERED_STATUS.REWRITE;
-export const checkRewriteHosts = reason => reason === FILTERED_STATUS.REWRITE_HOSTS;
-export const checkBlackList = reason => reason === FILTERED_STATUS.FILTERED_BLACK_LIST;
-export const checkWhiteList = reason => reason === FILTERED_STATUS.NOT_FILTERED_WHITE_LIST;
-export const checkNotFilteredNotFound = reason => reason === FILTERED_STATUS.NOT_FILTERED_NOT_FOUND;
-export const checkSafeSearch = reason => reason === FILTERED_STATUS.FILTERED_SAFE_SEARCH;
-export const checkSafeBrowsing = reason => reason === FILTERED_STATUS.FILTERED_SAFE_BROWSING;
-export const checkParental = reason => reason === FILTERED_STATUS.FILTERED_PARENTAL;
-export const checkBlockedService = reason => reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
+export const checkFiltered = (reason) => reason.indexOf(FILTERED) === 0;
+export const checkRewrite = (reason) => reason === FILTERED_STATUS.REWRITE;
+export const checkRewriteHosts = (reason) => reason === FILTERED_STATUS.REWRITE_HOSTS;
+export const checkBlackList = (reason) => reason === FILTERED_STATUS.FILTERED_BLACK_LIST;
+export const checkWhiteList = (reason) => reason === FILTERED_STATUS.NOT_FILTERED_WHITE_LIST;
+// eslint-disable-next-line max-len
+export const checkNotFilteredNotFound = (reason) => reason === FILTERED_STATUS.NOT_FILTERED_NOT_FOUND;
+export const checkSafeSearch = (reason) => reason === FILTERED_STATUS.FILTERED_SAFE_SEARCH;
+export const checkSafeBrowsing = (reason) => reason === FILTERED_STATUS.FILTERED_SAFE_BROWSING;
+export const checkParental = (reason) => reason === FILTERED_STATUS.FILTERED_PARENTAL;
+export const checkBlockedService = (reason) => reason === FILTERED_STATUS.FILTERED_BLOCKED_SERVICE;
 
 export const REQ_STATUS_TO_LABEL_MAP = {
     [FILTERED_STATUS.NOT_FILTERED_WHITE_LIST]: 'show_whitelisted_responses',
@@ -474,21 +462,14 @@ export const REQ_STATUS_TO_LABEL_MAP = {
 };
 
 export const getCurrentFilter = (url, filters) => {
-    const filter = filters && filters.find(item => url === item.url);
+    const filter = filters && filters.find((item) => url === item.url);
 
     if (filter) {
         const { enabled, name, url } = filter;
-        return {
-            enabled,
-            name,
-            url,
-        };
+        return { enabled, name, url };
     }
 
-    return {
-        name: '',
-        url: '',
-    };
+    return { name: '', url: '' };
 };
 
 /**

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { TABLE_DEFAULT_PAGE_SIZE, TABLE_FIRST_PAGE, TRANSITION_TIMEOUT } from '../../helpers/constants';
 
@@ -130,4 +130,4 @@ Logs.propTypes = {
     t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Logs);
+export default withTranslation()(Logs);

@@ -1,5 +1,5 @@
 import React from 'react';
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import { formatClientCell } from '../../../helpers/formatClientCell';
 import getHintElement from './getHintElement';
 import CustomTooltip from '../Tooltip/CustomTooltip';
@@ -11,7 +11,7 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         upstream, reason, client, domain, info: { name },
     } = row.original;
 
-    const autoClient = autoClients.find(autoClient => autoClient.name === client);
+    const autoClient = autoClients.find((autoClient) => autoClient.name === client);
     const country = autoClient && autoClient.whois_info && autoClient.whois_info.country;
     const network = autoClient && autoClient.whois_info && autoClient.whois_info.orgname;
 
@@ -36,19 +36,18 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     };
 
     const options = Object.entries(optionsToHandlerMap)
-        .map(([option, handler]) =>
-            <div key={option} onClick={handler} className='text-truncate'>{t(option)}</div>);
+        .map(([option, handler]) => <div key={option} onClick={handler} className='text-truncate'>{t(option)}</div>);
 
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
             <div className="w-90 o-hidden d-flex justify-content-center flex-column">
                 <div data-tip={true} data-for={id}
                      className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
-                {isDetailed && name &&
-                <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
+                {isDetailed && name
+                && <div className="detailed-info d-none d-sm-block logs__text">{name}</div>}
             </div>
-            {processedData.length > 0 &&
-            <CustomTooltip
+            {processedData.length > 0
+            && <CustomTooltip
                 id={id}
                 place='bottom'
                 title='client_details'

@@ -33,8 +33,8 @@ export const formatClientCell = (row, t, isDetailed = false) => {
         const { name, whois_info } = info;
 
         if (name) {
-            nameContainer = isDetailed ? <small>{value}</small> :
-                <div className="logs__text logs__text--wrap" title={`${name} (${value})`}>
+            nameContainer = isDetailed ? <small>{value}</small>
+                : <div className="logs__text logs__text--wrap" title={`${name} (${value})`}>
                     {name} <small>{`(${value})`}</small>
                 </div>;
         }

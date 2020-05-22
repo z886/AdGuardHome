@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import { Trans } from 'react-i18next';
 import getHintElement from './getHintElement';
 import {
@@ -52,7 +52,7 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
         },
     } = row;
 
-    const autoClient = autoClients.find(autoClient => autoClient.name === client);
+    const autoClient = autoClients.find((autoClient) => autoClient.name === client);
     const country = autoClient && autoClient.whois_info && autoClient.whois_info.country;
     const network = autoClient && autoClient.whois_info && autoClient.whois_info.orgname;
 
@@ -174,8 +174,8 @@ const getDomainCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
             {trackerHint}
             <div className={`${isDetailed ? 'px-2 w-100 d-flex justify-content-center flex-column' : ''}`}>
                 <div className="logs__text o-hidden text-truncate">{value}</div>
-                {(ip || protocol) && isDetailed &&
-                <div className="detailed-info d-none d-sm-block">
+                {(ip || protocol) && isDetailed
+                && <div className="detailed-info d-none d-sm-block">
                     {`${ip}${ip && protocol && ', '}${protocol}`}
                 </div>}
             </div>

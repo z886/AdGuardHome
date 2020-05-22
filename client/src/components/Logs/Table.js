@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import ReactTable from 'react-table';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
@@ -51,11 +51,12 @@ class Table extends Component {
 
         getFilteringStatus();
     };
+
     columns = [
         {
             Header: this.props.t('time_table_header'),
             accessor: 'time',
-            Cell: row => getDateCell(row, this.props.isDetailed),
+            Cell: (row) => getDateCell(row, this.props.isDetailed),
             minWidth: 62,
             maxHeight: 60,
             headerClassName: 'logs__text',
@@ -63,7 +64,7 @@ class Table extends Component {
         {
             Header: this.props.t('request_table_header'),
             accessor: 'domain',
-            Cell: row => getDomainCell(
+            Cell: (row) => getDomainCell(
                 row,
                 this.props.t,
                 this.props.isDetailed,
@@ -77,7 +78,7 @@ class Table extends Component {
         {
             Header: this.props.t('response_table_header'),
             accessor: 'response',
-            Cell: row => getResponseCell(
+            Cell: (row) => getResponseCell(
                 row,
                 this.props.filtering,
                 this.props.t,
@@ -114,7 +115,7 @@ class Table extends Component {
                 </div>;
             },
             accessor: 'client',
-            Cell: row => getClientCell(
+            Cell: (row) => getClientCell(
                 row,
                 this.props.t,
                 this.props.isDetailed,
@@ -189,8 +190,8 @@ class Table extends Component {
                 defaultPageSize={defaultPageSize || TABLE_DEFAULT_PAGE_SIZE}
                 loadingText={t('loading_table_status')}
                 rowsText={t('rows_table_footer_text')}
-                noDataText={!isLoading &&
-                <label className="logs__text logs__text--bold">{t('empty_log')}</label>}
+                noDataText={!isLoading
+                && <label className="logs__text logs__text--bold">{t('empty_log')}</label>}
                 pageText=''
                 ofText=''
                 showPagination={logs.length > 0}
@@ -243,4 +244,4 @@ Table.propTypes = {
     setLoading: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Table);
+export default withTranslation()(Table);

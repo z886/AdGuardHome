@@ -18,8 +18,8 @@ const getDateCell = (row, isDetailed) => {
             <div className="logs__time">
                 {formatTime(value, DEFAULT_TIME_FORMAT)}
             </div>
-            {isDetailed &&
-            <div className="detailed-info d-none d-sm-block">
+            {isDetailed
+            && <div className="detailed-info d-none d-sm-block">
                 {formatDateTime(value, DEFAULT_SHORT_DATE_FORMAT_OPTIONS)}
             </div>
             }
