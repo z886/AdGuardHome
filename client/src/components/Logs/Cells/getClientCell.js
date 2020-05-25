@@ -36,11 +36,13 @@ const getClientCell = (row, t, isDetailed, toggleBlocking, autoClients) => {
     };
 
     const options = Object.entries(optionsToHandlerMap)
-        .map(([option, handler]) => <div key={option} onClick={handler} className='text-truncate'>{t(option)}</div>);
+        .map(([option, handler]) => <div key={option} onClick={handler}
+                                         className='text-truncate'>{t(option)}</div>);
 
     return (
         <div className="logs__row o-hidden justify-content-between h-100">
-            <div className="w-90 o-hidden d-flex justify-content-center flex-column">
+            <div
+                className={`w-90 o-hidden d-flex flex-column ${isDetailed && !name && 'justify-content-center'}`}>
                 <div data-tip={true} data-for={id}
                      className="cursor--pointer">{formatClientCell(row, t, isDetailed)}</div>
                 {isDetailed && name

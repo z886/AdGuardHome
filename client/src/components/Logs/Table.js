@@ -206,16 +206,17 @@ class Table extends Component {
                         <use xlinkHref="#arrow-right" />
                     </svg>}
                 renderTotalPagesCount={() => false}
-                getTrProps={(_state, rowInfo) => {
+                getTrGroupProps={(_state, rowInfo) => {
                     if (!rowInfo) {
                         return {};
                     }
 
                     const { reason } = rowInfo.original;
-                    const colorClass = REASON_TO_COLOR_CLASS_MAP[reason] || '';
+                    const colorClass = REASON_TO_COLOR_CLASS_MAP[reason] || 'white';
 
-                    return { className: `${this.props.isDetailed ? 'row--detailed' : ''} ${colorClass}` };
+                    return { className: colorClass };
                 }}
+                getTrProps={() => ({ className: this.props.isDetailed ? 'row--detailed' : '' })}
             />
         );
     }
