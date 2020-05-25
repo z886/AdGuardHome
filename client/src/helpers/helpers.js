@@ -476,21 +476,3 @@ export const formatNumber = (num) => {
     const currentLanguage = i18n.languages[0] || DEFAULT_LANGUAGE;
     return num.toLocaleString(currentLanguage);
 };
-
-export const flattenObject = (obj) => Object.values(obj)
-    .reduce((acc, curr) => ({ ...acc, ...curr }), {});
-
-export const enrichWithKey = (filters, propName = 'name') => Object.entries(filters)
-    .reduce((acc, [key, value]) => {
-        // eslint-disable-next-line no-param-reassign
-        value[propName] = key;
-        acc[key] = value;
-        return acc;
-    }, {});
-
-export const flagPresentValues = (arr, obj) => arr.reduce((acc, curr) => {
-    if (Object.prototype.hasOwnProperty.call(obj, curr)) {
-        acc[curr] = true;
-    }
-    return acc;
-}, {});

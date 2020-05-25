@@ -9,36 +9,38 @@ import {
 } from '../../helpers/form';
 import { MODAL_OPEN_TIMEOUT, MODAL_TYPE } from '../../helpers/constants';
 
-const renderFilters = (filtersCatalog, selectedSources, t) => Object.entries(filtersCatalog)
-    .map(([categoryName, listObj]) => <div key={categoryName} className="modal-body__item">
-                <h6 className="form__label form__label--with-desc form__label--bold pb-2">
-                    <Trans>{categoryName}</Trans></h6>
-                {Object.entries(listObj)
-                    .map(([listName, { homepage, source }]) => {
-                        const isSelected = Object.prototype
-                            .hasOwnProperty.call(selectedSources, source);
+const renderFilters = ({ categories, filters }, selectedFilters, t) => Object.values(categories)
+    .map(({ name, filterIds }) => <div key={name} className="modal-body__item">
+            <h6 className="form__label form__label--with-desc form__label--bold pb-2">
+                <Trans>{name}</Trans></h6>
+            {filterIds.map((filterId) => {
+                const {
+                    homepage, id, source, name,
+                } = filters[filterId];
 
-                        return <div key={listName} className="d-flex align-items-center">
-                            <Field
-                                name={listName}
-                                type="checkbox"
-                                component={renderSelectField}
-                                placeholder={t(listName)}
-                                disabled={isSelected}
-                            />
-                            <a href={homepage} className="ml-1 d-flex align-items-center">
-                                <svg className="nav-icon">
-                                    <use xlinkHref='#dashboard' />
-                                </svg>
-                            </a>
-                            <a href={source} className="d-flex align-items-center">
-                                <svg className="nav-icon">
-                                    <use xlinkHref='#setup' />
-                                </svg>
-                            </a>
-                        </div>;
-                    })}
-            </div>);
+                const isSelected = Object.prototype.hasOwnProperty.call(selectedFilters, id);
+
+                return <div key={name} className="d-flex align-items-center">
+                    <Field
+                        name={`filter${filterId}`}
+                        type="checkbox"
+                        component={renderSelectField}
+                        placeholder={t(name)}
+                        disabled={isSelected}
+                    />
+                    <a href={homepage} className="ml-1 d-flex align-items-center">
+                        <svg className="nav-icon">
+                            <use xlinkHref='#dashboard' />
+                        </svg>
+                    </a>
+                    <a href={source} className="d-flex align-items-center">
+                        <svg className="nav-icon">
+                            <use xlinkHref='#setup' />
+                        </svg>
+                    </a>
+                </div>;
+            })}
+        </div>);
 
 const Form = (props) => {
     const {
@@ -50,7 +52,7 @@ const Form = (props) => {
         whitelist,
         modalType,
         toggleFilteringModal,
-        selectedSources,
+        selectedFilters,
         filtersCatalog,
     } = props;
 
@@ -77,7 +79,7 @@ const Form = (props) => {
                     </button>
                 </div>}
                 {modalType === MODAL_TYPE.CHOOSE_FILTERING_LIST
-                && renderFilters(filtersCatalog, selectedSources, t)}
+                && renderFilters(filtersCatalog, selectedFilters, t)}
                 {modalType !== MODAL_TYPE.CHOOSE_FILTERING_LIST
                 && modalType !== MODAL_TYPE.SELECT_MODAL_TYPE && <Fragment>
                     <div className="form__group">
@@ -138,7 +140,7 @@ Form.propTypes = {
     modalType: PropTypes.string.isRequired,
     toggleFilteringModal: PropTypes.func.isRequired,
     filtersCatalog: PropTypes.object,
-    selectedSources: PropTypes.object,
+    selectedFilters: PropTypes.object,
 };
 
 export default flow([

@@ -6,7 +6,6 @@ import { withTranslation } from 'react-i18next';
 import { MODAL_TYPE } from '../../helpers/constants';
 import Form from './Form';
 import '../ui/Modal.css';
-import { flagPresentValues } from '../../helpers/helpers';
 
 ReactModal.setAppElement('#root');
 
@@ -30,20 +29,12 @@ const getTitle = (modalType, whitelist) => {
     return `${titleType}_${whitelist ? 'allowlist' : 'blocklist'}`;
 };
 
-const getInitialValues = (filters, normalizedFiltersCatalog) => {
-    const filterNames = filters.map((filter) => filter.name);
-    return flagPresentValues(filterNames, normalizedFiltersCatalog);
-};
-
-const getSources = (filters, normalizedFiltersCatalog) => {
-    const filterUrls = filters.map((filter) => filter.url);
-    const normalizedSources = Object.values(normalizedFiltersCatalog)
-        .map((el) => el.source).reduce((acc, curr) => {
-            acc[curr] = true;
-            return acc;
-        }, {});
-    return flagPresentValues(filterUrls, normalizedSources);
-};
+const getInitialValues = (filters, filtersCatalog) => filters.reduce((acc, { id }) => {
+    if (Object.prototype.hasOwnProperty.call(filtersCatalog, id)) {
+        acc[`filter${id}`] = true;
+    }
+    return acc;
+}, {});
 
 class Modal extends Component {
     closeModal = () => {
@@ -63,19 +54,15 @@ class Modal extends Component {
             filters,
             t,
             filtersCatalog,
-            normalizedFiltersCatalog,
         } = this.props;
 
         let initialValues;
-        let selectedSources;
         switch (modalType) {
             case MODAL_TYPE.EDIT_FILTERS:
                 initialValues = currentFilterData;
                 break;
             case MODAL_TYPE.CHOOSE_FILTERING_LIST:
-                initialValues = getInitialValues(filters, normalizedFiltersCatalog);
-
-                selectedSources = getSources(filters, normalizedFiltersCatalog);
+                initialValues = getInitialValues(filters, filtersCatalog.filters);
                 break;
             default:
         }
@@ -97,8 +84,8 @@ class Modal extends Component {
                         </button>
                     </div>
                     <Form
+                        selectedFilters={initialValues}
                         filtersCatalog={filtersCatalog}
-                        normalizedFiltersCatalog={normalizedFiltersCatalog}
                         modalType={modalType}
                         initialValues={initialValues}
                         onSubmit={handleSubmit}
@@ -107,7 +94,6 @@ class Modal extends Component {
                         closeModal={this.closeModal}
                         whitelist={whitelist}
                         toggleFilteringModal={toggleFilteringModal}
-                        selectedSources={selectedSources}
                     />
                 </div>
             </ReactModal>
@@ -129,7 +115,6 @@ Modal.propTypes = {
     whitelist: PropTypes.bool,
     filters: PropTypes.array.isRequired,
     filtersCatalog: PropTypes.object,
-    normalizedFiltersCatalog: PropTypes.object,
 };
 
 export default withTranslation()(Modal);

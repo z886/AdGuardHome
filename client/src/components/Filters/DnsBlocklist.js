@@ -11,20 +11,11 @@ import Table from './Table';
 import { MODAL_TYPE } from '../../helpers/constants';
 
 import {
-    enrichWithKey,
-    flattenObject,
     getCurrentFilter,
     getObjDiff,
 } from '../../helpers/helpers';
 
-const filtersCatalog = require('../../../../filters');
-
-export const normalizeFiltersCatalog = (filtersCatalog) => {
-    const allFilters = flattenObject(filtersCatalog);
-    return enrichWithKey(allFilters);
-};
-
-const normalizedFiltersCatalog = normalizeFiltersCatalog(filtersCatalog);
+const filtersCatalog = require('../../../../filters.json');
 
 class DnsBlocklist extends Component {
     componentDidMount() {
@@ -47,16 +38,16 @@ class DnsBlocklist extends Component {
             case MODAL_TYPE.CHOOSE_FILTERING_LIST: {
                 const changedValues = getObjDiff(initialValues, values);
 
-                Object.entries(changedValues)
-                    .forEach(([name, shouldAddFilter]) => {
-                        const url = normalizedFiltersCatalog[name].source;
+                Object.entries(changedValues).forEach(([fieldName, shouldAddFilter]) => {
+                    const id = fieldName.replace('filter', '');
+                    const { source, name } = filtersCatalog.filters[id];
 
-                        if (shouldAddFilter) {
-                            this.props.addFilter(url, name);
-                        } else {
-                            this.props.removeFilter(url);
-                        }
-                    });
+                    if (shouldAddFilter) {
+                        this.props.addFilter(source, name);
+                    } else {
+                        this.props.removeFilter(source);
+                    }
+                });
                 break;
             }
             default:
@@ -136,7 +127,6 @@ class DnsBlocklist extends Component {
                 </div>
                 <Modal
                     filtersCatalog={filtersCatalog}
-                    normalizedFiltersCatalog={normalizedFiltersCatalog}
                     filters={filters}
                     isOpen={isModalOpen}
                     toggleFilteringModal={toggleFilteringModal}
