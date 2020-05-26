@@ -38,16 +38,12 @@ class DnsBlocklist extends Component {
             case MODAL_TYPE.CHOOSE_FILTERING_LIST: {
                 const changedValues = getObjDiff(initialValues, values);
 
-                Object.entries(changedValues).forEach(([fieldName, shouldAddFilter]) => {
-                    const id = fieldName.replace('filter', '');
-                    const { source, name } = filtersCatalog.filters[id];
-
-                    if (shouldAddFilter) {
+                Object.keys(changedValues)
+                    .forEach((fieldName) => {
+                        const filterId = fieldName.replace('filter', '');
+                        const { source, name } = filtersCatalog.filters[filterId];
                         this.props.addFilter(source, name);
-                    } else {
-                        this.props.removeFilter(source);
-                    }
-                });
+                    });
                 break;
             }
             default:

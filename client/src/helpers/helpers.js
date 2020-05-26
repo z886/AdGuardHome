@@ -476,3 +476,14 @@ export const formatNumber = (num) => {
     const currentLanguage = i18n.languages[0] || DEFAULT_LANGUAGE;
     return num.toLocaleString(currentLanguage);
 };
+
+/**
+ * @param arr {array}
+ * @param key {string}
+ * @param value {string}
+ * @returns {object}
+ */
+export const getMap = (arr, key, value) => arr.reduce((acc, curr) => {
+    acc[curr[key]] = curr[value];
+    return acc;
+}, {});

@@ -6,6 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { MODAL_TYPE } from '../../helpers/constants';
 import Form from './Form';
 import '../ui/Modal.css';
+import { getMap } from '../../helpers/helpers';
 
 ReactModal.setAppElement('#root');
 
@@ -29,12 +30,17 @@ const getTitle = (modalType, whitelist) => {
     return `${titleType}_${whitelist ? 'allowlist' : 'blocklist'}`;
 };
 
-const getInitialValues = (filters, filtersCatalog) => filters.reduce((acc, { id }) => {
-    if (Object.prototype.hasOwnProperty.call(filtersCatalog, id)) {
-        acc[`filter${id}`] = true;
+const getSelectedValues = (filters, catalogSourcesToIdMap) => filters.reduce((acc, { url }) => {
+    if (Object.prototype.hasOwnProperty.call(catalogSourcesToIdMap, url)) {
+        const fieldId = `filter${catalogSourcesToIdMap[url]}`;
+        acc.selectedFilterIds[fieldId] = true;
+        acc.selectedSources[url] = true;
     }
     return acc;
-}, {});
+}, {
+    selectedFilterIds: {},
+    selectedSources: {},
+});
 
 class Modal extends Component {
     closeModal = () => {
@@ -57,13 +63,19 @@ class Modal extends Component {
         } = this.props;
 
         let initialValues;
+        let selectedSources;
         switch (modalType) {
             case MODAL_TYPE.EDIT_FILTERS:
                 initialValues = currentFilterData;
                 break;
-            case MODAL_TYPE.CHOOSE_FILTERING_LIST:
-                initialValues = getInitialValues(filters, filtersCatalog.filters);
+            case MODAL_TYPE.CHOOSE_FILTERING_LIST: {
+                const catalogSourcesToIdMap = getMap(Object.values(filtersCatalog.filters), 'source', 'id');
+
+                const selectedValues = getSelectedValues(filters, catalogSourcesToIdMap);
+                initialValues = selectedValues.selectedFilterIds;
+                selectedSources = selectedValues.selectedSources;
                 break;
+            }
             default:
         }
 
@@ -84,10 +96,10 @@ class Modal extends Component {
                         </button>
                     </div>
                     <Form
-                        selectedFilters={initialValues}
+                        selectedSources={selectedSources}
+                        initialValues={initialValues}
                         filtersCatalog={filtersCatalog}
                         modalType={modalType}
-                        initialValues={initialValues}
                         onSubmit={handleSubmit}
                         processingAddFilter={processingAddFilter}
                         processingConfigFilter={processingConfigFilter}

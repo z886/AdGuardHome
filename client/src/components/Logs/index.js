@@ -145,7 +145,7 @@ class Logs extends Component {
 
     getFilterName = (filters, whitelistFilters, filterId, t) => {
         if (filterId === CUSTOM_FILTERING_RULES_ID) {
-            return t('custom_filter_rules');
+            return t('custom_filtering_rules');
         }
 
         const filter = filters.find((filter) => filter.id === filterId)

@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Trans, withTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import flow from 'lodash/flow';
 
 import {
@@ -9,38 +9,58 @@ import {
 } from '../../helpers/form';
 import { MODAL_OPEN_TIMEOUT, MODAL_TYPE } from '../../helpers/constants';
 
-const renderFilters = ({ categories, filters }, selectedFilters, t) => Object.values(categories)
+const getIconsData = (homepage, source) => ([
+    {
+        iconName: 'dashboard',
+        href: homepage,
+        className: 'ml-1',
+    },
+    {
+        iconName: 'setup',
+        href: source,
+        className: '',
+    },
+]);
+
+const renderIcons = (iconsData) => iconsData.map(({
+    iconName,
+    href,
+    className = '',
+}) => <a key={iconName} href={href}
+         className={`${className} d-flex align-items-center`.trim()}>
+    <svg className="nav-icon">
+        <use xlinkHref={`#${iconName}`} />
+    </svg>
+</a>);
+
+const renderFilters = ({ categories, filters }, selectedSources, t) => Object.values(categories)
     .map(({ name, filterIds }) => <div key={name} className="modal-body__item">
-            <h6 className="form__label form__label--with-desc form__label--bold pb-2">
-                <Trans>{name}</Trans></h6>
-            {filterIds.map((filterId) => {
-                const {
-                    homepage, id, source, name,
-                } = filters[filterId];
+        <h6 className="form__label form__label--with-desc form__label--bold pb-2">{t('name')}</h6>
+        {filterIds.map((filterId) => {
+            const filter = filters[filterId];
 
-                const isSelected = Object.prototype.hasOwnProperty.call(selectedFilters, id);
+            if (!filter) {
+                return null;
+            }
 
-                return <div key={name} className="d-flex align-items-center">
-                    <Field
-                        name={`filter${filterId}`}
-                        type="checkbox"
-                        component={renderSelectField}
-                        placeholder={t(name)}
-                        disabled={isSelected}
-                    />
-                    <a href={homepage} className="ml-1 d-flex align-items-center">
-                        <svg className="nav-icon">
-                            <use xlinkHref='#dashboard' />
-                        </svg>
-                    </a>
-                    <a href={source} className="d-flex align-items-center">
-                        <svg className="nav-icon">
-                            <use xlinkHref='#setup' />
-                        </svg>
-                    </a>
-                </div>;
-            })}
-        </div>);
+            const { homepage, source, name } = filter;
+
+            const isSelected = Object.prototype.hasOwnProperty.call(selectedSources, source);
+
+            const iconsData = getIconsData(homepage, source);
+
+            return <div key={name} className="d-flex align-items-center">
+                <Field
+                    name={`filter${filterId}`}
+                    type="checkbox"
+                    component={renderSelectField}
+                    placeholder={t(name)}
+                    disabled={isSelected}
+                />
+                {renderIcons(iconsData)}
+            </div>;
+        })}
+    </div>);
 
 const Form = (props) => {
     const {
@@ -52,7 +72,7 @@ const Form = (props) => {
         whitelist,
         modalType,
         toggleFilteringModal,
-        selectedFilters,
+        selectedSources,
         filtersCatalog,
     } = props;
 
@@ -65,69 +85,67 @@ const Form = (props) => {
 
     const openAddFiltersModal = () => openModal(MODAL_TYPE.ADD_FILTERS);
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div className="modal-body modal-body--medium">
-                {modalType === MODAL_TYPE.SELECT_MODAL_TYPE
-                && <div className="d-flex justify-content-around">
-                    <button onClick={openFilteringListModal}
-                            className="btn btn-success btn-standard mr-2 btn-large">
-                        Choose from a list
-                    </button>
-                    <button onClick={openAddFiltersModal} className="btn btn-primary btn-standard">
-                        Add a custom list
-                    </button>
-                </div>}
-                {modalType === MODAL_TYPE.CHOOSE_FILTERING_LIST
-                && renderFilters(filtersCatalog, selectedFilters, t)}
-                {modalType !== MODAL_TYPE.CHOOSE_FILTERING_LIST
-                && modalType !== MODAL_TYPE.SELECT_MODAL_TYPE && <Fragment>
-                    <div className="form__group">
-                        <Field
-                            id="name"
-                            name="name"
-                            type="text"
-                            component={renderInputField}
-                            className="form-control"
-                            placeholder={t('enter_name_hint')}
-                            validate={[required]}
-                            normalizeOnBlur={(data) => data.trim()} />
-                    </div>
-                    <div className="form__group">
-                        <Field
-                            id="url"
-                            name="url"
-                            type="text"
-                            component={renderInputField}
-                            className="form-control"
-                            placeholder={t('enter_url_or_path_hint')}
-                            validate={[required, isValidPath]}
-                            normalizeOnBlur={(data) => data.trim()} />
-                    </div>
-                    <div className="form__description">
-                        {whitelist ? <Trans>enter_valid_allowlist</Trans>
-                            : <Trans>enter_valid_blocklist</Trans>}
-                    </div>
-                </Fragment>}
-            </div>
-            <div className="modal-footer">
-                <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={closeModal}
-                >
-                    <Trans>cancel_btn</Trans>
+    return <form onSubmit={handleSubmit}>
+        <div className="modal-body modal-body--medium">
+            {modalType === MODAL_TYPE.SELECT_MODAL_TYPE
+            && <div className="d-flex justify-content-around">
+                <button onClick={openFilteringListModal}
+                        className="btn btn-success btn-standard mr-2 btn-large">
+                    {t('choose_from_list')}
                 </button>
-                <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={processingAddFilter || processingConfigFilter}
-                >
-                    <Trans>save_btn</Trans>
+                <button onClick={openAddFiltersModal} className="btn btn-primary btn-standard">
+                    {t('add_custom_list')}
                 </button>
-            </div>
-        </form>
-    );
+            </div>}
+            {modalType === MODAL_TYPE.CHOOSE_FILTERING_LIST
+            && renderFilters(filtersCatalog, selectedSources, t)}
+            {modalType !== MODAL_TYPE.CHOOSE_FILTERING_LIST
+            && modalType !== MODAL_TYPE.SELECT_MODAL_TYPE
+            && <>
+                <div className="form__group">
+                    <Field
+                        id="name"
+                        name="name"
+                        type="text"
+                        component={renderInputField}
+                        className="form-control"
+                        placeholder={t('enter_name_hint')}
+                        validate={[required]}
+                        normalizeOnBlur={(data) => data.trim()} />
+                </div>
+                <div className="form__group">
+                    <Field
+                        id="url"
+                        name="url"
+                        type="text"
+                        component={renderInputField}
+                        className="form-control"
+                        placeholder={t('enter_url_or_path_hint')}
+                        validate={[required, isValidPath]}
+                        normalizeOnBlur={(data) => data.trim()} />
+                </div>
+                <div className="form__description">
+                    {whitelist ? t('enter_valid_allowlist') : t('enter_valid_blocklist')}
+                </div>
+            </>}
+        </div>
+        <div className="modal-footer">
+            <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={closeModal}
+            >
+                {t('cancel_btn')}
+            </button>
+            <button
+                type="submit"
+                className="btn btn-success"
+                disabled={processingAddFilter || processingConfigFilter}
+            >
+                {t('save_btn')}
+            </button>
+        </div>
+    </form>;
 };
 
 Form.propTypes = {
@@ -140,7 +158,7 @@ Form.propTypes = {
     modalType: PropTypes.string.isRequired,
     toggleFilteringModal: PropTypes.func.isRequired,
     filtersCatalog: PropTypes.object,
-    selectedFilters: PropTypes.object,
+    selectedSources: PropTypes.object,
 };
 
 export default flow([
