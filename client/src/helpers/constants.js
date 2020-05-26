@@ -407,3 +407,8 @@ export const REASON_TO_COLOR_CLASS_MAP = {
     [FILTERED_STATUS.NOT_FILTERED_WHITE_LIST]: 'green',
     [FILTERED_STATUS.REWRITE]: 'blue',
 };
+
+export const DNS_REQUEST_OPTIONS = {
+    PARALLEL_REQUESTS: 'parallel_requests',
+    FASTEST_ADDR: 'fastest_addr',
+};
