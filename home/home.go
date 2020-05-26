@@ -222,7 +222,17 @@ func run(args options) {
 		os.Exit(1)
 	}
 	Context.autoHosts.Init("")
-	Context.clients.Init(config.Clients, Context.dhcpServer, &Context.autoHosts)
+
+	if config.ClientsReloadARPIntervalMinutes == 0 {
+		config.ClientsReloadARPIntervalMinutes = 60
+	}
+	clientConf := ClientsConfig{
+		Objects:               config.Clients,
+		ReloadIntervalMinutes: config.ClientsReloadARPIntervalMinutes,
+		DCHPServer:            Context.dhcpServer,
+		AutoHosts:             &Context.autoHosts,
+	}
+	Context.clients.Init(clientConf)
 	config.Clients = nil
 
 	if (runtime.GOOS == "linux" || runtime.GOOS == "darwin") &&

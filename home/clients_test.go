@@ -18,7 +18,7 @@ func TestClients(t *testing.T) {
 	clients := clientsContainer{}
 	clients.testing = true
 
-	clients.Init(nil, nil, nil)
+	clients.Init(ClientsConfig{})
 
 	// add
 	c = Client{
@@ -156,7 +156,7 @@ func TestClientsWhois(t *testing.T) {
 	var c Client
 	clients := clientsContainer{}
 	clients.testing = true
-	clients.Init(nil, nil, nil)
+	clients.Init(ClientsConfig{})
 
 	whois := [][]string{{"orgname", "orgname-val"}, {"country", "country-val"}}
 	// set whois info on new client
@@ -183,7 +183,7 @@ func TestClientsAddExisting(t *testing.T) {
 	var c Client
 	clients := clientsContainer{}
 	clients.testing = true
-	clients.Init(nil, nil, nil)
+	clients.Init(ClientsConfig{})
 
 	// some test variables
 	mac, _ := net.ParseMAC("aa:aa:aa:aa:aa:aa")
@@ -241,7 +241,7 @@ func TestClientsCustomUpstream(t *testing.T) {
 	clients := clientsContainer{}
 	clients.testing = true
 
-	clients.Init(nil, nil, nil)
+	clients.Init(ClientsConfig{})
 
 	// add client with upstreams
 	client := Client{

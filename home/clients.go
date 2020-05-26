@@ -21,11 +21,16 @@ import (
 	"github.com/AdguardTeam/golibs/utils"
 )
 
-const (
-	clientsUpdatePeriod = 1 * time.Hour
-)
-
 var webHandlersRegistered = false
+
+// ClientsConfig - module configuration
+type ClientsConfig struct {
+	Objects               []clientObject
+	ReloadIntervalMinutes uint32
+
+	DCHPServer *dhcpd.Server
+	AutoHosts  *util.AutoHosts
+}
 
 // Client information
 type Client struct {
@@ -70,6 +75,8 @@ type ClientHost struct {
 }
 
 type clientsContainer struct {
+	conf ClientsConfig
+
 	list    map[string]*Client     // name -> client
 	idIndex map[string]*Client     // IP -> client
 	ipHost  map[string]*ClientHost // IP -> Hostname
@@ -87,7 +94,7 @@ type clientsContainer struct {
 
 // Init initializes clients container
 // Note: this function must be called only once
-func (clients *clientsContainer) Init(objects []clientObject, dhcpServer *dhcpd.Server, autoHosts *util.AutoHosts) {
+func (clients *clientsContainer) Init(conf ClientsConfig) {
 	if clients.list != nil {
 		log.Fatal("clients.list != nil")
 	}
@@ -100,9 +107,10 @@ func (clients *clientsContainer) Init(objects []clientObject, dhcpServer *dhcpd.
 		clients.allTags[t] = false
 	}
 
-	clients.dhcpServer = dhcpServer
-	clients.autoHosts = autoHosts
-	clients.addFromConfig(objects)
+	clients.dhcpServer = conf.DCHPServer
+	clients.autoHosts = conf.AutoHosts
+	clients.addFromConfig(conf.Objects)
+	clients.conf.ReloadIntervalMinutes = conf.ReloadIntervalMinutes
 
 	if !clients.testing {
 		clients.addFromDHCP()
@@ -216,7 +224,7 @@ func (clients *clientsContainer) WriteDiskConfig(objects *[]clientObject) {
 func (clients *clientsContainer) periodicUpdate() {
 	for {
 		clients.Reload()
-		time.Sleep(clientsUpdatePeriod)
+		time.Sleep(time.Minute * time.Duration(clients.conf.ReloadIntervalMinutes))
 	}
 }
 

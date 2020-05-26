@@ -63,6 +63,9 @@ type configuration struct {
 	// Note: this array is filled only before file read/write and then it's cleared
 	Clients []clientObject `yaml:"clients"`
 
+	// Time interval when to re-read system ARP data
+	ClientsReloadARPIntervalMinutes uint32 `yaml:"clients_reload_arp_interval"`
+
 	logSettings `yaml:",inline"`
 
 	sync.RWMutex `yaml:"-"`
