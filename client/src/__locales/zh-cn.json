@@ -170,8 +170,6 @@
     "updated_upstream_dns_toast": "上游 DNS 已更新",
     "dns_test_ok_toast": "指定的 DNS 服务器现已正常运行",
     "dns_test_not_ok_toast": "服务器 \"{{key}}\"：无法使用，请检查你输入的是否正确",
-    "unblock": "放行",
-    "block": "拦截",
     "time_table_header": "时间",
     "domain_name_table_header": "域名",
     "type_table_header": "类型",
