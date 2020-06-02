@@ -145,11 +145,13 @@ func (s *Server) WriteDiskConfig(c *ServerConfig) {
 func (s *Server) Start() error {
 	err := s.srv4.Start()
 	if err != nil {
+		log.Error("DHCPv4: start: %s", err)
 		return err
 	}
 
 	err = s.srv6.Start()
 	if err != nil {
+		log.Error("DHCPv6: start: %s", err)
 		return err
 	}
 
@@ -157,10 +159,9 @@ func (s *Server) Start() error {
 }
 
 // Stop closes the listening UDP socket
-func (s *Server) Stop() error {
+func (s *Server) Stop() {
 	s.srv4.Stop()
 	s.srv6.Stop()
-	return nil
 }
 
 // flags for Leases() function

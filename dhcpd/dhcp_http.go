@@ -101,10 +101,12 @@ func (s *Server) handleDHCPStatus(w http.ResponseWriter, r *http.Request) {
 	s.srv6.WriteDiskConfig6(&v6conf)
 
 	status := map[string]interface{}{
-		"v4":            v4ServerConfToJSON(v4conf),
-		"v6":            v6ServerConfToJSON(v6conf),
-		"leases":        leases,
-		"static_leases": staticLeases,
+		"enabled":        s.conf.Enabled,
+		"interface_name": s.conf.InterfaceName,
+		"v4":             v4ServerConfToJSON(v4conf),
+		"v6":             v6ServerConfToJSON(v6conf),
+		"leases":         leases,
+		"static_leases":  staticLeases,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -156,10 +158,7 @@ func (s *Server) handleDHCPSetConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = s.Stop()
-	if err != nil {
-		log.Error("failed to stop the DHCP server: %s", err)
-	}
+	s.Stop()
 
 	s.conf.Enabled = newconfig.Enabled
 	s.conf.InterfaceName = newconfig.InterfaceName
@@ -416,12 +415,9 @@ func (s *Server) handleDHCPRemoveStaticLease(w http.ResponseWriter, r *http.Requ
 }
 
 func (s *Server) handleReset(w http.ResponseWriter, r *http.Request) {
-	err := s.Stop()
-	if err != nil {
-		log.Error("DHCP: Stop: %s", err)
-	}
+	s.Stop()
 
-	err = os.Remove(s.conf.DBFilePath)
+	err := os.Remove(s.conf.DBFilePath)
 	if err != nil && !os.IsNotExist(err) {
 		log.Error("DHCP: os.Remove: %s: %s", s.conf.DBFilePath, err)
 	}

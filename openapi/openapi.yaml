@@ -351,8 +351,6 @@ paths:
                     application/json:
                         schema:
                             $ref: "#/components/schemas/DhcpConfig"
-                description: DHCP configuration JSON
-                required: true
             responses:
                 "200":
                     description: OK
@@ -1253,17 +1251,18 @@ components:
                     description: Time period to keep data (1 | 7 | 30 | 90)
         DhcpConfig:
             type: object
-            description: Built-in DHCP server configuration
-            required:
-                - enabled
-                - gateway_ip
-                - subnet_mask
-                - range_start
-                - range_end
-                - lease_duration
             properties:
                 enabled:
                     type: boolean
+                interface_name:
+                    type: string
+                v4:
+                    $ref: "#/components/schemas/DhcpConfigV4"
+                v6:
+                    $ref: "#/components/schemas/DhcpConfigV6"
+        DhcpConfigV4:
+            type: object
+            properties:
                 gateway_ip:
                     type: string
                     example: 192.168.1.1
@@ -1277,8 +1276,14 @@ components:
                     type: string
                     example: 192.168.10.50
                 lease_duration:
+                    type: integer
+        DhcpConfigV6:
+            type: object
+            properties:
+                range_start:
                     type: string
-                    example: 12h
+                lease_duration:
+                    type: integer
         DhcpLease:
             type: object
             description: DHCP lease information
@@ -1299,8 +1304,7 @@ components:
                     example: dell
                 expires:
                     type: string
-                    format: date-time
-                    example: 2017-07-21T17:32:28Z
+                    example: "2017-07-21T17:32:28Z"
         DhcpStaticLease:
             type: object
             description: DHCP static lease information
@@ -1326,8 +1330,14 @@ components:
                 - config
                 - leases
             properties:
-                config:
-                    $ref: "#/components/schemas/DhcpConfig"
+                enabled:
+                    type: boolean
+                interface_name:
+                    type: string
+                v4:
+                    $ref: "#/components/schemas/DhcpConfigV4"
+                v6:
+                    $ref: "#/components/schemas/DhcpConfigV6"
                 leases:
                     type: array
                     items:
