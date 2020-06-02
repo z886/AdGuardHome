@@ -145,6 +145,8 @@ func initConfig() {
 	config.DNS.DnsfilterConf.ParentalCacheSize = 1 * 1024 * 1024
 	config.DNS.DnsfilterConf.CacheTime = 30
 	config.Filters = defaultFilters()
+
+	config.DHCP.Conf4.ICMPTimeout = 1000
 }
 
 // getConfigFilename returns path to the current config file

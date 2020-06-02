@@ -601,8 +601,6 @@ func v4Create(conf V4ServerConf) (DHCPServer, error) {
 		return nil, fmt.Errorf("DHCPv4: range end IP should match range start IP")
 	}
 
-	// s.conf.ICMPTimeout = 1000
-
 	if conf.LeaseDuration == 0 {
 		s.conf.leaseTime = time.Hour * 24
 		s.conf.LeaseDuration = uint32(s.conf.leaseTime.Seconds())

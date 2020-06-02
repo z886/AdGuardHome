@@ -35,10 +35,15 @@ type DHCPServer interface {
 type V4ServerConf struct {
 	Enabled       bool   `yaml:"-"`
 	InterfaceName string `yaml:"-"`
-	GatewayIP     string `yaml:"gateway_ip"`
-	SubnetMask    string `yaml:"subnet_mask"`
-	RangeStart    string `yaml:"range_start"`
-	RangeEnd      string `yaml:"range_end"`
+
+	GatewayIP  string `yaml:"gateway_ip"`
+	SubnetMask string `yaml:"subnet_mask"`
+
+	// The first & the last IP address for dynamic leases
+	// Bytes [0..2] of the last allowed IP address must match the first IP
+	RangeStart string `yaml:"range_start"`
+	RangeEnd   string `yaml:"range_end"`
+
 	LeaseDuration uint32 `yaml:"lease_duration"` // in seconds
 
 	// IP conflict detector: time (ms) to wait for ICMP reply
@@ -60,7 +65,11 @@ type V4ServerConf struct {
 type V6ServerConf struct {
 	Enabled       bool   `yaml:"-"`
 	InterfaceName string `yaml:"-"`
-	RangeStart    string `yaml:"range_start"`
+
+	// The first IP address for dynamic leases
+	// The last allowed IP address ends with 0xff byte
+	RangeStart string `yaml:"range_start"`
+
 	LeaseDuration uint32 `yaml:"lease_duration"` // in seconds
 
 	ipStart    net.IP        // starting IP address for dynamic leases
