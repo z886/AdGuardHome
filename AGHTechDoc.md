@@ -982,6 +982,20 @@ Response:
 This section allows the administrator to easily configure custom DNS response for a specific domain name.
 A, AAAA and CNAME records are supported.
 
+Syntax:
+
+	key -> value
+
+where `key` is a host name or a wild card that matches Question in DNS request
+and `value` is either:
+* IPv4 address: use this IP in A response
+* IPv6 address: use this IP in AAAA response
+* canonical name: add CNAME record
+* "<key>": CNAME exception - pass request to upstream
+* "A": A exception - pass A request to upstream
+* "AAAA": AAAA exception - pass AAAA request to upstream
+
+
 #### Example: A record
 
 	host.com -> 1.2.3.4
@@ -1030,7 +1044,7 @@ Response:
 	AAAA:
 		CNAME = host.com
 
-#### Example: Wildcard CNAME+A record with exception
+#### Example: Wildcard CNAME+A record with CNAME exception
 
 	*.host.com -> 1.2.3.4
 	pass.host.com -> pass.host.com
