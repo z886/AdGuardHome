@@ -180,6 +180,7 @@ func TestRewritesExceptionIP(t *testing.T) {
 		RewriteEntry{"host.com", "AAAA", 0, nil},
 		RewriteEntry{"host2.com", "::1", 0, nil},
 		RewriteEntry{"host2.com", "A", 0, nil},
+		RewriteEntry{"host3.com", "A", 0, nil},
 	}
 	d.prepareRewrites()
 
@@ -202,4 +203,13 @@ func TestRewritesExceptionIP(t *testing.T) {
 	assert.Equal(t, ReasonRewrite, r.Reason)
 	assert.Equal(t, 1, len(r.IPList))
 	assert.Equal(t, "::1", r.IPList[0].String())
+
+	// match exception
+	r = d.processRewrites("host3.com", dns.TypeA)
+	assert.Equal(t, NotFilteredNotFound, r.Reason)
+
+	// match domain
+	r = d.processRewrites("host3.com", dns.TypeAAAA)
+	assert.Equal(t, ReasonRewrite, r.Reason)
+	assert.Equal(t, 0, len(r.IPList))
 }

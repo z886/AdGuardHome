@@ -1075,6 +1075,17 @@ Response:
 	AAAA:
 		AAAA = <IPv6 address of host.com>
 
+#### Example: pass A only
+
+	host.com -> A
+
+Response:
+
+	A:
+		A = <IPv4 address of host.com>
+	AAAA:
+		<empty>
+
 
 ### API: List rewrite entries
 
