@@ -10,7 +10,7 @@ import { createOnBlurHandler } from './helpers';
 export const renderField = (props, elementType) => {
     const {
         input, id, className, placeholder, type, disabled, normalizeOnBlur,
-        autoComplete, meta: { touched, error },
+        autoComplete, meta: { touched, error }, min,
     } = props;
 
     const onBlur = (event) => createOnBlurHandler(event, input, normalizeOnBlur);
@@ -24,13 +24,14 @@ export const renderField = (props, elementType) => {
         disabled,
         type,
         onBlur,
+        min,
     });
     return (
-        <Fragment>
+        <>
             {element}
             {!disabled && touched && error
             && <span className="form__message form__message--error">{error}</span>}
-        </Fragment>
+        </>
     );
 };
 
@@ -43,6 +44,7 @@ renderField.propTypes = {
     disabled: PropTypes.bool,
     autoComplete: PropTypes.bool,
     normalizeOnBlur: PropTypes.func,
+    min: PropTypes.num,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
         error: PropTypes.object,

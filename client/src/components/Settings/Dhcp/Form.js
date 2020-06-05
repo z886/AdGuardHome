@@ -1,35 +1,36 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { Trans, withTranslation } from 'react-i18next';
-import flow from 'lodash/flow';
+import { Field, reduxForm } from 'redux-form';
+import { Trans, useTranslation } from 'react-i18next';
 
 import {
-    renderInputField, required, ipv4, isPositive, toNumber,
+    renderInputField, required, ipv4, isPositive, toNumber, ipv6,
 } from '../../../helpers/form';
+import { resetDhcp } from '../../../actions';
 
 const renderInterfaces = ((interfaces) => (
-    Object.keys(interfaces).map((item) => {
-        const option = interfaces[item];
-        const { name } = option;
-        const onlyIPv6 = option.ip_addresses.every((ip) => ip.includes(':'));
-        let interfaceIP = option.ip_addresses[0];
+    Object.keys(interfaces)
+        .map((item) => {
+            const option = interfaces[item];
+            const { name } = option;
+            const onlyIPv6 = option.ip_addresses.every((ip) => ip.includes(':'));
+            let interfaceIP = option.ip_addresses[0];
 
-        if (!onlyIPv6) {
-            option.ip_addresses.forEach((ip) => {
-                if (!ip.includes(':')) {
-                    interfaceIP = ip;
-                }
-            });
-        }
+            if (!onlyIPv6) {
+                option.ip_addresses.forEach((ip) => {
+                    if (!ip.includes(':')) {
+                        interfaceIP = ip;
+                    }
+                });
+            }
 
-        return (
-            <option value={name} key={name} disabled={onlyIPv6}>
-                {name} - {interfaceIP}
-            </option>
-        );
-    })
+            return (
+                <option value={name} key={name} disabled={onlyIPv6}>
+                    {name} - {interfaceIP}
+                </option>
+            );
+        })
 ));
 
 const renderInterfaceValues = ((interfaceValues) => (
@@ -44,15 +45,13 @@ const renderInterfaceValues = ((interfaceValues) => (
         </li>
         <li>
             <span className="interface__title"><Trans>dhcp_ip_addresses</Trans>: </span>
-            {
-                interfaceValues.ip_addresses
-                    .map((ip) => <span key={ip} className="interface__ip">{ip}</span>)
-            }
+            {interfaceValues.ip_addresses
+                .map((ip) => <span key={ip} className="interface__ip">{ip}</span>)}
         </li>
     </ul>
 ));
 
-const clearFields = (change, resetDhcp, t) => {
+const clearFields = (change, resetDhcp, t, dispatch) => {
     const fields = {
         interface_name: '',
         gateway_ip: '',
@@ -64,62 +63,61 @@ const clearFields = (change, resetDhcp, t) => {
 
     // eslint-disable-next-line no-alert
     if (window.confirm(t('dhcp_reset'))) {
-        Object.keys(fields).forEach((field) => change(field, fields[field]));
-        resetDhcp();
+        Object.keys(fields)
+            .forEach((field) => change(field, fields[field]));
+        dispatch(resetDhcp());
     }
 };
 
-let Form = (props) => {
+const Form = (props) => {
     const {
-        t,
         handleSubmit,
         submitting,
         invalid,
         enabled,
         interfaces,
-        interfaceValue,
         processingConfig,
         processingInterfaces,
-        resetDhcp,
         change,
     } = props;
+
+    const dispatch = useDispatch();
+    const [t] = useTranslation();
+    const interfaceValue = useSelector((store) => store.form.dhcpForm.values.interfaceValue);
 
     return (
         <form onSubmit={handleSubmit}>
             {!processingInterfaces && interfaces
-                && <div className="row">
-                    <div className="col-sm-12 col-md-6">
-                        <div className="form__group form__group--settings">
-                            <label>{t('dhcp_interface_select')}</label>
-                            <Field
-                                name="interface_name"
-                                component="select"
-                                className="form-control custom-select"
-                                validate={[required]}
-                            >
-                                <option value="" disabled={enabled}>
-                                    {t('dhcp_interface_select')}
-                                </option>
-                                {renderInterfaces(interfaces)}
-                            </Field>
-                        </div>
+            && <div className="row">
+                <div className="col-sm-12 col-md-6">
+                    <div className="form__group form__group--settings">
+                        <label>{t('dhcp_interface_select')}</label>
+                        <Field
+                            name="interface_name"
+                            component="select"
+                            className="form-control custom-select"
+                            validate={[required]}
+                        >
+                            <option value="" disabled={enabled}>
+                                {t('dhcp_interface_select')}
+                            </option>
+                            {renderInterfaces(interfaces)}
+                        </Field>
                     </div>
-                    {interfaceValue
-                        && <div className="col-sm-12 col-md-6">
-                            {interfaces[interfaceValue]
-                                && renderInterfaceValues(interfaces[interfaceValue])}
-                        </div>
-                    }
                 </div>
-            }
-            <hr/>
+                {interfaceValue
+                && <div className="col-sm-12 col-md-6">
+                    {interfaces[interfaceValue]
+                    && renderInterfaceValues(interfaces[interfaceValue])}
+                </div>}
+            </div>}
+            <hr />
             <div className="row">
                 <div className="col-lg-6">
                     <div className="form__group form__group--settings">
                         <label>{t('dhcp_form_gateway_input')}</label>
                         <Field
-                            id="gateway_ip"
-                            name="gateway_ip"
+                            name="v4.gateway_ip"
                             component={renderInputField}
                             type="text"
                             className="form-control"
@@ -130,8 +128,7 @@ let Form = (props) => {
                     <div className="form__group form__group--settings">
                         <label>{t('dhcp_form_subnet_input')}</label>
                         <Field
-                            id="subnet_mask"
-                            name="subnet_mask"
+                            name="v4.subnet_mask"
                             component={renderInputField}
                             type="text"
                             className="form-control"
@@ -148,8 +145,7 @@ let Form = (props) => {
                             </div>
                             <div className="col">
                                 <Field
-                                    id="range_start"
-                                    name="range_start"
+                                    name="v4.range_start"
                                     component={renderInputField}
                                     type="text"
                                     className="form-control"
@@ -159,8 +155,7 @@ let Form = (props) => {
                             </div>
                             <div className="col">
                                 <Field
-                                    id="range_end"
-                                    name="range_end"
+                                    name="v4.range_end"
                                     component={renderInputField}
                                     type="text"
                                     className="form-control"
@@ -173,15 +168,50 @@ let Form = (props) => {
                     <div className="form__group form__group--settings">
                         <label>{t('dhcp_form_lease_title')}</label>
                         <Field
-                            name="lease_duration"
+                            name="v4.lease_duration"
                             component={renderInputField}
                             type="number"
                             className="form-control"
                             placeholder={t('dhcp_form_lease_input')}
                             validate={[required, isPositive]}
                             normalize={toNumber}
+                            min={0}
                         />
                     </div>
+                </div>
+            </div>
+            <hr />
+
+            <div className="card-header with-border mb-5">
+                <div className="card-inner">
+                    <div className="card-title">{t('dhcp_ipv6_settings')}</div>
+                </div>
+            </div>
+
+            <div className="col-lg-6">
+                <div className="form__group form__group--settings">
+                    <label>{t('dhcp_form_range_title')}</label>
+                    <Field
+                        name="v6.range_start"
+                        component={renderInputField}
+                        type="text"
+                        className="form-control"
+                        placeholder={t('dhcp_form_range_start')}
+                        validate={[ipv6, required]}
+                    />
+                </div>
+                <div className="form__group form__group--settings">
+                    <label>{t('dhcp_form_lease_title')}</label>
+                    <Field
+                        name="v6.lease_duration"
+                        component={renderInputField}
+                        type="number"
+                        className="form-control"
+                        placeholder={t('dhcp_form_lease_input')}
+                        validate={[required, isPositive]}
+                        normalize={toNumber}
+                        min={0}
+                    />
                 </div>
             </div>
 
@@ -197,7 +227,7 @@ let Form = (props) => {
                     type="button"
                     className="btn btn-secondary btn-standart"
                     disabled={submitting || processingConfig}
-                    onClick={() => clearFields(change, resetDhcp, t)}
+                    onClick={() => clearFields(change, resetDhcp, t, dispatch)}
                 >
                     <Trans>reset_settings</Trans>
                 </button>
@@ -211,26 +241,11 @@ Form.propTypes = {
     submitting: PropTypes.bool.isRequired,
     invalid: PropTypes.bool.isRequired,
     interfaces: PropTypes.object.isRequired,
-    interfaceValue: PropTypes.string,
     initialValues: PropTypes.object.isRequired,
     processingConfig: PropTypes.bool.isRequired,
     processingInterfaces: PropTypes.bool.isRequired,
     enabled: PropTypes.bool.isRequired,
-    t: PropTypes.func.isRequired,
-    resetDhcp: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
 };
 
-const selector = formValueSelector('dhcpForm');
-
-Form = connect((state) => {
-    const interfaceValue = selector(state, 'interface_name');
-    return {
-        interfaceValue,
-    };
-})(Form);
-
-export default flow([
-    withTranslation(),
-    reduxForm({ form: 'dhcpForm' }),
-])(Form);
+export default reduxForm({ form: 'dhcpForm' })(Form);
