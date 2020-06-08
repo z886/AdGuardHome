@@ -140,6 +140,9 @@ func (s *Server) handleDHCPSetConfig(w http.ResponseWriter, r *http.Request) {
 
 	v4conf := v4JSONToServerConf(newconfig.V4)
 	v4conf.Enabled = newconfig.Enabled
+	if len(v4conf.RangeStart) == 0 {
+		v4conf.Enabled = false
+	}
 	v4conf.InterfaceName = newconfig.InterfaceName
 	v4conf.notify = s.onNotify
 	s4, err := v4Create(v4conf)
@@ -150,11 +153,19 @@ func (s *Server) handleDHCPSetConfig(w http.ResponseWriter, r *http.Request) {
 
 	v6conf := v6JSONToServerConf(newconfig.V6)
 	v6conf.Enabled = newconfig.Enabled
+	if len(v6conf.RangeStart) == 0 {
+		v6conf.Enabled = false
+	}
 	v6conf.InterfaceName = newconfig.InterfaceName
 	v6conf.notify = s.onNotify
 	s6, err := v6Create(v6conf)
 	if s6 == nil {
 		httpError(r, w, http.StatusBadRequest, "Invalid DHCPv6 configuration: %s", err)
+		return
+	}
+
+	if newconfig.Enabled && !v4conf.Enabled && !v6conf.Enabled {
+		httpError(r, w, http.StatusBadRequest, "DHCPv4 or DHCPv6 configuration must be complete")
 		return
 	}
 

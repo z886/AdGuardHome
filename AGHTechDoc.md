@@ -423,13 +423,13 @@ Response:
 		"v4":{
 			"gateway_ip":"...",
 			"subnet_mask":"...",
-			"range_start":"...",
+			"range_start":"...", // if empty: DHCPv4 won't be enabled
 			"range_end":"...",
 			"lease_duration":60,
 			"icmp_timeout_msec":0
 		},
 		"v6":{
-			"range_start":"...",
+			"range_start":"...", // if empty: DHCPv6 won't be enabled
 			"lease_duration":60,
 		}
 		"leases":[
@@ -496,7 +496,7 @@ Request:
 		"gateway_ip":"192.169.56.1",
 		"subnet_mask":"255.255.255.0",
 		"range_start":"192.169.56.100",
-		"range_end":"192.169.56.200",
+		"range_end":"192.169.56.200", // Note: first 3 octects must match "range_start"
 		"lease_duration":60,
 		"icmp_timeout_msec":0,
 	},
@@ -511,6 +511,10 @@ Response:
 	200 OK
 
 	OK
+
+For v4, if range_start = "1.2.3.4", the range_end must be "1.2.3.X" where X > 4.
+
+For v6, if range_start = "2001::1", the last IP is "2001:ff".
 
 
 ### Static IP check/set
