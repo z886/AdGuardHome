@@ -46,7 +46,6 @@ type v4ServerConfJSON struct {
 	RangeStart    string `json:"range_start"`
 	RangeEnd      string `json:"range_end"`
 	LeaseDuration uint32 `json:"lease_duration"`
-	ICMPTimeout   uint32 `json:"icmp_timeout_msec"`
 }
 
 func v4ServerConfToJSON(c V4ServerConf) v4ServerConfJSON {
@@ -56,7 +55,6 @@ func v4ServerConfToJSON(c V4ServerConf) v4ServerConfJSON {
 		RangeStart:    c.RangeStart,
 		RangeEnd:      c.RangeEnd,
 		LeaseDuration: c.LeaseDuration,
-		ICMPTimeout:   c.ICMPTimeout,
 	}
 }
 
@@ -67,7 +65,6 @@ func v4JSONToServerConf(j v4ServerConfJSON) V4ServerConf {
 		RangeStart:    j.RangeStart,
 		RangeEnd:      j.RangeEnd,
 		LeaseDuration: j.LeaseDuration,
-		ICMPTimeout:   j.ICMPTimeout,
 	}
 }
 

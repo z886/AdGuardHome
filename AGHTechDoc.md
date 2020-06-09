@@ -426,7 +426,6 @@ Response:
 			"range_start":"...", // if empty: DHCPv4 won't be enabled
 			"range_end":"...",
 			"lease_duration":60,
-			"icmp_timeout_msec":0
 		},
 		"v6":{
 			"range_start":"...", // if empty: DHCPv6 won't be enabled
@@ -498,7 +497,6 @@ Request:
 		"range_start":"192.169.56.100",
 		"range_end":"192.169.56.200", // Note: first 3 octects must match "range_start"
 		"lease_duration":60,
-		"icmp_timeout_msec":0,
 	},
 	"v6":{
 		"range_start":"...",
