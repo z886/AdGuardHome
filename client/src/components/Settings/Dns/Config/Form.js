@@ -8,7 +8,7 @@ import flow from 'lodash/flow';
 import {
     renderInputField,
     renderRadioField,
-    renderSelectField,
+    renderCheckboxField,
     required,
     ipv4,
     ipv6,
@@ -86,7 +86,7 @@ let Form = ({
                         <Field
                             name={name}
                             type="checkbox"
-                            component={renderSelectField}
+                            component={renderCheckboxField}
                             placeholder={t(placeholder)}
                             disabled={processing}
                             subtitle={t(subtitle)}

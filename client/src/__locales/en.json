@@ -28,6 +28,7 @@
     "form_error_client_id_format": "Invalid client ID format",
     "form_error_positive": "Must be greater than 0",
     "form_error_negative": "Must be equal to 0 or greater",
+    "range_end_error": "Must be greater than range start",
     "dhcp_form_gateway_input": "Gateway IP",
     "dhcp_form_subnet_input": "Subnet mask",
     "dhcp_form_range_title": "Range of IP addresses",

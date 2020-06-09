@@ -40,8 +40,11 @@ const Dhcp = () => {
         v4,
         v6,
         enabled,
-        interface_name,
+        interface_name: initialInterfaceName,
     } = dhcp;
+
+    const interface_name = useSelector((store) => store.form.dhcpForm
+        && store.form.dhcpForm.values.interface_name);
 
     useEffect(() => {
         dispatch(getDhcpStatus());
@@ -57,14 +60,24 @@ const Dhcp = () => {
             dispatch(setDhcpConfig({
                 enabled,
                 interface_name,
-                v4,
-                v6,
+                v4: Object.values(v4)
+                    .some(Boolean) ? v4 : {},
+                v6: Object.values(v6)
+                    .some(Boolean) ? v6 : {},
             }));
         }
     };
 
-    const handleToggle = (config) => {
-        toggleDhcp(config);
+    const handleToggle = () => {
+        const values = {
+            enabled,
+            interface_name,
+            v4: Object.values(v4)
+                .some(Boolean) ? v4 : {},
+            v6: Object.values(v6)
+                .some(Boolean) ? v6 : {},
+        };
+        toggleDhcp(values);
     };
 
     const getToggleDhcpButton = () => {
@@ -97,10 +110,9 @@ const Dhcp = () => {
             <button
                 type="button"
                 className="btn btn-sm mr-2 btn-outline-success"
-                onClick={() => handleToggle(v4)}
-                disabled={
-                    !filledConfig || !check || otherDhcpFound || processingDhcp || processingConfig
-                }
+                onClick={handleToggle}
+                disabled={!filledConfig || !check || otherDhcpFound
+                || processingDhcp || processingConfig}
             >
                 <Trans>dhcp_enable</Trans>
             </button>
@@ -198,6 +210,39 @@ const Dhcp = () => {
 
     const toggleModal = () => dispatch(toggleLeaseModal());
 
+    const {
+        gateway_ip,
+        subnet_mask,
+        range_start,
+        range_end,
+        lease_duration,
+    } = v4;
+
+    const initialV4Values = {
+        gateway_ip,
+        subnet_mask,
+        range_start,
+        range_end,
+        lease_duration,
+    };
+
+    const initialV4 = Object.values(initialV4Values)
+        .some(Boolean) ? initialV4Values : {};
+
+    const initialV6 = Object.values(v6)
+        .some(Boolean)
+        ? {
+            range_start: v6.range_start,
+            lease_duration: v6.lease_duration,
+        } : {};
+
+    const initialValues = {
+        interface_name: initialInterfaceName,
+        enabled,
+        v4: initialV4,
+        v6: initialV6,
+    };
+
     return (
         <>
             <PageTitle title={t('dhcp_settings')} subtitle={t('dhcp_description')}>
@@ -208,9 +253,7 @@ const Dhcp = () => {
                             type="button"
                             className={statusButtonClass}
                             onClick={onClick}
-                            disabled={
-                                enabled || !interface_name || processingConfig
-                            }
+                            disabled={enabled || !interface_name || processingConfig}
                         >
                             <Trans>check_dhcp_servers</Trans>
                         </button>
@@ -227,12 +270,7 @@ const Dhcp = () => {
                         <div>
                             <Form
                                 onSubmit={handleFormSubmit}
-                                initialValues={{
-                                    interface_name,
-                                    enabled,
-                                    v4,
-                                    v6,
-                                }}
+                                initialValues={initialValues}
                                 interfaces={interfaces}
                                 processingConfig={processingConfig}
                                 processingInterfaces={processingInterfaces}

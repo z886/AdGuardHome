@@ -26,11 +26,12 @@ export const renderField = (props, elementType) => {
         onBlur,
         min,
     });
+
     return (
         <>
             {element}
             {!disabled && touched && error
-            && <span className="form__message form__message--error">{error}</span>}
+            && <span className="form__message form__message--error"><Trans>{error}</Trans></span>}
         </>
     );
 };
@@ -47,7 +48,7 @@ renderField.propTypes = {
     min: PropTypes.num,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
-        error: PropTypes.object,
+        error: PropTypes.string,
     }).isRequired,
 };
 
@@ -71,7 +72,7 @@ export const renderGroupField = ({
     const onBlur = (event) => createOnBlurHandler(event, input, normalizeOnBlur);
 
     return (
-        <Fragment>
+        <>
             <div className="input-group">
                 <input
                     {...input}
@@ -98,8 +99,8 @@ export const renderGroupField = ({
                 }
             </div>
             {!disabled && touched && error
-            && <span className="form__message form__message--error">{error}</span>}
-        </Fragment>
+            && <span className="form__message form__message--error"><Trans>{error}</Trans></span>}
+        </>
     );
 };
 
@@ -115,7 +116,7 @@ renderGroupField.propTypes = {
     removeField: PropTypes.func,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
-        error: PropTypes.object,
+        error: PropTypes.string,
     }).isRequired,
     normalizeOnBlur: PropTypes.func,
 };
@@ -137,7 +138,8 @@ export const renderRadioField = ({
     </label>
     {!disabled
     && touched
-    && (error && <span className="form__message form__message--error">{error}</span>)}
+    && (error
+        && <span className="form__message form__message--error"><Trans>{error}</Trans></span>)}
 </Fragment>;
 
 renderRadioField.propTypes = {
@@ -147,11 +149,11 @@ renderRadioField.propTypes = {
     disabled: PropTypes.bool,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
-        error: PropTypes.object,
+        error: PropTypes.string,
     }).isRequired,
 };
 
-export const renderSelectField = ({
+export const renderCheckboxField = ({
     input,
     placeholder,
     subtitle,
@@ -159,7 +161,7 @@ export const renderSelectField = ({
     onClick,
     modifier = 'checkbox--form',
     meta: { touched, error },
-}) => <Fragment>
+}) => <>
     <label className={`checkbox ${modifier}`} onClick={onClick}>
         <span className="checkbox__marker" />
         <input {...input} type="checkbox" className="checkbox__input" disabled={disabled} />
@@ -175,10 +177,11 @@ export const renderSelectField = ({
     </label>
     {!disabled
     && touched
-    && (error && <span className="form__message form__message--error">{error}</span>)}
-</Fragment>;
+    && (error
+        && <span className="form__message form__message--error"><Trans>{error}</Trans></span>)}
+</>;
 
-renderSelectField.propTypes = {
+renderCheckboxField.propTypes = {
     input: PropTypes.object.isRequired,
     placeholder: PropTypes.string,
     subtitle: PropTypes.string,
@@ -187,7 +190,38 @@ renderSelectField.propTypes = {
     modifier: PropTypes.string,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
-        error: PropTypes.object,
+        error: PropTypes.string,
+    }).isRequired,
+};
+
+export const renderSelectField = (props) => {
+    const {
+        input,
+        meta: { touched, error },
+        children,
+        label,
+    } = props;
+
+    return <>
+        <div className="form__group form__group--settings">
+            {label && <label><Trans>{label}</Trans></label>}
+            <select {...input} className="form-control custom-select">
+                {children}
+            </select>
+        </div>
+        {touched && error
+        && <span className="form__message form__message--error"><Trans>{error}</Trans></span>}
+    </>;
+};
+
+renderSelectField.propTypes = {
+    input: PropTypes.object.isRequired,
+    disabled: PropTypes.bool,
+    label: PropTypes.string,
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
+    meta: PropTypes.shape({
+        touched: PropTypes.bool,
+        error: PropTypes.string,
     }).isRequired,
 };
 
@@ -214,7 +248,7 @@ export const renderServiceField = ({
         </svg>
     </label>
     {!disabled && touched && error
-    && <span className="form__message form__message--error">{error}</span>}
+    && <span className="form__message form__message--error"><Trans>{error}</Trans></span>}
 </Fragment>;
 
 renderServiceField.propTypes = {
@@ -225,25 +259,42 @@ renderServiceField.propTypes = {
     icon: PropTypes.string,
     meta: PropTypes.shape({
         touched: PropTypes.bool,
-        error: PropTypes.object,
+        error: PropTypes.string,
     }).isRequired,
 };
 
+export const getLastIpv4Byte = (ipv4) => parseInt(ipv4.slice(ipv4.lastIndexOf('.') + 1), 10);
+
 // Validation functions
 // If the value is valid, the validation function should return undefined.
-// https://redux-form.com/6.6.3/examples/fieldlevelvalidation/
+// https://redux-form.com/8.2.2/examples/fieldlevelvalidation/
 export const required = (value) => {
     const formattedValue = typeof value === 'string' ? value.trim() : value;
     if (formattedValue || formattedValue === 0 || (formattedValue && formattedValue.length !== 0)) {
         return undefined;
     }
-    return <Trans>form_error_required</Trans>;
+    return 'form_error_required';
 };
 
 export const ipv4 = (value) => {
     if (value && !R_IPV4.test(value)) {
-        return <Trans>form_error_ip4_format</Trans>;
+        return 'form_error_ip4_format';
     }
+    return undefined;
+};
+
+export const validateIpv4RangeEnd = (_, allValues) => {
+    if (!allValues || !allValues.v4
+        || !allValues.v4.range_end || !allValues.v4.range_start) {
+        return undefined;
+    }
+
+    const { range_end, range_start } = allValues.v4;
+
+    if (getLastIpv4Byte(range_end) <= getLastIpv4Byte(range_start)) {
+        return 'range_end_error';
+    }
+
     return undefined;
 };
 
@@ -259,56 +310,56 @@ export const clientId = (value) => {
         || R_CIDR.test(formattedValue)
         || R_CIDR_IPV6.test(formattedValue)
     )) {
-        return <Trans>form_error_client_id_format</Trans>;
+        return 'form_error_client_id_format';
     }
     return undefined;
 };
 
 export const ipv6 = (value) => {
     if (value && !R_IPV6.test(value)) {
-        return <Trans>form_error_ip6_format</Trans>;
+        return 'form_error_ip6_format';
     }
     return undefined;
 };
 
 export const ip = (value) => {
     if (value && !R_IPV4.test(value) && !R_IPV6.test(value)) {
-        return <Trans>form_error_ip_format</Trans>;
+        return 'form_error_ip_format';
     }
     return undefined;
 };
 
 export const mac = (value) => {
     if (value && !R_MAC.test(value)) {
-        return <Trans>form_error_mac_format</Trans>;
+        return 'form_error_mac_format';
     }
     return undefined;
 };
 
 export const isPositive = (value) => {
     if ((value || value === 0) && value <= 0) {
-        return <Trans>form_error_positive</Trans>;
+        return 'form_error_positive';
     }
     return undefined;
 };
 
 export const biggerOrEqualZero = (value) => {
     if (value < 0) {
-        return <Trans>form_error_negative</Trans>;
+        return 'form_error_negative';
     }
     return false;
 };
 
 export const port = (value) => {
     if ((value || value === 0) && (value < 80 || value > 65535)) {
-        return <Trans>form_error_port_range</Trans>;
+        return 'form_error_port_range';
     }
     return undefined;
 };
 
 export const validInstallPort = (value) => {
     if (value < 1 || value > 65535) {
-        return <Trans>form_error_port</Trans>;
+        return 'form_error_port';
     }
     return undefined;
 };
@@ -318,35 +369,35 @@ export const portTLS = (value) => {
         return undefined;
     }
     if (value && (value < 80 || value > 65535)) {
-        return <Trans>form_error_port_range</Trans>;
+        return 'form_error_port_range';
     }
     return undefined;
 };
 
 export const isSafePort = (value) => {
     if (UNSAFE_PORTS.includes(value)) {
-        return <Trans>form_error_port_unsafe</Trans>;
+        return 'form_error_port_unsafe';
     }
     return undefined;
 };
 
 export const domain = (value) => {
     if (value && !R_HOST.test(value)) {
-        return <Trans>form_error_domain_format</Trans>;
+        return 'form_error_domain_format';
     }
     return undefined;
 };
 
 export const answer = (value) => {
     if (value && (!R_IPV4.test(value) && !R_IPV6.test(value) && !R_HOST.test(value))) {
-        return <Trans>form_error_answer_format</Trans>;
+        return 'form_error_answer_format';
     }
     return undefined;
 };
 
 export const isValidUrl = (value) => {
     if (value && !R_URL_REQUIRES_PROTOCOL.test(value)) {
-        return <Trans>form_error_url_format</Trans>;
+        return 'form_error_url_format';
     }
     return undefined;
 };
@@ -356,7 +407,7 @@ export const isValidAbsolutePath = (value) => R_WIN_ABSOLUTE_PATH.test(value)
 
 export const isValidPath = (value) => {
     if (value && !isValidAbsolutePath(value) && !R_URL_REQUIRES_PROTOCOL.test(value)) {
-        return <Trans>form_error_url_or_path_format</Trans>;
+        return 'form_error_url_or_path_format';
     }
     return undefined;
 };

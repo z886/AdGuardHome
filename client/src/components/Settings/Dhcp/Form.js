@@ -5,9 +5,16 @@ import { Field, reduxForm } from 'redux-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
-    renderInputField, required, ipv4, isPositive, toNumber, ipv6,
+    renderInputField,
+    required,
+    ipv4,
+    isPositive,
+    toNumber,
+    ipv6,
+    renderSelectField, validateIpv4RangeEnd,
 } from '../../../helpers/form';
 import { resetDhcp } from '../../../actions';
+import { maxIPv6 } from '../../../helpers/constants';
 
 const renderInterfaces = ((interfaces) => (
     Object.keys(interfaces)
@@ -54,11 +61,17 @@ const renderInterfaceValues = ((interfaceValues) => (
 const clearFields = (change, resetDhcp, t, dispatch) => {
     const fields = {
         interface_name: '',
-        gateway_ip: '',
-        subnet_mask: '',
-        range_start: '',
-        range_end: '',
-        lease_duration: 86400,
+        v4: {
+            gateway_ip: '',
+            subnet_mask: '',
+            range_start: '',
+            range_end: '',
+            lease_duration: '',
+        },
+        v6: {
+            range_start: '',
+            lease_duration: '',
+        },
     };
 
     // eslint-disable-next-line no-alert
@@ -73,7 +86,6 @@ const Form = (props) => {
     const {
         handleSubmit,
         submitting,
-        invalid,
         enabled,
         interfaces,
         processingConfig,
@@ -84,6 +96,36 @@ const Form = (props) => {
     const dispatch = useDispatch();
     const [t] = useTranslation();
     const interfaceValue = useSelector((store) => store.form.dhcpForm.values.interfaceValue);
+    const v4 = useSelector((store) => store.form.dhcpForm.values.v4);
+    const v6 = useSelector((store) => store.form.dhcpForm.values.v6);
+    const syncErrors = useSelector((store) => store.form.dhcpForm.syncErrors);
+
+    const invalid = syncErrors && (syncErrors.interface_name || (syncErrors.v4 && syncErrors.v6));
+
+    const requiredV4 = Object.values(v4)
+        .some(Boolean) ? required : [];
+
+    const requiredV6 = Object.values(v6)
+        .some(Boolean) ? required : [];
+
+    const getNormalize = (complementaryFieldName) => (value, prevValue, allValues) => {
+        if (value && allValues.v4) {
+            const complementaryFieldValue = (allValues.v4[complementaryFieldName]
+                && allValues.v4[complementaryFieldName].split('.')[3]) || [];
+
+            const dispatchedValue = value.split('.')
+                .slice(0, 3)
+                .concat(complementaryFieldValue)
+                .join('.');
+
+            dispatch(change(`v4.${complementaryFieldName}`, dispatchedValue));
+        }
+
+        return value;
+    };
+
+    const normalizeRangeStart = getNormalize('range_end');
+    const normalizeRangeEnd = getNormalize('range_start');
 
     return (
         <form onSubmit={handleSubmit}>
@@ -91,12 +133,12 @@ const Form = (props) => {
             && <div className="row">
                 <div className="col-sm-12 col-md-6">
                     <div className="form__group form__group--settings">
-                        <label>{t('dhcp_interface_select')}</label>
                         <Field
                             name="interface_name"
-                            component="select"
+                            component={renderSelectField}
                             className="form-control custom-select"
                             validate={[required]}
+                            label='dhcp_interface_select'
                         >
                             <option value="" disabled={enabled}>
                                 {t('dhcp_interface_select')}
@@ -122,7 +164,7 @@ const Form = (props) => {
                             type="text"
                             className="form-control"
                             placeholder={t('dhcp_form_gateway_input')}
-                            validate={[ipv4, required]}
+                            validate={[ipv4].concat(requiredV4)}
                         />
                     </div>
                     <div className="form__group form__group--settings">
@@ -133,7 +175,7 @@ const Form = (props) => {
                             type="text"
                             className="form-control"
                             placeholder={t('dhcp_form_subnet_input')}
-                            validate={[ipv4, required]}
+                            validate={[ipv4].concat(requiredV4)}
                         />
                     </div>
                 </div>
@@ -150,7 +192,9 @@ const Form = (props) => {
                                     type="text"
                                     className="form-control"
                                     placeholder={t('dhcp_form_range_start')}
-                                    validate={[ipv4, required]}
+                                    validate={[ipv4].concat(requiredV4,
+                                        v6.range_start ? [] : required)}
+                                    normalize={normalizeRangeStart}
                                 />
                             </div>
                             <div className="col">
@@ -160,7 +204,8 @@ const Form = (props) => {
                                     type="text"
                                     className="form-control"
                                     placeholder={t('dhcp_form_range_end')}
-                                    validate={[ipv4, required]}
+                                    validate={[ipv4, validateIpv4RangeEnd].concat(requiredV4)}
+                                    normalize={normalizeRangeEnd}
                                 />
                             </div>
                         </div>
@@ -173,7 +218,7 @@ const Form = (props) => {
                             type="number"
                             className="form-control"
                             placeholder={t('dhcp_form_lease_input')}
-                            validate={[required, isPositive]}
+                            validate={[isPositive].concat(requiredV4)}
                             normalize={toNumber}
                             min={0}
                         />
@@ -190,15 +235,32 @@ const Form = (props) => {
 
             <div className="col-lg-6">
                 <div className="form__group form__group--settings">
-                    <label>{t('dhcp_form_range_title')}</label>
-                    <Field
-                        name="v6.range_start"
-                        component={renderInputField}
-                        type="text"
-                        className="form-control"
-                        placeholder={t('dhcp_form_range_start')}
-                        validate={[ipv6, required]}
-                    />
+                    <div className="row">
+                        <div className="col-12">
+                            <label>{t('dhcp_form_range_title')}</label>
+                        </div>
+                        <div className="col">
+                            <Field
+                                name="v6.range_start"
+                                component={renderInputField}
+                                type="text"
+                                className="form-control"
+                                placeholder={t('dhcp_form_range_start')}
+                                validate={[ipv6].concat(requiredV6, v4.range_start ? [] : required)}
+                            />
+                        </div>
+                        <div className="col">
+                            <Field
+                                name="v6.range_end"
+                                component="input"
+                                type="text"
+                                className="form-control disabled cursor--not-allowed"
+                                placeholder={maxIPv6}
+                                value={maxIPv6}
+                                disabled
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="form__group form__group--settings">
                     <label>{t('dhcp_form_lease_title')}</label>
@@ -208,8 +270,8 @@ const Form = (props) => {
                         type="number"
                         className="form-control"
                         placeholder={t('dhcp_form_lease_input')}
-                        validate={[required, isPositive]}
-                        normalize={toNumber}
+                        validate={[isPositive].concat(requiredV6)}
+                        normalizeOnBlur={toNumber}
                         min={0}
                     />
                 </div>
@@ -239,7 +301,6 @@ const Form = (props) => {
 Form.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    invalid: PropTypes.bool.isRequired,
     interfaces: PropTypes.object.isRequired,
     initialValues: PropTypes.object.isRequired,
     processingConfig: PropTypes.bool.isRequired,

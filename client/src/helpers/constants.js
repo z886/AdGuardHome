@@ -386,3 +386,5 @@ export const IP_MATCH_LIST_STATUS = {
     EXACT: 'EXACT', // found exact match (ip === ip)
     CIDR: 'CIDR', // the ip is in the specified CIDR range
 };
+
+export const maxIPv6 = '0xff';
