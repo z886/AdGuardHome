@@ -158,7 +158,9 @@ func initConfig() {
 	config.DNS.DnsfilterConf.CacheTime = 30
 	config.Filters = defaultFilters()
 
+	config.DHCP.Conf4.LeaseDuration = 86400
 	config.DHCP.Conf4.ICMPTimeout = 1000
+	config.DHCP.Conf6.LeaseDuration = 86400
 }
 
 // getConfigFilename returns path to the current config file
