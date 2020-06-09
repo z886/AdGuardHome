@@ -86,22 +86,31 @@ func Create(config ServerConfig) *Server {
 		s.registerHandlers()
 	}
 
-	var err error
-	config.Conf4.Enabled = s.conf.Enabled
-	config.Conf4.InterfaceName = s.conf.InterfaceName
-	config.Conf4.notify = s.onNotify
-	s.srv4, err = v4Create(config.Conf4)
-	if err != nil {
-		log.Error("%s", err)
+	var err4, err6 error
+	v4conf := config.Conf4
+	v4conf.Enabled = s.conf.Enabled
+	if len(v4conf.RangeStart) == 0 {
+		v4conf.Enabled = false
+	}
+	v4conf.InterfaceName = s.conf.InterfaceName
+	v4conf.notify = s.onNotify
+	s.srv4, err4 = v4Create(v4conf)
+
+	v6conf := config.Conf6
+	v6conf.Enabled = s.conf.Enabled
+	if len(v6conf.RangeStart) == 0 {
+		v6conf.Enabled = false
+	}
+	v6conf.InterfaceName = s.conf.InterfaceName
+	v6conf.notify = s.onNotify
+	s.srv6, err6 = v6Create(v6conf)
+
+	if err4 != nil {
+		log.Error("%s", err4)
 		return nil
 	}
-
-	config.Conf6.Enabled = s.conf.Enabled
-	config.Conf6.InterfaceName = s.conf.InterfaceName
-	config.Conf6.notify = s.onNotify
-	s.srv6, err = v6Create(config.Conf6)
-	if err != nil {
-		log.Error("%s", err)
+	if err6 != nil {
+		log.Error("%s", err6)
 		return nil
 	}
 
@@ -175,10 +184,8 @@ const (
 func (s *Server) Leases(flags int) []Lease {
 	result := s.srv4.GetLeases(flags)
 
-	if s.srv6 != nil {
-		v6leases := s.srv6.GetLeases(flags)
-		result = append(result, v6leases...)
-	}
+	v6leases := s.srv6.GetLeases(flags)
+	result = append(result, v6leases...)
 
 	return result
 }

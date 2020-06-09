@@ -614,7 +614,7 @@ func v6Create(conf V6ServerConf) (DHCPServer, error) {
 
 	s.conf.ipStart = net.ParseIP(conf.RangeStart)
 	if s.conf.ipStart == nil {
-		return nil, fmt.Errorf("DHCPv6: invalid range-start IP: %s", conf.RangeStart)
+		return s, fmt.Errorf("DHCPv6: invalid range-start IP: %s", conf.RangeStart)
 	}
 
 	if conf.LeaseDuration == 0 {

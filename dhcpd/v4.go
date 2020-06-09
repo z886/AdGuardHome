@@ -574,31 +574,31 @@ func v4Create(conf V4ServerConf) (DHCPServer, error) {
 	var err error
 	s.conf.routerIP, err = parseIPv4(s.conf.GatewayIP)
 	if err != nil {
-		return nil, fmt.Errorf("DHCPv4: %s", err)
+		return s, fmt.Errorf("DHCPv4: %s", err)
 	}
 
 	subnet, err := parseIPv4(s.conf.SubnetMask)
 	if err != nil || !isValidSubnetMask(subnet) {
-		return nil, fmt.Errorf("DHCPv4: invalid subnet mask: %s", s.conf.SubnetMask)
+		return s, fmt.Errorf("DHCPv4: invalid subnet mask: %s", s.conf.SubnetMask)
 	}
 	s.conf.subnetMask = make([]byte, 4)
 	copy(s.conf.subnetMask, subnet)
 
 	s.conf.ipStart, err = parseIPv4(conf.RangeStart)
 	if s.conf.ipStart == nil {
-		return nil, fmt.Errorf("DHCPv4: %s", err)
+		return s, fmt.Errorf("DHCPv4: %s", err)
 	}
 	if s.conf.ipStart[0] == 0 {
-		return nil, fmt.Errorf("DHCPv4: invalid range start IP")
+		return s, fmt.Errorf("DHCPv4: invalid range start IP")
 	}
 
 	s.conf.ipEnd, err = parseIPv4(conf.RangeEnd)
 	if s.conf.ipEnd == nil {
-		return nil, fmt.Errorf("DHCPv4: %s", err)
+		return s, fmt.Errorf("DHCPv4: %s", err)
 	}
 	if !net.IP.Equal(s.conf.ipStart[:3], s.conf.ipEnd[:3]) ||
 		s.conf.ipStart[3] > s.conf.ipEnd[3] {
-		return nil, fmt.Errorf("DHCPv4: range end IP should match range start IP")
+		return s, fmt.Errorf("DHCPv4: range end IP should match range start IP")
 	}
 
 	if conf.LeaseDuration == 0 {

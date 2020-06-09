@@ -435,11 +435,19 @@ func (s *Server) handleReset(w http.ResponseWriter, r *http.Request) {
 
 	oldconf := s.conf
 	s.conf = ServerConfig{}
-
 	s.conf.WorkDir = oldconf.WorkDir
 	s.conf.HTTPRegister = oldconf.HTTPRegister
 	s.conf.ConfigModified = oldconf.ConfigModified
 	s.conf.DBFilePath = oldconf.DBFilePath
+
+	v4conf := V4ServerConf{}
+	v4conf.ICMPTimeout = 1000
+	v4conf.notify = s.onNotify
+	s.srv4, _ = v4Create(v4conf)
+
+	v6conf := V6ServerConf{}
+	v6conf.notify = s.onNotify
+	s.srv6, _ = v6Create(v6conf)
 
 	s.conf.ConfigModified()
 }
