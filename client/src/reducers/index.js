@@ -245,6 +245,9 @@ const dhcp = handleActions(
             ...state,
             processingReset: false,
             enabled: false,
+            v4: {},
+            v6: {},
+            interface_name: '',
         }),
 
         [actions.toggleLeaseModal]: (state) => {
@@ -303,7 +306,6 @@ const dhcp = handleActions(
             range_start: '',
             range_end: '',
             lease_duration: 0,
-            icmp_timeout_msec: 0,
         },
         v6: {
             range_start: '',

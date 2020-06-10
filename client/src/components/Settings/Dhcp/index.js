@@ -77,7 +77,7 @@ const Dhcp = () => {
             v6: Object.values(v6)
                 .some(Boolean) ? v6 : {},
         };
-        toggleDhcp(values);
+        dispatch(toggleDhcp(values));
     };
 
     const getToggleDhcpButton = () => {
@@ -86,7 +86,7 @@ const Dhcp = () => {
 
         const filledConfig = Object.keys(v4)
             .every((key) => {
-                if (key === 'enabled' || key === 'icmp_timeout_msec') {
+                if (key === 'enabled') {
                     return true;
                 }
 
@@ -98,7 +98,7 @@ const Dhcp = () => {
                 <button
                     type="button"
                     className="btn btn-sm mr-2 btn-gray"
-                    onClick={() => toggleDhcp(enabled)}
+                    onClick={() => dispatch(toggleDhcp({ enabled }))}
                     disabled={processingDhcp || processingConfig}
                 >
                     <Trans>dhcp_disable</Trans>

@@ -58,26 +58,17 @@ const renderInterfaceValues = ((interfaceValues) => (
     </ul>
 ));
 
-const clearFields = (change, resetDhcp, t, dispatch) => {
+const clearFields = (reset, resetDhcp, t, dispatch) => {
     const fields = {
         interface_name: '',
-        v4: {
-            gateway_ip: '',
-            subnet_mask: '',
-            range_start: '',
-            range_end: '',
-            lease_duration: '',
-        },
-        v6: {
-            range_start: '',
-            lease_duration: '',
-        },
+        v4: {},
+        v6: {},
     };
 
     // eslint-disable-next-line no-alert
     if (window.confirm(t('dhcp_reset'))) {
         Object.keys(fields)
-            .forEach((field) => change(field, fields[field]));
+            .forEach((field) => reset(field));
         dispatch(resetDhcp());
     }
 };
@@ -91,6 +82,7 @@ const Form = (props) => {
         processingConfig,
         processingInterfaces,
         change,
+        reset,
     } = props;
 
     const dispatch = useDispatch();
@@ -102,19 +94,26 @@ const Form = (props) => {
 
     const invalid = syncErrors && (syncErrors.interface_name || (syncErrors.v4 && syncErrors.v6));
 
-    const requiredV4 = Object.values(v4)
-        .some(Boolean) ? required : [];
+    const enteredSomeV4Vale = Object.values(v4)
+        .some(Boolean);
+    const enteredSomeV6Vale = Object.values(v6)
+        .some(Boolean);
 
-    const requiredV6 = Object.values(v6)
-        .some(Boolean) ? required : [];
+    const requiredV4 = enteredSomeV4Vale ? required : [];
+    const requiredV6 = enteredSomeV6Vale ? required : [];
+
+    const requiredV4StartRange = enteredSomeV4Vale && !v6.range_start ? required : [];
+    const requiredV6StartRange = enteredSomeV6Vale && !v4.range_start ? required : [];
 
     const getNormalize = (complementaryFieldName) => (value, prevValue, allValues) => {
         if (value && allValues.v4) {
+            const fourthOctet = 3;
+
             const complementaryFieldValue = (allValues.v4[complementaryFieldName]
-                && allValues.v4[complementaryFieldName].split('.')[3]) || [];
+                && allValues.v4[complementaryFieldName].split('.')[fourthOctet]) || [];
 
             const dispatchedValue = value.split('.')
-                .slice(0, 3)
+                .slice(0, fourthOctet)
                 .concat(complementaryFieldValue)
                 .join('.');
 
@@ -192,8 +191,7 @@ const Form = (props) => {
                                     type="text"
                                     className="form-control"
                                     placeholder={t('dhcp_form_range_start')}
-                                    validate={[ipv4].concat(requiredV4,
-                                        v6.range_start ? [] : required)}
+                                    validate={[ipv4].concat(requiredV4StartRange)}
                                     normalize={normalizeRangeStart}
                                 />
                             </div>
@@ -246,7 +244,7 @@ const Form = (props) => {
                                 type="text"
                                 className="form-control"
                                 placeholder={t('dhcp_form_range_start')}
-                                validate={[ipv6].concat(requiredV6, v4.range_start ? [] : required)}
+                                validate={[ipv6].concat(requiredV6StartRange)}
                             />
                         </div>
                         <div className="col">
@@ -289,7 +287,7 @@ const Form = (props) => {
                     type="button"
                     className="btn btn-secondary btn-standart"
                     disabled={submitting || processingConfig}
-                    onClick={() => clearFields(change, resetDhcp, t, dispatch)}
+                    onClick={() => clearFields(reset, resetDhcp, t, dispatch)}
                 >
                     <Trans>reset_settings</Trans>
                 </button>
@@ -307,6 +305,7 @@ Form.propTypes = {
     processingInterfaces: PropTypes.bool.isRequired,
     enabled: PropTypes.bool.isRequired,
     change: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
 };
 
 export default reduxForm({ form: 'dhcpForm' })(Form);
