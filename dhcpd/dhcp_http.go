@@ -141,7 +141,12 @@ func (s *Server) handleDHCPSetConfig(w http.ResponseWriter, r *http.Request) {
 		v4conf.Enabled = false
 	}
 	v4conf.InterfaceName = newconfig.InterfaceName
-	v4conf.notify = s.onNotify
+
+	c4 := V4ServerConf{}
+	s.srv4.WriteDiskConfig4(&c4)
+	v4conf.notify = c4.notify
+	v4conf.ICMPTimeout = c4.ICMPTimeout
+
 	s4, err := v4Create(v4conf)
 	if err != nil {
 		httpError(r, w, http.StatusBadRequest, "Invalid DHCPv4 configuration: %s", err)
