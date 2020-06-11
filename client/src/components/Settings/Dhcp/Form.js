@@ -15,6 +15,7 @@ import {
 } from '../../../helpers/form';
 import { resetDhcp } from '../../../actions';
 import { maxIPv6 } from '../../../helpers/constants';
+import { FORM_NAME } from '../../../helpers/constants';
 
 const renderInterfaces = ((interfaces) => (
     Object.keys(interfaces)
@@ -308,4 +309,4 @@ Form.propTypes = {
     reset: PropTypes.func.isRequired,
 };
 
-export default reduxForm({ form: 'dhcpForm' })(Form);
+export default reduxForm({ form: FORM_NAME.DHCP })(Form);

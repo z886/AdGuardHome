@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Trans, useTranslation } from 'react-i18next';
-
 import { useDispatch } from 'react-redux';
 import {
     renderInputField, ipv4, mac, required,
 } from '../../../../helpers/form';
+import { FORM_NAME } from '../../../../helpers/constants';
 import { toggleLeaseModal } from '../../../../actions';
 
 const Form = ({
@@ -92,4 +92,4 @@ Form.propTypes = {
     processingAdding: PropTypes.bool.isRequired,
 };
 
-export default reduxForm({ form: 'leaseForm' })(Form);
+export default reduxForm({ form: FORM_NAME.LEASE })(Form);
