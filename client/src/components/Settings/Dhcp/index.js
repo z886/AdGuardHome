@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { DHCP_STATUS_RESPONSE } from '../../../helpers/constants';
+import { DHCP_STATUS_RESPONSE, FORM_NAME } from '../../../helpers/constants';
 import Form from './Form';
 import Leases from './Leases';
 import StaticLeases from './StaticLeases/index';
@@ -43,8 +43,8 @@ const Dhcp = () => {
         interface_name: initialInterfaceName,
     } = dhcp;
 
-    const interface_name = useSelector((store) => store.form.dhcpForm
-        && store.form.dhcpForm.values.interface_name);
+    const interface_name = useSelector((store) => store.form[FORM_NAME.DHCP]
+        && store.form[FORM_NAME.DHCP].values.interface_name);
 
     useEffect(() => {
         dispatch(getDhcpStatus());

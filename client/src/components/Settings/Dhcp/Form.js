@@ -87,10 +87,10 @@ const Form = (props) => {
 
     const dispatch = useDispatch();
     const [t] = useTranslation();
-    const interfaceValue = useSelector((store) => store.form.dhcpForm.values.interfaceValue);
-    const v4 = useSelector((store) => store.form.dhcpForm.values.v4);
-    const v6 = useSelector((store) => store.form.dhcpForm.values.v6);
-    const syncErrors = useSelector((store) => store.form.dhcpForm.syncErrors);
+    const interfaceValue = useSelector((store) => store.form[FORM_NAME.DHCP].values.interfaceValue);
+    const v4 = useSelector((store) => store.form[FORM_NAME.DHCP].values.v4);
+    const v6 = useSelector((store) => store.form[FORM_NAME.DHCP].values.v6);
+    const syncErrors = useSelector((store) => store.form[FORM_NAME.DHCP].syncErrors);
 
     const invalid = syncErrors && (syncErrors.interface_name || (syncErrors.v4 && syncErrors.v6));
 
