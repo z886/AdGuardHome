@@ -14,8 +14,7 @@ import {
     renderSelectField, validateIpv4RangeEnd,
 } from '../../../helpers/form';
 import { resetDhcp } from '../../../actions';
-import { maxIPv6 } from '../../../helpers/constants';
-import { FORM_NAME } from '../../../helpers/constants';
+import { FORM_NAME, maxIPv6 } from '../../../helpers/constants';
 
 const renderInterfaces = ((interfaces) => (
     Object.keys(interfaces)

@@ -22,27 +22,27 @@ const checkboxes = [{
     placeholder: 'edns_enable',
     subtitle: 'edns_cs_desc',
 },
-    {
-        name: 'dnssec_enabled',
-        placeholder: 'dnssec_enable',
-        subtitle: 'dnssec_enable_desc',
-    },
-    {
-        name: 'disable_ipv6',
-        placeholder: 'disable_ipv6',
-        subtitle: 'disable_ipv6_desc',
-    }];
+{
+    name: 'dnssec_enabled',
+    placeholder: 'dnssec_enable',
+    subtitle: 'dnssec_enable_desc',
+},
+{
+    name: 'disable_ipv6',
+    placeholder: 'disable_ipv6',
+    subtitle: 'disable_ipv6_desc',
+}];
 
 const customIps = [{
     description: 'blocking_ipv4_desc',
     name: 'blocking_ipv4',
     validateIp: ipv4,
 },
-    {
-        description: 'blocking_ipv6_desc',
-        name: 'blocking_ipv6',
-        validateIp: ipv6,
-    }];
+{
+    description: 'blocking_ipv6_desc',
+    name: 'blocking_ipv6',
+    validateIp: ipv6,
+}];
 
 const getFields = (processing, t) => Object.values(BLOCKING_MODES)
     .map((mode) => (
