@@ -408,4 +408,4 @@ export const FORM_NAME = {
     LOGIN: 'login',
 };
 
-export const maxIPv6 = '0xff';
+export const maxIPv6 = 'ff';

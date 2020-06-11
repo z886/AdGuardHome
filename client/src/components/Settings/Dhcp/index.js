@@ -84,14 +84,9 @@ const Dhcp = () => {
         const otherDhcpFound = check && check.otherServer
             && check.otherServer.found === DHCP_STATUS_RESPONSE.YES;
 
-        const filledConfig = Object.keys(v4)
-            .every((key) => {
-                if (key === 'enabled') {
-                    return true;
-                }
-
-                return v4[key];
-            });
+        const filledConfig = interface_name && (Object.keys(v4)
+            .every(Boolean)
+            || Object.keys(v6).every(Boolean));
 
         if (enabled) {
             return (
