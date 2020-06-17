@@ -1,11 +1,11 @@
+rlimit_nofile: 0
+debug_pprof: false
+http_proxy: ""
 web:
   bind_host: 127.0.0.1
   bind_port: 3000
   users: []
-  http_proxy: ""
   language: en
-  rlimit_nofile: 0
-  debug_pprof: false
   web_session_ttl: 720
 dns:
   bind_host: 127.0.0.1
