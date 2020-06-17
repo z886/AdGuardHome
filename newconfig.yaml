@@ -1,0 +1,127 @@
+web:
+  bind_host: 127.0.0.1
+  bind_port: 3000
+  users: []
+  http_proxy: ""
+  language: en
+  rlimit_nofile: 0
+  debug_pprof: false
+  web_session_ttl: 720
+dns:
+  bind_host: 127.0.0.1
+  port: 5354
+  anonymize_client_ip: false
+  protection_enabled: true
+  blocking_mode: null_ip
+  blocking_ipv4: ""
+  blocking_ipv6: ""
+  blocked_response_ttl: 300
+  parental_block_host: family-block.dns.adguard.com
+  safebrowsing_block_host: standard-block.dns.adguard.com
+  ratelimit: 100
+  ratelimit_whitelist: []
+  refuse_any: false
+  upstream_dns:
+  - tls://dns.quad9.net
+  bootstrap_dns:
+  - 1.1.1.1:53
+  all_servers: false
+  fastest_addr: false
+  allowed_clients: []
+  disallowed_clients: []
+  blocked_hosts: []
+  cache_size: 10000
+  cache_ttl_min: 0
+  cache_ttl_max: 0
+  bogus_nxdomain: []
+  aaaa_disabled: false
+  enable_dnssec: false
+  edns_client_subnet: false
+  rewrites: []
+  blocked_services: []
+  filtering:
+    filtering_enabled: true
+    filters_update_interval: 168
+    parental_enabled: false
+    safesearch_enabled: false
+    safebrowsing_enabled: false
+    safebrowsing_cache_size: 1048576
+    safesearch_cache_size: 1048576
+    parental_cache_size: 1048576
+    cache_time: 30
+    blocklist_filters:
+    - id: 2
+      enabled: true
+      name: list2
+      url: https://adaway.org/hosts.txt
+      last_modified: ""
+    allowlist_filters:
+    - id: 1
+      enabled: false
+      name: AdGuard Simplified Domain Names filter
+      url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+      last_modified: ""
+    user_rules: []
+stats:
+  interval: 90
+querylog:
+  enabled: true
+  file_enabled: true
+  interval: 90
+  size_memory: 10
+tls:
+  enabled: false
+  server_name: www.example.com
+  force_https: false
+  port_https: 443
+  port_dns_over_tls: 853
+  allow_unencrypted_doh: false
+  strict_sni_check: false
+  certificate_chain: ""
+  private_key: ""
+  certificate_path: ""
+  private_key_path: ""
+mitmproxy:
+  enabled: false
+  listen_address: ""
+  auth_username: ""
+  auth_password: ""
+  regenerate_cert: false
+  filters:
+  - id: 1
+    enabled: true
+    name: AdGuard Base filter
+    url: https://filters.adtidy.org/extension/chromium/filters/2.txt
+    last_modified: ""
+dhcp:
+  enabled: false
+  interface_name: ""
+  gateway_ip: ""
+  subnet_mask: ""
+  range_start: ""
+  range_end: ""
+  lease_duration: 86400
+  icmp_timeout_msec: 1000
+clients:
+- name: me
+  tags:
+  - user_admin
+  ids:
+  - 127.0.0.1
+  use_global_settings: true
+  filtering_enabled: false
+  parental_enabled: false
+  safesearch_enabled: false
+  safebrowsing_enabled: false
+  use_global_blocked_services: true
+  blocked_services: []
+  upstreams: []
+log:
+  compress: false
+  localtime: false
+  max_backups: 0
+  max_size: 100
+  max_age: 3
+  file: ""
+  verbose: true
+schema_version: 6
