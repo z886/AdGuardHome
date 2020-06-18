@@ -11,6 +11,7 @@ import (
 
 // QueryLog - main interface
 type QueryLog interface {
+	// Start the module
 	Start()
 
 	// Close query log object
@@ -21,6 +22,12 @@ type QueryLog interface {
 
 	// WriteDiskConfig - write configuration
 	WriteDiskConfig(c *Config)
+
+	// Clear memory buffer and remove log files
+	Clear()
+
+	// Set config settings
+	SetConfig(c Config) error
 }
 
 // Config - configuration object
@@ -31,9 +38,6 @@ type Config struct {
 	Interval          uint32 // interval to rotate logs (in days)
 	MemSize           uint32 // number of entries kept in memory before they are flushed to disk
 	AnonymizeClientIP bool   // anonymize clients' IP addresses
-
-	// Called when the configuration is changed by HTTP request
-	ConfigModified func()
 
 	// Register an HTTP handler
 	HTTPRegister func(string, string, func(http.ResponseWriter, *http.Request))

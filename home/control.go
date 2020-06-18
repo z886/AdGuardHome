@@ -100,6 +100,8 @@ func registerControlHandlers() {
 
 	httpRegister("GET", "/control/profile", handleGetProfile)
 	RegisterAuthHandlers()
+	registerQuerylogHandlers()
+	registerDHCPHandlers()
 }
 
 func httpRegister(method string, url string, handler func(http.ResponseWriter, *http.Request)) {

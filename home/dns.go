@@ -45,7 +45,6 @@ func initDNSServer() error {
 		Interval:          config.DNS.QueryLogInterval,
 		MemSize:           config.DNS.QueryLogMemSize,
 		AnonymizeClientIP: config.DNS.AnonymizeClientIP,
-		ConfigModified:    onConfigModified,
 		HTTPRegister:      httpRegister,
 	}
 	Context.queryLog = querylog.New(conf)

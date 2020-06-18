@@ -128,7 +128,7 @@ func (s *server) SetConfig(c Config) error {
 
 	s4, err := v4Create(c.Conf4)
 	if err != nil {
-		return fmt.Errorf("Invalid DHCPv4 configuration: %s", err)
+		return fmt.Errorf("invalid DHCPv4 configuration: %s", err)
 	}
 
 	c.Conf6.Enabled = c.Enabled
@@ -139,7 +139,7 @@ func (s *server) SetConfig(c Config) error {
 	c.Conf6.notify = s.onNotify
 	s6, err := v6Create(c.Conf6)
 	if s6 == nil {
-		return fmt.Errorf("Invalid DHCPv6 configuration: %s", err)
+		return fmt.Errorf("invalid DHCPv6 configuration: %s", err)
 	}
 
 	if c.Enabled && !c.Conf4.Enabled && !c.Conf6.Enabled {
@@ -160,13 +160,13 @@ func (s *server) SetConfig(c Config) error {
 		if !staticIP && err == nil {
 			err = SetStaticIP(c.InterfaceName)
 			if err != nil {
-				return fmt.Errorf("Failed to configure static IP: %s", err)
+				return fmt.Errorf("failed to configure static IP: %s", err)
 			}
 		}
 
 		err = s.Start()
 		if err != nil {
-			return fmt.Errorf("Failed to start DHCP server: %s", err)
+			return fmt.Errorf("failed to start DHCP server: %s", err)
 		}
 	}
 

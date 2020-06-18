@@ -1,6 +1,7 @@
 package querylog
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -73,12 +74,25 @@ func checkInterval(days uint32) bool {
 	return days == 1 || days == 7 || days == 30 || days == 90
 }
 
+func (l *queryLog) SetConfig(c Config) error {
+	if !checkInterval(c.Interval) {
+		return fmt.Errorf("unsupported interval")
+	}
+
+	l.lock.Lock()
+	// copy data, modify it, then activate.  Other threads (readers) don't need to use this lock.
+	conf := c
+	l.conf = &conf
+	l.lock.Unlock()
+	return nil
+}
+
 func (l *queryLog) WriteDiskConfig(c *Config) {
 	*c = *l.conf
 }
 
 // Clear memory buffer and remove log files
-func (l *queryLog) clear() {
+func (l *queryLog) Clear() {
 	l.fileFlushLock.Lock()
 	defer l.fileFlushLock.Unlock()
 

@@ -10,22 +10,12 @@ import (
 
 	"github.com/AdguardTeam/AdGuardHome/util"
 
-	"github.com/AdguardTeam/golibs/jsonutil"
 	"github.com/AdguardTeam/golibs/log"
 )
-
-type qlogConfig struct {
-	Enabled           bool   `json:"enabled"`
-	Interval          uint32 `json:"interval"`
-	AnonymizeClientIP bool   `json:"anonymize_client_ip"`
-}
 
 // Register web handlers
 func (l *queryLog) initWeb() {
 	l.conf.HTTPRegister("GET", "/control/querylog", l.handleQueryLog)
-	l.conf.HTTPRegister("GET", "/control/querylog_info", l.handleQueryLogInfo)
-	l.conf.HTTPRegister("POST", "/control/querylog_clear", l.handleQueryLogClear)
-	l.conf.HTTPRegister("POST", "/control/querylog_config", l.handleQueryLogConfig)
 }
 
 func httpError(r *http.Request, w http.ResponseWriter, code int, format string, args ...interface{}) {
@@ -60,61 +50,6 @@ func (l *queryLog) handleQueryLog(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		httpError(r, w, http.StatusInternalServerError, "Unable to write response json: %s", err)
 	}
-}
-
-func (l *queryLog) handleQueryLogClear(_ http.ResponseWriter, _ *http.Request) {
-	l.clear()
-}
-
-// Get configuration
-func (l *queryLog) handleQueryLogInfo(w http.ResponseWriter, r *http.Request) {
-	resp := qlogConfig{}
-	resp.Enabled = l.conf.Enabled
-	resp.Interval = l.conf.Interval
-	resp.AnonymizeClientIP = l.conf.AnonymizeClientIP
-
-	jsonVal, err := json.Marshal(resp)
-	if err != nil {
-		httpError(r, w, http.StatusInternalServerError, "json encode: %s", err)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(jsonVal)
-	if err != nil {
-		httpError(r, w, http.StatusInternalServerError, "http write: %s", err)
-	}
-}
-
-// Set configuration
-func (l *queryLog) handleQueryLogConfig(w http.ResponseWriter, r *http.Request) {
-	d := qlogConfig{}
-	req, err := jsonutil.DecodeObject(&d, r.Body)
-	if err != nil {
-		httpError(r, w, http.StatusBadRequest, "%s", err)
-		return
-	}
-
-	if req.Exists("interval") && !checkInterval(d.Interval) {
-		httpError(r, w, http.StatusBadRequest, "Unsupported interval")
-		return
-	}
-
-	l.lock.Lock()
-	// copy data, modify it, then activate.  Other threads (readers) don't need to use this lock.
-	conf := *l.conf
-	if req.Exists("enabled") {
-		conf.Enabled = d.Enabled
-	}
-	if req.Exists("interval") {
-		conf.Interval = d.Interval
-	}
-	if req.Exists("anonymize_client_ip") {
-		conf.AnonymizeClientIP = d.AnonymizeClientIP
-	}
-	l.conf = &conf
-	l.lock.Unlock()
-
-	l.conf.ConfigModified()
 }
 
 // "value" -> value, return TRUE
