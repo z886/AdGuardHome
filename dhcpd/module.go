@@ -8,7 +8,7 @@ import (
 type Server interface {
 	SetOnLeaseChanged(onLeaseChanged onLeaseChangedT)
 	SetConfig(c Config) error
-	WriteDiskConfig(c *Config)
+	GetConfig(c *Config)
 	Start() error
 	Stop()
 	Leases(flags int) []Lease

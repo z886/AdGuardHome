@@ -20,8 +20,8 @@ type QueryLog interface {
 	// Add a log entry
 	Add(params AddParams)
 
-	// WriteDiskConfig - write configuration
-	WriteDiskConfig(c *Config)
+	// GetConfig - write configuration
+	GetConfig(c *Config)
 
 	// Clear memory buffer and remove log files
 	Clear()

@@ -173,8 +173,8 @@ func (s *server) SetConfig(c Config) error {
 	return nil
 }
 
-// WriteDiskConfig - write configuration
-func (s *server) WriteDiskConfig(c *Config) {
+// GetConfig - write configuration
+func (s *server) GetConfig(c *Config) {
 	c.Enabled = s.conf.Enabled
 	c.InterfaceName = s.conf.InterfaceName
 	s.srv4.WriteDiskConfig4(&c.Conf4)

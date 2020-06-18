@@ -87,7 +87,7 @@ func (l *queryLog) SetConfig(c Config) error {
 	return nil
 }
 
-func (l *queryLog) WriteDiskConfig(c *Config) {
+func (l *queryLog) GetConfig(c *Config) {
 	*c = *l.conf
 }
 

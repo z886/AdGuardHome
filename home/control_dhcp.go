@@ -92,7 +92,7 @@ func handleDHCPStatus(w http.ResponseWriter, r *http.Request) {
 	staticLeases := convertLeases(Context.dhcpServer.Leases(dhcpd.LeasesStatic), false)
 
 	conf := dhcpd.Config{}
-	Context.dhcpServer.WriteDiskConfig(&conf)
+	Context.dhcpServer.GetConfig(&conf)
 
 	status := map[string]interface{}{
 		"enabled":        conf.Enabled,

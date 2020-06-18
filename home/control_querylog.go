@@ -27,7 +27,7 @@ type qlogConfigJSON struct {
 // Get configuration
 func handleQueryLogInfo(w http.ResponseWriter, r *http.Request) {
 	conf := querylog.Config{}
-	Context.queryLog.WriteDiskConfig(&conf)
+	Context.queryLog.GetConfig(&conf)
 
 	resp := qlogConfigJSON{}
 	resp.Enabled = conf.Enabled
@@ -57,7 +57,7 @@ func handleQueryLogConfig(w http.ResponseWriter, r *http.Request) {
 
 	config.Lock()
 	conf := querylog.Config{}
-	Context.queryLog.WriteDiskConfig(&conf)
+	Context.queryLog.GetConfig(&conf)
 	if req.Exists("enabled") {
 		conf.Enabled = d.Enabled
 	}

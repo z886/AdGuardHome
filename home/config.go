@@ -254,7 +254,7 @@ func (c *configuration) write() error {
 
 	if Context.queryLog != nil {
 		dc := querylog.Config{}
-		Context.queryLog.WriteDiskConfig(&dc)
+		Context.queryLog.GetConfig(&dc)
 		config.DNS.QueryLogEnabled = dc.Enabled
 		config.DNS.QueryLogFileEnabled = dc.FileEnabled
 		config.DNS.QueryLogInterval = dc.Interval
@@ -276,7 +276,7 @@ func (c *configuration) write() error {
 
 	if Context.dhcpServer != nil {
 		c := dhcpd.Config{}
-		Context.dhcpServer.WriteDiskConfig(&c)
+		Context.dhcpServer.GetConfig(&c)
 		config.DHCP = c
 	}
 
