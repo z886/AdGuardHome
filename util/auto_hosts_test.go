@@ -29,8 +29,8 @@ func TestAutoHostsResolution(t *testing.T) {
 	defer func() { _ = os.Remove(f.Name()) }()
 	defer f.Close()
 
-	_, _ = f.WriteString("  127.0.0.1   host  localhost  \n")
-	_, _ = f.WriteString("  ::1   localhost  \n")
+	_, _ = f.WriteString("  127.0.0.1   host  localhost # comment \n")
+	_, _ = f.WriteString("  ::1   localhost#comment  \n")
 
 	ah.Init(f.Name())
 
@@ -47,12 +47,15 @@ func TestAutoHostsResolution(t *testing.T) {
 	ips = ah.Process("newhost", dns.TypeA)
 	assert.Nil(t, ips)
 
+	// Unknown host (comment)
+	ips = ah.Process("comment", dns.TypeA)
+	assert.Nil(t, ips)
+
 	// Test hosts file
 	table := ah.List()
-	ips, _ = table["host"]
-	assert.NotNil(t, ips)
-	assert.Equal(t, 1, len(ips))
-	assert.Equal(t, "127.0.0.1", ips[0].String())
+	name, ok := table["127.0.0.1"]
+	assert.True(t, ok)
+	assert.Equal(t, "host", name)
 
 	// Test PTR
 	a, _ := dns.ReverseAddr("127.0.0.1")
