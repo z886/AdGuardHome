@@ -38,10 +38,10 @@ func (s *winServer) Stop() {
 func (s *winServer) Reset() {
 }
 
-func v4Create(conf V4ServerConf) (DHCPServer, error) {
+func v4Create(conf V4ServerConf) (serverV, error) {
 	return &winServer{}, nil
 }
 
-func v6Create(conf V6ServerConf) (DHCPServer, error) {
+func v6Create(conf V6ServerConf) (serverV, error) {
 	return &winServer{}, nil
 }

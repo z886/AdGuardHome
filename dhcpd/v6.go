@@ -604,7 +604,7 @@ func (s *v6Server) Stop() {
 }
 
 // Create DHCPv6 server
-func v6Create(conf V6ServerConf) (DHCPServer, error) {
+func v6Create(conf V6ServerConf) (serverV, error) {
 	s := &v6Server{}
 	s.conf = conf
 

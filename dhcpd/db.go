@@ -31,7 +31,7 @@ func normalizeIP(ip net.IP) net.IP {
 }
 
 // Load lease table from DB
-func (s *Server) dbLoad() {
+func (s *server) dbLoad() {
 	dynLeases := []*Lease{}
 	staticLeases := []*Lease{}
 	v6StaticLeases := []*Lease{}
@@ -124,7 +124,7 @@ func normalizeLeases(staticLeases, dynLeases []*Lease) []*Lease {
 }
 
 // Store lease table in DB
-func (s *Server) dbStore() {
+func (s *server) dbStore() {
 	var leases []leaseJSON
 
 	leases4 := s.srv4.GetLeasesRef()

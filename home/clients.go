@@ -78,7 +78,7 @@ type clientsContainer struct {
 	allTags map[string]bool
 
 	// dhcpServer is used for looking up clients IP addresses by MAC addresses
-	dhcpServer *dhcpd.Server
+	dhcpServer dhcpd.Server
 
 	autoHosts *util.AutoHosts // get entries from system hosts-files
 
@@ -88,7 +88,7 @@ type clientsContainer struct {
 // Init initializes clients container
 // dhcpServer: optional
 // Note: this function must be called only once
-func (clients *clientsContainer) Init(objects []clientObject, dhcpServer *dhcpd.Server, autoHosts *util.AutoHosts) {
+func (clients *clientsContainer) Init(objects []clientObject, dhcpServer dhcpd.Server, autoHosts *util.AutoHosts) {
 	if clients.list != nil {
 		log.Fatal("clients.list != nil")
 	}

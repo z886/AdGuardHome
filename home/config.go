@@ -63,7 +63,7 @@ type configuration struct {
 	WhitelistFilters []filter `yaml:"whitelist_filters"`
 	UserRules        []string `yaml:"user_rules"`
 
-	DHCP dhcpd.ServerConfig `yaml:"dhcp"`
+	DHCP dhcpd.Config `yaml:"dhcp"`
 
 	// Note: this array is filled only before file read/write and then it's cleared
 	Clients []clientObject `yaml:"clients"`
@@ -275,7 +275,7 @@ func (c *configuration) write() error {
 	}
 
 	if Context.dhcpServer != nil {
-		c := dhcpd.ServerConfig{}
+		c := dhcpd.Config{}
 		Context.dhcpServer.WriteDiskConfig(&c)
 		config.DHCP = c
 	}

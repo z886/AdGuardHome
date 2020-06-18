@@ -5,30 +5,59 @@ import (
 	"time"
 )
 
-// DHCPServer - DHCP server interface
-type DHCPServer interface {
-	// ResetLeases - reset leases
-	ResetLeases(leases []*Lease)
-	// GetLeases - get leases
-	GetLeases(flags int) []Lease
-	// GetLeasesRef - get reference to leases array
-	GetLeasesRef() []*Lease
-	// AddStaticLease - add a static lease
-	AddStaticLease(lease Lease) error
-	// RemoveStaticLease - remove a static lease
-	RemoveStaticLease(l Lease) error
-	// FindMACbyIP - find a MAC address by IP address in the currently active DHCP leases
-	FindMACbyIP(ip net.IP) net.HardwareAddr
-
-	// WriteDiskConfig4 - copy disk configuration
-	WriteDiskConfig4(c *V4ServerConf)
-	// WriteDiskConfig6 - copy disk configuration
-	WriteDiskConfig6(c *V6ServerConf)
-
-	// Start - start server
+type Server interface {
+	SetOnLeaseChanged(onLeaseChanged onLeaseChangedT)
+	SetConfig(c Config) error
+	WriteDiskConfig(c *Config)
 	Start() error
-	// Stop - stop server
 	Stop()
+	Leases(flags int) []Lease
+	FindMACbyIP(ip net.IP) net.HardwareAddr
+	AddStaticLease(lease Lease) error
+	RemoveStaticLease(lease Lease) error
+	Reset()
+}
+
+func Create(conf Config) Server {
+	return createServer(conf)
+}
+
+// Lease contains the necessary information about a DHCP lease
+type Lease struct {
+	HWAddr   net.HardwareAddr `json:"mac"`
+	IP       net.IP           `json:"ip"`
+	Hostname string           `json:"hostname"`
+
+	// Lease expiration time
+	// 1: static lease
+	Expiry time.Time `json:"expires"`
+}
+
+type onLeaseChangedT func(flags int)
+
+// flags for onLeaseChanged()
+const (
+	LeaseChangedAdded = iota
+	LeaseChangedAddedStatic
+	LeaseChangedRemovedStatic
+	LeaseChangedBlacklisted
+
+	LeaseChangedDBStore
+)
+
+// ServerConfig - DHCP server configuration
+type Config struct {
+	Enabled       bool   `yaml:"enabled"`
+	InterfaceName string `yaml:"interface_name"`
+
+	Conf4 V4ServerConf `yaml:"dhcpv4"`
+	Conf6 V6ServerConf `yaml:"dhcpv6"`
+
+	WorkDir    string `yaml:"-"`
+	DBFilePath string `yaml:"-"` // path to DB file
+
+	// Called when the configuration is changed by HTTP request
+	ConfigModified func() `yaml:"-"`
 }
 
 // V4ServerConf - server configuration

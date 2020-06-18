@@ -205,7 +205,7 @@ func TestClientsAddExisting(t *testing.T) {
 
 	// now some more complicated stuff
 	// first, init a DHCP server with a single static lease
-	config := dhcpd.ServerConfig{
+	config := dhcpd.Config{
 		DBFilePath: "leases.db",
 	}
 	defer func() { _ = os.Remove("leases.db") }()

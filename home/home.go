@@ -65,7 +65,7 @@ type homeContext struct {
 	rdns       *RDNS                // rDNS module
 	whois      *Whois               // WHOIS module
 	dnsFilter  *dnsfilter.Dnsfilter // DNS filtering module
-	dhcpServer *dhcpd.Server        // DHCP module
+	dhcpServer dhcpd.Server         // DHCP module
 	auth       *Auth                // HTTP authentication module
 	filters    Filtering            // DNS filtering module
 	web        *Web                 // Web (HTTP, HTTPS) module
@@ -216,7 +216,6 @@ func run(args options) {
 	dnsfilter.InitModule()
 
 	config.DHCP.WorkDir = Context.workDir
-	config.DHCP.HTTPRegister = httpRegister
 	config.DHCP.ConfigModified = onConfigModified
 	if runtime.GOOS != "windows" {
 		Context.dhcpServer = dhcpd.Create(config.DHCP)

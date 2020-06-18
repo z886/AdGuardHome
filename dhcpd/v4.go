@@ -207,6 +207,7 @@ func (s *v4Server) AddStaticLease(lease Lease) error {
 
 // RemoveStaticLease removes a static lease (thread-safe)
 func (s *v4Server) RemoveStaticLease(l Lease) error {
+	l.IP = l.IP.To4()
 	if len(l.IP) != 4 {
 		return fmt.Errorf("invalid IP")
 	}
@@ -563,7 +564,7 @@ func (s *v4Server) Stop() {
 }
 
 // Create DHCPv4 server
-func v4Create(conf V4ServerConf) (DHCPServer, error) {
+func v4Create(conf V4ServerConf) (serverV, error) {
 	s := &v4Server{}
 	s.conf = conf
 
