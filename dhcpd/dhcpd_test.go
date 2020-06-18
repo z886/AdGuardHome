@@ -22,7 +22,7 @@ func testNotify(flags uint32) {
 // Leases database store/load
 func TestDB(t *testing.T) {
 	var err error
-	s := Server{}
+	s := server{}
 	s.conf.DBFilePath = dbFilename
 
 	conf := V4ServerConf{
