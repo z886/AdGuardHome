@@ -263,7 +263,7 @@ renderServiceField.propTypes = {
     }).isRequired,
 };
 
-export const getLastIpv4Byte = (ipv4) => parseInt(ipv4.slice(ipv4.lastIndexOf('.') + 1), 10);
+export const getLastIpv4Octet = (ipv4) => parseInt(ipv4.slice(ipv4.lastIndexOf('.') + 1), 10);
 
 // Validation functions
 // If the value is valid, the validation function should return undefined.
@@ -291,7 +291,7 @@ export const validateIpv4RangeEnd = (_, allValues) => {
 
     const { range_end, range_start } = allValues.v4;
 
-    if (getLastIpv4Byte(range_end) <= getLastIpv4Byte(range_start)) {
+    if (range_end <= getLastIpv4Octet(range_start)) {
         return 'range_end_error';
     }
 

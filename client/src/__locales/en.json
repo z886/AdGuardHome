@@ -233,6 +233,7 @@
     "custom_ip": "Custom IP",
     "blocking_ipv4": "Blocking IPv4",
     "blocking_ipv6": "Blocking IPv6",
+    "last_octet": "Last octet",
     "dns_over_https": "DNS-over-HTTPS",
     "dns_over_tls": "DNS-over-TLS",
     "plain_dns": "Plain DNS",

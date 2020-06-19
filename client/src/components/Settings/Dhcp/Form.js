@@ -81,7 +81,6 @@ const Form = (props) => {
         interfaces,
         processingConfig,
         processingInterfaces,
-        change,
         reset,
     } = props;
 
@@ -104,27 +103,6 @@ const Form = (props) => {
 
     const requiredV4StartRange = enteredSomeV4Vale && !v6.range_start ? required : [];
     const requiredV6StartRange = enteredSomeV6Vale && !v4.range_start ? required : [];
-
-    const getNormalize = (complementaryFieldName) => (value, prevValue, allValues) => {
-        if (value && allValues.v4) {
-            const fourthOctet = 3;
-
-            const complementaryFieldValue = (allValues.v4[complementaryFieldName]
-                && allValues.v4[complementaryFieldName].split('.')[fourthOctet]) || [];
-
-            const dispatchedValue = value.split('.')
-                .slice(0, fourthOctet)
-                .concat(complementaryFieldValue)
-                .join('.');
-
-            dispatch(change(`v4.${complementaryFieldName}`, dispatchedValue));
-        }
-
-        return value;
-    };
-
-    const normalizeRangeStart = getNormalize('range_end');
-    const normalizeRangeEnd = getNormalize('range_start');
 
     return (
         <form onSubmit={handleSubmit}>
@@ -192,7 +170,6 @@ const Form = (props) => {
                                     className="form-control"
                                     placeholder={t('dhcp_form_range_start')}
                                     validate={[ipv4].concat(requiredV4StartRange)}
-                                    normalize={normalizeRangeStart}
                                 />
                             </div>
                             <div className="col">
@@ -201,9 +178,8 @@ const Form = (props) => {
                                     component={renderInputField}
                                     type="text"
                                     className="form-control"
-                                    placeholder={t('dhcp_form_range_end')}
-                                    validate={[ipv4, validateIpv4RangeEnd].concat(requiredV4)}
-                                    normalize={normalizeRangeEnd}
+                                    placeholder={t('last_octet')}
+                                    validate={[validateIpv4RangeEnd].concat(requiredV4)}
                                 />
                             </div>
                         </div>

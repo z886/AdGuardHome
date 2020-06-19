@@ -57,16 +57,22 @@ const Dhcp = () => {
             enabled, interface_name, v4, v6,
         } = values;
 
-        if (interface_name) {
-            dispatch(setDhcpConfig({
-                enabled,
-                interface_name,
-                v4: Object.values(v4)
-                    .some(Boolean) ? v4 : {},
-                v6: Object.values(v6)
-                    .some(Boolean) ? v6 : {},
-            }));
+        const v4configChanged = Object.values(v4)
+            .some(Boolean);
+        const v6configChanged = Object.values(v6)
+            .some(Boolean);
+
+        if (v4configChanged && v4.range_start && v4.range_end) {
+            const lastOctetIdx = v4.range_start.lastIndexOf('.');
+            v4.range_end = v4.range_start.slice(0, lastOctetIdx + 1) + v4.range_end;
         }
+
+        dispatch(setDhcpConfig({
+            enabled,
+            interface_name,
+            v4: v4configChanged ? v4 : {},
+            v6: v6configChanged ? v6 : {},
+        }));
     };
 
     const handleToggle = () => {
