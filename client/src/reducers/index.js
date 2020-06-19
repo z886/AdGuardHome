@@ -314,6 +314,7 @@ const dhcp = handleActions(
         leases: [],
         staticLeases: [],
         isModalOpen: false,
+        dhcp_available: false,
     },
 );
 

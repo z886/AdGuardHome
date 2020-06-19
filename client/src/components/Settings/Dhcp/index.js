@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { DHCP_STATUS_RESPONSE, FORM_NAME } from '../../../helpers/constants';
 import Form from './Form';
 import Leases from './Leases';
@@ -23,7 +23,7 @@ import {
 const Dhcp = () => {
     const [t] = useTranslation();
     const dispatch = useDispatch();
-    const dhcp = useSelector((store) => store.dhcp);
+    const dhcp = useSelector((store) => store.dhcp, shallowEqual);
     const {
         processingStatus,
         processingConfig,
@@ -41,6 +41,7 @@ const Dhcp = () => {
         v6,
         enabled,
         interface_name: initialInterfaceName,
+        dhcp_available,
     } = dhcp;
 
     const interface_name = useSelector((store) => store.form[FORM_NAME.DHCP]
@@ -86,7 +87,8 @@ const Dhcp = () => {
 
         const filledConfig = interface_name && (Object.keys(v4)
             .every(Boolean)
-            || Object.keys(v6).every(Boolean));
+            || Object.keys(v6)
+                .every(Boolean));
 
         if (enabled) {
             return (
@@ -238,6 +240,14 @@ const Dhcp = () => {
         v6: initialV6,
     };
 
+    if (processing || processingInterfaces) {
+        return <Loading />;
+    }
+
+    if (!processing && !dhcp_available) {
+        return <h2 className='text-center mt-5'><Trans>unavailable_dhcp</Trans></h2>;
+    }
+
     return (
         <>
             <PageTitle title={t('dhcp_settings')} subtitle={t('dhcp_description')}>
@@ -255,7 +265,6 @@ const Dhcp = () => {
                     </div>}
                 </div>
             </PageTitle>
-            {(processing || processingInterfaces) && <Loading />}
             {!processing && !processingInterfaces && (
                 <>
                     <Card

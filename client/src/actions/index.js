@@ -341,6 +341,8 @@ export const getDhcpStatus = () => async (dispatch) => {
     dispatch(getDhcpStatusRequest());
     try {
         const status = await apiClient.getDhcpStatus();
+        const globalStatus = await apiClient.getGlobalStatus();
+        status.dhcp_available = globalStatus.dhcp_available;
         dispatch(getDhcpStatusSuccess(status));
     } catch (error) {
         dispatch(addErrorToast({ error }));
