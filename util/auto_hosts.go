@@ -76,17 +76,19 @@ func (a *AutoHosts) Start() {
 	go a.updateLoop()
 	a.updateChan <- true
 
-	go a.watcherLoop()
+	if a.watcher != nil {
+		go a.watcherLoop()
 
-	err := a.watcher.Add(a.hostsFn)
-	if err != nil {
-		log.Error("Error while initializing watcher for a file %s: %s", a.hostsFn, err)
-	}
-
-	for _, dir := range a.hostsDirs {
-		err = a.watcher.Add(dir)
+		err := a.watcher.Add(a.hostsFn)
 		if err != nil {
-			log.Error("Error while initializing watcher for a directory %s: %s", dir, err)
+			log.Error("Error while initializing watcher for a file %s: %s", a.hostsFn, err)
+		}
+
+		for _, dir := range a.hostsDirs {
+			err = a.watcher.Add(dir)
+			if err != nil {
+				log.Error("Error while initializing watcher for a directory %s: %s", dir, err)
+			}
 		}
 	}
 }
@@ -95,7 +97,9 @@ func (a *AutoHosts) Start() {
 func (a *AutoHosts) Close() {
 	a.updateChan <- false
 	close(a.updateChan)
-	_ = a.watcher.Close()
+	if a.watcher != nil {
+		_ = a.watcher.Close()
+	}
 }
 
 // update table
@@ -172,8 +176,18 @@ func (a *AutoHosts) load(table map[string][]net.IP, tableRev map[string]string, 
 			if len(host) == 0 {
 				break
 			}
+			sharp := strings.IndexByte(host, '#')
+			if sharp == 0 {
+				break // skip the rest of the line after #
+			} else if sharp > 0 {
+				host = host[:sharp]
+			}
+
 			a.updateTable(table, host, ipAddr)
 			a.updateTableRev(tableRev, host, ipAddr)
+			if sharp >= 0 {
+				break // skip the rest of the line after #
+			}
 		}
 	}
 }
@@ -371,11 +385,11 @@ func (a *AutoHosts) ProcessReverse(addr string, qtype uint16) string {
 	return host
 }
 
-// List - get the hosts table.  Thread-safe.
-func (a *AutoHosts) List() map[string][]net.IP {
-	table := make(map[string][]net.IP)
+// List - get "IP -> hostname" table.  Thread-safe.
+func (a *AutoHosts) List() map[string]string {
+	table := make(map[string]string)
 	a.lock.Lock()
-	for k, v := range a.table {
+	for k, v := range a.tableReverse {
 		table[k] = v
 	}
 	a.lock.Unlock()

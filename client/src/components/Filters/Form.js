@@ -7,7 +7,7 @@ import flow from 'lodash/flow';
 import {
     renderInputField, required, isValidPath, renderSelectField,
 } from '../../helpers/form';
-import { MODAL_OPEN_TIMEOUT, MODAL_TYPE } from '../../helpers/constants';
+import { MODAL_OPEN_TIMEOUT, MODAL_TYPE, FORM_NAME } from '../../helpers/constants';
 
 const getIconsData = (homepage, source) => ([
     {
@@ -163,7 +163,5 @@ Form.propTypes = {
 
 export default flow([
     withTranslation(),
-    reduxForm({
-        form: 'filterForm',
-    }),
+    reduxForm({ form: FORM_NAME.FILTER }),
 ])(Form);

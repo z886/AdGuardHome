@@ -22,6 +22,8 @@ import (
 	"syscall"
 	"time"
 
+	"gopkg.in/natefinch/lumberjack.v2"
+
 	"github.com/AdguardTeam/AdGuardHome/util"
 
 	"github.com/joomcode/errorx"
@@ -108,11 +110,6 @@ func Main(version string, channel string, armVer string) {
 	// therefore, we must do it manually instead of using a lib
 	args := loadOptions()
 
-	if args.serviceControlAction != "" {
-		handleServiceControlAction(args.serviceControlAction)
-		return
-	}
-
 	Context.appSignalChannel = make(chan os.Signal)
 	signal.Notify(Context.appSignalChannel, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT)
 	go func() {
@@ -131,6 +128,11 @@ func Main(version string, channel string, armVer string) {
 			}
 		}
 	}()
+
+	if args.serviceControlAction != "" {
+		handleServiceControlAction(args.serviceControlAction)
+		return
+	}
 
 	// run the protection
 	run(args)
@@ -396,12 +398,21 @@ func configureLogger(args options) {
 	ls := getLogSettings()
 
 	// command-line arguments can override config settings
-	if args.verbose {
+	if args.verbose || config.Verbose {
 		ls.Verbose = true
 	}
 	if args.logFile != "" {
 		ls.LogFile = args.logFile
+	} else if config.LogFile != "" {
+		ls.LogFile = config.LogFile
 	}
+
+	// Handle default log settings overrides
+	ls.LogCompress = config.LogCompress
+	ls.LogLocalTime = config.LogLocalTime
+	ls.LogMaxBackups = config.LogMaxBackups
+	ls.LogMaxSize = config.LogMaxSize
+	ls.LogMaxAge = config.LogMaxAge
 
 	// log.SetLevel(log.INFO) - default
 	if ls.Verbose {
@@ -414,6 +425,7 @@ func configureLogger(args options) {
 		ls.LogFile = configSyslog
 	}
 
+	// logs are written to stdout (default)
 	if ls.LogFile == "" {
 		return
 	}
@@ -430,11 +442,19 @@ func configureLogger(args options) {
 			logFilePath = ls.LogFile
 		}
 
-		file, err := os.OpenFile(logFilePath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		_, err := os.OpenFile(logFilePath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			log.Fatalf("cannot create a log file: %s", err)
 		}
-		log.SetOutput(file)
+
+		log.SetOutput(&lumberjack.Logger{
+			Filename:   logFilePath,
+			Compress:   ls.LogCompress, // disabled by default
+			LocalTime:  ls.LogLocalTime,
+			MaxBackups: ls.LogMaxBackups,
+			MaxSize:    ls.LogMaxSize, // megabytes
+			MaxAge:     ls.LogMaxAge,  //days
+		})
 	}
 }
 

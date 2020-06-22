@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
@@ -76,7 +76,7 @@ class DnsAllowlist extends Component {
         const whitelist = true;
 
         return (
-            <Fragment>
+            <>
                 <PageTitle
                     title={t('dns_allowlists')}
                     subtitle={t('dns_allowlists_desc')}
@@ -118,7 +118,7 @@ class DnsAllowlist extends Component {
                     currentFilterData={currentFilterData}
                     whitelist={whitelist}
                 />
-            </Fragment>
+            </>
         );
     }
 }
