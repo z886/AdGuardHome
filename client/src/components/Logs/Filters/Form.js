@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash/debounce';
-import { DEBOUNCE_FILTER_TIMEOUT, FORM_NAME, RESPONSE_FILTER } from '../../../helpers/constants';
+import { useDispatch } from 'react-redux';
+import {
+    DEBOUNCE_FILTER_TIMEOUT,
+    DEFAULT_LOGS_FILTER,
+    FORM_NAME,
+    RESPONSE_FILTER,
+} from '../../../helpers/constants';
 import Tooltip from '../../ui/Tooltip';
+import { setLogsFilter } from '../../../actions/queryLogs';
 
 const renderFilterField = ({
     input,
@@ -62,9 +69,12 @@ const Form = (props) => {
     } = props;
 
     const [t] = useTranslation();
+    const dispatch = useDispatch();
 
     const debouncedSubmit = debounce(submit, DEBOUNCE_FILTER_TIMEOUT);
     const zeroDelaySubmit = () => setTimeout(submit, 0);
+
+    useEffect(() => () => dispatch(setLogsFilter(DEFAULT_LOGS_FILTER)), []);
 
     return (
         <form className="d-flex flex-wrap form-control--container"

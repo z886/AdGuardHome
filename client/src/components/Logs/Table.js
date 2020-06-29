@@ -178,6 +178,7 @@ const Table = (props) => {
             minWidth: 123,
             maxHeight: 60,
             headerClassName: 'logs__text',
+            className: 'pb-0',
         },
     ];
 
@@ -277,18 +278,13 @@ const Table = (props) => {
 
                         const hasTracker = !!tracker;
 
-                        const autoClient = autoClients.find(
-                            (autoClient) => autoClient.name === client,
-                        );
+                        const autoClient = autoClients
+                            .find((autoClient) => autoClient.name === client);
 
-                        const country = autoClient && autoClient.whois_info
-                            && autoClient.whois_info.country;
-
-                        const network = autoClient && autoClient.whois_info
-                            && autoClient.whois_info.orgname;
-
-                        const city = autoClient && autoClient.whois_info
-                            && autoClient.whois_info.city;
+                        const { whois_info } = info;
+                        const country = whois_info && whois_info.country;
+                        const city = whois_info && whois_info.city;
+                        const network = whois_info && whois_info.orgname;
 
                         const source = autoClient && autoClient.source;
 
