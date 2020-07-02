@@ -10,6 +10,7 @@ import i18n from '../../i18n';
 import Version from './Version';
 import './Footer.css';
 import './Select.css';
+import { setHtmlLangAttr } from '../../helpers/helpers';
 
 const linksData = [
     {
@@ -38,7 +39,7 @@ const Footer = (props) => {
     const changeLanguage = (event) => {
         const { value } = event.target;
         i18n.changeLanguage(value);
-        window.document.documentElement.lang = value;
+        setHtmlLangAttr(value);
     };
 
     const renderCopyright = () => <div className="footer__column">
