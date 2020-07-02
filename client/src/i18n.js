@@ -143,10 +143,13 @@ i18n
             wait: true,
         },
         whitelist: availableLanguages,
-    }, () => {
+    },
+    () => {
         if (!availableLanguages.includes(i18n.language)) {
             i18n.changeLanguage(BASE_LOCALE);
         }
+
+        window.document.documentElement.lang = i18n.language;
     });
 
 export default i18n;
