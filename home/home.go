@@ -263,7 +263,7 @@ func run(args options) {
 	}
 
 	sessFilename := filepath.Join(Context.getDataDir(), "sessions.db")
-	Context.auth = InitAuth(sessFilename, config.Users, config.WebSessionTTLHours*60*60)
+	Context.auth = InitAuth(sessFilename, config.Users, config.WebSessionTTLHours*60*60, args.glinetMode)
 	if Context.auth == nil {
 		log.Fatalf("Couldn't initialize Auth module")
 	}
@@ -525,6 +525,8 @@ type options struct {
 
 	// runningAsService flag is set to true when options are passed from the service runner
 	runningAsService bool
+
+	glinetMode bool // Activate GL-Inet mode
 }
 
 // loadOptions reads command line arguments and initializes configuration
@@ -559,6 +561,7 @@ func loadOptions() options {
 		{"check-config", "", "Check configuration and exit", nil, func() { o.checkConfig = true }},
 		{"no-check-update", "", "Don't check for updates", nil, func() { o.disableUpdate = true }},
 		{"verbose", "v", "Enable verbose output", nil, func() { o.verbose = true }},
+		{"glinet", "", "Run in GL-Inet compatibility mode", nil, func() { o.glinetMode = true }},
 		{"version", "", "Show the version and exit", nil, func() {
 			fmt.Printf("AdGuardHome %s\n", versionString)
 			os.Exit(0)
