@@ -39,7 +39,7 @@ var filteringStatusValues = []string{
 type searchCriteria struct {
 	criteriaType criteriaType // type of the criteria
 	strict       bool         // should we strictly match (equality) or not (indexOf)
-	value        string       // search criteria value
+	value        string       // search criteria value (lower case)
 }
 
 // quickMatch - quickly checks if the log entry matches this search criteria
@@ -62,6 +62,7 @@ func (c *searchCriteria) quickMatchJSONValue(line string, propertyName string) b
 	if len(val) == 0 {
 		return false
 	}
+	val = strings.ToLower(val)
 
 	if c.strict && c.value == val {
 		return true
@@ -78,10 +79,11 @@ func (c *searchCriteria) quickMatchJSONValue(line string, propertyName string) b
 func (c *searchCriteria) match(entry *logEntry) bool {
 	switch c.criteriaType {
 	case ctDomainOrClient:
-		if c.strict && entry.QHost == c.value {
+		qhost := strings.ToLower(entry.QHost)
+		if c.strict && qhost == c.value {
 			return true
 		}
-		if !c.strict && strings.Contains(entry.QHost, c.value) {
+		if !c.strict && strings.Contains(qhost, c.value) {
 			return true
 		}
 
