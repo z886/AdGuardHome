@@ -26,6 +26,7 @@ import {
 
 } from '../../helpers/helpers';
 import Loading from '../ui/Loading';
+import { getSourceData } from '../../helpers/trackers/trackers';
 
 const Table = (props) => {
     const {
@@ -300,14 +301,13 @@ const Table = (props) => {
                             toggleBlocking(buttonType, domain);
                         };
 
-                        const tracker_source = tracker && tracker.sourceData
-                            && tracker.sourceData.name;
-
                         const status = t((FILTERED_STATUS_TO_META_MAP[reason]
                             && FILTERED_STATUS_TO_META_MAP[reason].label) || reason);
                         const statusBlocked = <div className="bg--danger">{status}</div>;
 
                         const protocol = t(SCHEME_TO_PROTOCOL_MAP[client_proto]) || '';
+
+                        const sourceData = getSourceData(tracker);
 
                         const detailedData = {
                             time_table_header: formatTime(time, LONG_TIME_FORMAT),
@@ -319,8 +319,9 @@ const Table = (props) => {
                             known_tracker: hasTracker && 'title',
                             table_name: hasTracker && tracker.name,
                             category_label: hasTracker && tracker.category,
-                            tracker_source: hasTracker && tracker_source && <a href={`//${source}`}
-                                                                               className="link--green">{tracker_source}</a>,
+                            tracker_source: hasTracker && sourceData
+                                && <a href={sourceData.url} target="_blank" rel="noopener noreferrer"
+                                   className="link--green">{sourceData.name}</a>,
                             response_details: 'title',
                             install_settings_dns: upstream,
                             elapsed: formattedElapsedMs,
@@ -347,8 +348,9 @@ const Table = (props) => {
                             known_tracker: 'title',
                             table_name: hasTracker && tracker.name,
                             category_label: hasTracker && tracker.category,
-                            source_label: hasTracker && source
-                                && <a href={`//${source}`} className="link--green">{source}</a>,
+                            source_label: hasTracker && sourceData
+                                && <a href={sourceData.url} target="_blank" rel="noopener noreferrer"
+                                      className="link--green">{sourceData.name}</a>,
                             response_details: 'title',
                             install_settings_dns: upstream,
                             elapsed: formattedElapsedMs,
