@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/AdguardTeam/AdGuardHome/util"
@@ -137,7 +136,7 @@ func (l *queryLog) parseSearchCriteria(q url.Values, name string, ct criteriaTyp
 
 	c := searchCriteria{
 		criteriaType: ct,
-		value:        strings.ToLower(val),
+		value:        val,
 	}
 	if getDoubleQuotesEnclosedValue(&c.value) {
 		c.strict = true

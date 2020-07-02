@@ -63,11 +63,12 @@ func (c *searchCriteria) quickMatchJSONValue(line string, propertyName string) b
 		return false
 	}
 	val = strings.ToLower(val)
+	searchVal := strings.ToLower(c.value)
 
-	if c.strict && c.value == val {
+	if c.strict && searchVal == val {
 		return true
 	}
-	if !c.strict && strings.Contains(val, c.value) {
+	if !c.strict && strings.Contains(val, searchVal) {
 		return true
 	}
 
@@ -80,10 +81,11 @@ func (c *searchCriteria) match(entry *logEntry) bool {
 	switch c.criteriaType {
 	case ctDomainOrClient:
 		qhost := strings.ToLower(entry.QHost)
-		if c.strict && qhost == c.value {
+		searchVal := strings.ToLower(c.value)
+		if c.strict && qhost == searchVal {
 			return true
 		}
-		if !c.strict && strings.Contains(qhost, c.value) {
+		if !c.strict && strings.Contains(qhost, searchVal) {
 			return true
 		}
 
